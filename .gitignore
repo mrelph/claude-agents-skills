@@ -1,0 +1,32 @@
+# Archives
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+
+# Virtual environments
+venv/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data directories (may contain personal financial data)
+Skills/*/data/
+Skills/*/history/
+
+# Temp files
+*.tmp
+*.temp
