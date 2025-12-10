@@ -1,6 +1,9 @@
 # Archives
 *.zip
 
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
+
 # Python
 __pycache__/
 *.py[cod]
