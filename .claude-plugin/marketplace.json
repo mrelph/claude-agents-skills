@@ -9,6 +9,17 @@
   "license": "MIT",
   "plugins": [
     {
+      "name": "marketplace-manager",
+      "source": "./Agents/marketplace-manager",
+      "description": "Automates adding new agents and skills to the Claude Code marketplace from staging directory",
+      "version": "1.0.0",
+      "author": {
+        "name": "mrelph"
+      },
+      "keywords": ["marketplace", "automation", "staging", "contribution", "workflow"],
+      "category": "development"
+    },
+    {
       "name": "bug-tracker-resolver",
       "source": "./Agents/bug-tracker-resolver",
       "description": "Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes",
