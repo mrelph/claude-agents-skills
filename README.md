@@ -312,13 +312,39 @@ jq '.stats' marketplace.json
 
 ## Contributing
 
-To add a new skill or agent:
+We've created an automated workflow to make adding new agents and skills easy!
+
+### Quick Start
+
+1. **Use the templates** in `staging/`:
+   ```bash
+   # For agents
+   cp staging/agent-template.md staging/agents/my-new-agent.md
+
+   # For skills
+   cp -r staging/skill-template staging/skills/my-new-skill
+   ```
+
+2. **Fill in your content** and metadata
+
+3. **Run the automation script**:
+   ```bash
+   python3 add-to-marketplace.py
+   ```
+
+4. **Commit and push** your changes
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Manual Process
+
+To add a new skill or agent manually:
 
 1. Follow the existing structure patterns
 2. Include comprehensive documentation
 3. Add appropriate `.gitignore` entries for data directories
 4. Test with Claude Code before submitting
-5. Update `marketplace.json` with the new entry
+5. Update both `marketplace.json` files (root and `.claude-plugin/`)
 
 ## License
 
