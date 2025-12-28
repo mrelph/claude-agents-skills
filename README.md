@@ -1,6 +1,77 @@
-# Claude Code Agents & Skills
+# Claude Code Agents & Skills Marketplace
 
 A curated collection of specialized agents and skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), extending Claude's capabilities with domain expertise and task automation.
+
+## Marketplace Catalog
+
+This repository includes a machine-readable `marketplace.json` catalog that enables programmatic discovery and installation of agents and skills.
+
+📖 **[Full Marketplace Integration Guide →](MARKETPLACE.md)**
+
+The catalog includes:
+
+- Complete metadata for all agents and skills
+- Installation commands and directory structures
+- Version tracking and update history
+- Categorization and tagging
+- Integration mappings between skills
+- Usage statistics and compatibility information
+
+### Using the Marketplace Catalog
+
+The `marketplace.json` file can be consumed by:
+
+- **Claude Code integrations** - Automated discovery and installation
+- **CLI tools** - Browse and install agents/skills via command line
+- **Web frontends** - Build marketplace UIs for browsing
+- **CI/CD pipelines** - Automated testing and deployment
+- **Package managers** - Integration with existing tooling
+
+Example: Programmatically list all financial skills:
+
+```bash
+jq '.categories.skills.financial[] | {id, name, version}' marketplace.json
+```
+
+Example: Get installation command for a specific agent:
+
+```bash
+jq '.categories.agents.development[] | select(.id=="database-architect") | .install_command' marketplace.json
+```
+
+### Marketplace CLI Tool
+
+A Python CLI tool is included for easy browsing and installation:
+
+```bash
+# List all items
+./marketplace-cli.py list
+
+# List only agents or skills
+./marketplace-cli.py list agents
+./marketplace-cli.py list skills
+
+# Search for items
+./marketplace-cli.py search security
+./marketplace-cli.py search finance
+
+# Show detailed information
+./marketplace-cli.py info database-architect
+./marketplace-cli.py info tax-preparation
+
+# Install an agent or skill
+./marketplace-cli.py install database-architect
+./marketplace-cli.py install portfolio-analyzer --target /path/to/.claude/skills/
+
+# Show marketplace statistics
+./marketplace-cli.py stats
+```
+
+The CLI tool automatically:
+- Creates target directories if they don't exist
+- Detects whether to install as agent or skill
+- Shows detailed metadata and features
+- Handles installation conflicts
 
 ## What's Included
 
@@ -137,6 +208,91 @@ Some skills are designed to work together:
 - **portfolio-analyzer** → **tax-preparation**: Tax-loss harvesting and cost basis coordination
 - **retirement-planner** → **tax-preparation**: Roth conversion and withdrawal tax planning
 
+## Marketplace API
+
+The `marketplace.json` follows a structured format that supports various integration scenarios:
+
+### JSON Schema
+
+```json
+{
+  "name": "Marketplace name",
+  "version": "Semantic version",
+  "categories": {
+    "agents": {
+      "category_name": [/* agent objects */]
+    },
+    "skills": {
+      "category_name": [/* skill objects */]
+    }
+  },
+  "integrations": {
+    "skill_connections": [/* integration mappings */]
+  },
+  "installation": {/* installation instructions */},
+  "stats": {/* usage statistics */}
+}
+```
+
+### Agent Object Schema
+
+```json
+{
+  "id": "unique-identifier",
+  "name": "Display Name",
+  "description": "Brief description",
+  "model": "sonnet|opus|haiku",
+  "color": "UI color",
+  "version": "1.0.0",
+  "file": "path/to/agent.md",
+  "allowed_tools": ["Tool1", "Tool2"],
+  "install_command": "cp command",
+  "tags": ["tag1", "tag2"]
+}
+```
+
+### Skill Object Schema
+
+```json
+{
+  "id": "unique-identifier",
+  "name": "Display Name",
+  "description": "Detailed description",
+  "version": "1.0.0",
+  "last_updated": "YYYY-MM-DD",
+  "directory": "Skills/skill-name",
+  "allowed_tools": ["Tool1", "Tool2"],
+  "install_command": "cp -r command",
+  "target_users": "audience description",
+  "tags": ["tag1", "tag2"],
+  "features": ["Feature 1", "Feature 2"],
+  "scripts": ["script1.py"],
+  "references": ["ref1.md"]
+}
+```
+
+### Query Examples
+
+**Find all agents that use a specific tool:**
+```bash
+jq '[.categories.agents[][] | select(.allowed_tools[] | contains("WebSearch"))]' marketplace.json
+```
+
+**List all skills with their versions:**
+```bash
+jq '[.categories.skills[][] | {name, version}]' marketplace.json
+```
+
+**Get integration dependencies for a skill:**
+```bash
+jq '.integrations.skill_connections[] | select(.from=="portfolio-analyzer")' marketplace.json
+```
+
+**Count items by category:**
+```bash
+jq '.stats' marketplace.json
+```
+
 ## Contributing
 
 To add a new skill or agent:
@@ -145,6 +301,7 @@ To add a new skill or agent:
 2. Include comprehensive documentation
 3. Add appropriate `.gitignore` entries for data directories
 4. Test with Claude Code before submitting
+5. Update `marketplace.json` with the new entry
 
 ## License
 
