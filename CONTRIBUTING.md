@@ -25,21 +25,31 @@ cp -r staging/skill-template staging/skills/my-new-skill
 # Edit SKILL.md, README.md, and add your references/scripts
 ```
 
-### 2. Run the Automation Script
+### 2. Run the Automation
 
-**Interactive Mode (Recommended):**
+**Option A: Use the Marketplace Manager Agent (Recommended)**
+
+If you have the marketplace installed in Claude Code:
+```bash
+# Just ask Claude to process the staged items
+"Add the new agents and skills from staging"
+```
+
+The marketplace-manager agent will:
+- Scan your staging directory
+- Guide you through interactive prompts
+- Create proper directory structures
+- Update marketplace.json files automatically
+- Clean up staging area
+
+**Option B: Use the Python Script**
+
+Interactive Mode:
 ```bash
 python3 add-to-marketplace.py
 ```
 
-The script will:
-- Find your staged items
-- Prompt you for metadata (description, keywords, category)
-- Create proper directory structures
-- Update marketplace.json files
-- Clean up staging area
-
-**Non-Interactive Mode:**
+Non-Interactive Mode:
 ```bash
 # For a specific agent
 python3 add-to-marketplace.py --agent staging/agents/my-new-agent.md --non-interactive

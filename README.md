@@ -327,8 +327,12 @@ We've created an automated workflow to make adding new agents and skills easy!
 
 2. **Fill in your content** and metadata
 
-3. **Run the automation script**:
+3. **Run the automation** (choose one):
    ```bash
+   # Option A: Use the marketplace-manager agent (recommended)
+   # In Claude Code, just ask: "Add the new items from staging"
+
+   # Option B: Use the Python script
    python3 add-to-marketplace.py
    ```
 
