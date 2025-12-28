@@ -4,7 +4,7 @@
     "name": "mrelph"
   },
   "description": "A curated collection of specialized agents and skills for Claude Code, extending Claude's capabilities with domain expertise and task automation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": "https://github.com/mrelph/claude-agents-skills",
   "license": "MIT",
   "plugins": [

@@ -75,7 +75,7 @@ The CLI tool automatically:
 
 ## What's Included
 
-### 🤖 Agents (8)
+### 🤖 Agents (9)
 
 Specialized task-focused agents that can be spawned for specific development and business tasks:
 
@@ -84,18 +84,20 @@ Specialized task-focused agents that can be spawned for specific development and
 | [bug-tracker-resolver](Agents/bug-tracker-resolver.md) | Manages bugs, performs root cause analysis, implements fixes |
 | [database-architect](Agents/database-architect.md) | PostgreSQL/Supabase schema design, query optimization, RLS policies |
 | [documentation-maintainer](Agents/documentation-maintainer.md) | Creates and updates project documentation |
+| [marketplace-manager](Agents/marketplace-manager.md) | Automates adding new agents and skills to marketplace |
 | [performance-optimizer](Agents/performance-optimizer.md) | Core Web Vitals, bundle size, runtime efficiency |
 | [roadmap-feature-planner](Agents/roadmap-feature-planner.md) | Strategic feature planning and roadmap tracking |
 | [security-code-scanner](Agents/security-code-scanner.md) | Vulnerability identification, OWASP Top 10 analysis |
 | [ux-ui-design-expert](Agents/ux-ui-design-expert.md) | UX/UI guidance, accessibility, responsive design |
 | [video-integration-specialist](Agents/video-integration-specialist.md) | YouTube/Vimeo integration, streaming optimization |
 
-### 🛠️ Skills (5)
+### 🛠️ Skills (6)
 
 Comprehensive skill modules with supporting scripts and reference documentation:
 
 | Skill | Version | Description |
 |-------|---------|-------------|
+| [kiro-spec-driven-development](Skills/kiro-spec-driven-development/) | v1.0.0 | Spec-driven development: requirements → design → tasks workflow |
 | [research-consolidator](Skills/research-consolidator/) | v1.0.0 | Synthesize research from multiple AI models and sources |
 | [tax-preparation](Skills/tax-preparation/) | v1.3.0 | US tax preparation, deduction analysis, document processing |
 | [portfolio-analyzer](Skills/portfolio-analyzer/) | v2.3.0 | Investment analysis, performance metrics, recommendations |
@@ -124,6 +126,14 @@ Once installed, the marketplace will be available in your Claude Code plugin man
    ```
 
 2. The skill will be automatically available in Claude Code conversations.
+
+3. **NEW: Slash Command Support** - Skills can be invoked using custom slash commands for faster access:
+   ```
+   /tax-prep analyze my W-2 and find deductions
+   /portfolio review my current holdings
+   ```
+
+   Slash commands are configured when adding skills to the marketplace and provide a convenient shortcut for frequently-used skills.
 
 #### Using Agents in Claude Code
 
@@ -310,6 +320,19 @@ jq '.integrations.skill_connections[] | select(.from=="portfolio-analyzer")' mar
 jq '.stats' marketplace.json
 ```
 
+## What's New
+
+### Version 1.1.0 (2025-12-28)
+
+- **Slash Command Support**: Skills can now be invoked with custom slash commands (e.g., `/tax-prep`, `/portfolio`) for faster access
+- **New Skill: kiro-spec-driven-development**: Structured spec-driven development workflow (requirements → design → tasks)
+- **New Agent: marketplace-manager**: Automates adding new agents and skills to the marketplace
+- **Enhanced Contribution Workflow**: Staging directory with templates and automation
+- **Agent Directory Restructure**: Each agent now in its own directory for plugin compatibility
+- **Comprehensive CHANGELOG**: Full version history and change tracking
+
+See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
 ## Contributing
 
 We've created an automated workflow to make adding new agents and skills easy!
@@ -335,6 +358,8 @@ We've created an automated workflow to make adding new agents and skills easy!
    # Option B: Use the Python script
    python3 add-to-marketplace.py
    ```
+
+   **NEW**: When adding skills, you'll be prompted to define a slash command for easier invocation.
 
 4. **Commit and push** your changes
 
