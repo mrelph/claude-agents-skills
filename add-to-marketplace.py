@@ -10,6 +10,7 @@ import sys
 import shutil
 import re
 import argparse
+import subprocess
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -228,6 +229,32 @@ def add_entry_to_marketplace(marketplace_data: Dict, entry: Dict) -> Dict:
     return marketplace_data
 
 
+def package_skills():
+    """Run the skill packaging script to create distribution ZIPs."""
+    print("\n" + "=" * 60)
+    print("PACKAGING SKILLS")
+    print("=" * 60)
+
+    try:
+        # Run package-skills.py
+        result = subprocess.run(
+            [sys.executable, "package-skills.py"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        print(result.stdout)
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"✗ Error packaging skills: {e}")
+        print(e.stdout)
+        print(e.stderr)
+        return False
+    except FileNotFoundError:
+        print("⚠ package-skills.py not found. Skipping skill packaging.")
+        return False
+
+
 def interactive_mode():
     """Run in interactive mode to add items from staging."""
     print("=" * 60)
@@ -291,6 +318,10 @@ def interactive_mode():
     save_marketplace(marketplace_data, ".claude-plugin/marketplace.json")
     save_marketplace(marketplace_data, "marketplace.json")
 
+    # Package skills for distribution
+    if staging_skills or any(entry for entry in marketplace_data.get("plugins", []) if entry.get("source", "").startswith("./Skills/")):
+        package_skills()
+
     print("\n✓ Done! Don't forget to commit and push your changes.")
 
 
@@ -333,6 +364,7 @@ def main():
             marketplace_data = add_entry_to_marketplace(marketplace_data, entry)
             save_marketplace(marketplace_data, ".claude-plugin/marketplace.json")
             save_marketplace(marketplace_data, "marketplace.json")
+            package_skills()
             print("\n✓ Done!")
 
     # Batch mode

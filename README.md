@@ -106,72 +106,114 @@ Comprehensive skill modules with supporting scripts and reference documentation:
 
 ## Installation
 
-### Install as Plugin Marketplace (Recommended)
+### Method 1: Plugin Marketplace (Recommended)
 
 Install the entire marketplace in Claude Code to browse and install agents/skills on demand:
 
 ```bash
-/plugin install https://github.com/yourusername/claude-agents-skills
+/plugin marketplace add mrelph/claude-agents-skills
+/plugin install skill-name@claude-agents-skills
 ```
 
-Once installed, the marketplace will be available in your Claude Code plugin manager.
+Benefits:
+- Easy updates with `/plugin update`
+- Browse all available skills
+- Automatic dependency management
 
-### Manual Installation
+### Method 2: Direct Download (Individual Skills)
 
-#### Using Skills in Claude Code
+Download pre-packaged ZIP files for individual skills:
 
-1. Copy the skill folder to your project's `.claude/skills/` directory:
-   ```bash
-   cp -r Skills/tax-preparation /path/to/your/project/.claude/skills/
-   ```
+**[Browse Available Downloads →](releases/skills/)**
 
-2. The skill will be automatically available in Claude Code conversations.
+Quick install:
+```bash
+# Download the skill ZIP (example: tax-preparation)
+wget https://github.com/mrelph/claude-agents-skills/raw/main/releases/skills/tax-preparation-v1.3.0.zip
 
-3. **NEW: Slash Command Support** - Skills can be invoked using custom slash commands for faster access:
-   ```
-   /tax-prep analyze my W-2 and find deductions
-   /portfolio review my current holdings
-   ```
+# Extract to Claude Code skills directory
+unzip tax-preparation-v1.3.0.zip -d ~/.claude/skills/
+```
 
-   Slash commands are configured when adding skills to the marketplace and provide a convenient shortcut for frequently-used skills.
+Each skill package includes:
+- Complete skill with all reference materials
+- Python utility scripts
+- Installation instructions
+- CHANGELOG and version history
 
-#### Using Agents in Claude Code
+### Method 3: Manual Clone
 
-1. Copy the agent markdown file to your project's `.claude/agents/` directory:
-   ```bash
-   mkdir -p /path/to/your/project/.claude/agents/
-   cp Agents/database-architect.md /path/to/your/project/.claude/agents/
-   ```
+Clone the repository and copy skills/agents manually:
 
-2. Alternatively, add agent definitions to your Claude Code configuration.
+```bash
+# Clone the repository
+git clone https://github.com/mrelph/claude-agents-skills.git
+
+# Copy a skill
+cp -r claude-agents-skills/Skills/tax-preparation ~/.claude/skills/
+
+# Copy an agent
+cp -r claude-agents-skills/Agents/database-architect ~/.claude/agents/
+```
+
+### Using Skills and Agents
+
+Once installed, skills and agents are automatically available in Claude Code conversations.
+
+**Slash Command Support** - Skills can be invoked using custom slash commands:
+```
+/tax-prep analyze my W-2 and find deductions
+/portfolio review my current holdings
+```
+
+**Agents** - Spawn specialized agents for specific tasks:
+```
+Use the database-architect agent to design this schema
+Launch the security-code-scanner to audit this code
+```
 
 ## Repository Structure
 
 ```
 claude-agents-skills/
 ├── README.md                    # This file
+├── CHANGELOG.md                 # Version history
 ├── MARKETPLACE.md               # Marketplace integration guide
 ├── marketplace.json             # Catalog (root copy)
 ├── marketplace-cli.py           # CLI tool for browsing/installing
+├── package-skills.py            # Skill packaging script
+├── add-to-marketplace.py        # Automation for adding items
 ├── .claude-plugin/              # Plugin marketplace structure
 │   └── marketplace.json         # Catalog (plugin copy)
+├── releases/                    # Distribution packages
+│   └── skills/                  # Pre-packaged skill ZIPs
+│       ├── README.md            # Download instructions
+│       ├── tax-preparation-v1.3.0.zip
+│       ├── portfolio-analyzer-v2.3.0.zip
+│       └── ...
 ├── Agents/                      # Agent definitions
 │   ├── README.md                # Agents overview and usage
-│   ├── bug-tracker-resolver.md
-│   ├── database-architect.md
+│   ├── CHANGELOG.md             # Agents version history
+│   ├── bug-tracker-resolver/
+│   ├── database-architect/
 │   └── ...
 ├── Skills/                      # Skill modules
 │   ├── README.md                # Skills overview and usage
 │   ├── research-consolidator/
 │   │   ├── SKILL.md             # Main skill definition
 │   │   ├── README.md            # Skill documentation
+│   │   ├── CHANGELOG.md         # Version history
 │   │   ├── references/          # Domain knowledge
 │   │   └── scripts/             # Python utilities
 │   ├── tax-preparation/
 │   ├── portfolio-analyzer/
 │   ├── retirement-planner/
 │   └── jr-kraken-18u-navy-lineup/
-└── .gitignore
+└── staging/                     # Contribution templates
+    ├── agent-template.md
+    ├── skill-template/
+    ├── agents/
+    └── skills/
 ```
 
 ## Skill Anatomy
