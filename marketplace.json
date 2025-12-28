@@ -161,6 +161,17 @@
       },
       "keywords": ["hockey", "sports", "lineup", "strategy", "coaching"],
       "category": "domain-specific"
+    },
+    {
+      "name": "kiro-spec-driven-development",
+      "source": "./Skills/kiro-spec-driven-development",
+      "description": "Structured spec-driven development workflow that transforms feature ideas into requirements, design documents, and implementation plans using Kiro methodology",
+      "version": "1.0.0",
+      "author": {
+        "name": "mrelph"
+      },
+      "keywords": ["spec", "requirements", "design", "planning", "workflow", "methodology"],
+      "category": "development"
     }
   ]
 }
