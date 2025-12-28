@@ -71,6 +71,17 @@ def get_keywords_input() -> List[str]:
     return [k.strip() for k in keywords_str.split(',') if k.strip()]
 
 
+def get_slash_command_input(default_name: str) -> Optional[str]:
+    """Get slash command configuration from user input."""
+    wants_slash = get_user_input("\nDefine a slash command for this skill? (y/n)", "y").lower()
+
+    if wants_slash == 'y':
+        slash_cmd = get_user_input("Slash command name (without /)", default_name)
+        return slash_cmd if slash_cmd else default_name
+
+    return None
+
+
 def process_agent(agent_file: str, marketplace_data: Dict, interactive: bool = True) -> Dict:
     """Process an agent file from staging and create marketplace entry."""
     agent_path = Path(agent_file)
@@ -155,14 +166,16 @@ def process_skill(skill_dir: str, marketplace_data: Dict, interactive: bool = Tr
             frontmatter.get('description', '') if frontmatter else '')
         version = get_user_input("Version",
             frontmatter.get('metadata', {}).get('version', '1.0.0') if frontmatter else '1.0.0')
-        category = get_user_input("Category (financial/research/domain-specific)",
+        category = get_user_input("Category (financial/research/domain-specific/development)",
             frontmatter.get('category', 'domain-specific') if frontmatter else 'domain-specific')
         keywords = get_keywords_input()
+        slash_command = get_slash_command_input(skill_name)
     else:
         description = frontmatter.get('description', '') if frontmatter else ''
         version = frontmatter.get('metadata', {}).get('version', '1.0.0') if frontmatter else '1.0.0'
         category = frontmatter.get('category', 'domain-specific') if frontmatter else 'domain-specific'
         keywords = []
+        slash_command = None
 
     # Create skill directory
     dest_dir = Path(f"Skills/{skill_name}")
@@ -187,6 +200,11 @@ def process_skill(skill_dir: str, marketplace_data: Dict, interactive: bool = Tr
         "keywords": keywords,
         "category": category
     }
+
+    # Add slash command if defined
+    if slash_command:
+        entry["slash_command"] = slash_command
+        print(f"✓ Slash command configured: /{slash_command}")
 
     return entry
 
