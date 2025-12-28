@@ -104,7 +104,19 @@ Comprehensive skill modules with supporting scripts and reference documentation:
 
 ## Installation
 
-### Using Skills in Claude Code
+### Install as Plugin Marketplace (Recommended)
+
+Install the entire marketplace in Claude Code to browse and install agents/skills on demand:
+
+```bash
+/plugin install https://github.com/yourusername/claude-agents-skills
+```
+
+Once installed, the marketplace will be available in your Claude Code plugin manager.
+
+### Manual Installation
+
+#### Using Skills in Claude Code
 
 1. Copy the skill folder to your project's `.claude/skills/` directory:
    ```bash
@@ -113,7 +125,7 @@ Comprehensive skill modules with supporting scripts and reference documentation:
 
 2. The skill will be automatically available in Claude Code conversations.
 
-### Using Agents in Claude Code
+#### Using Agents in Claude Code
 
 1. Copy the agent markdown file to your project's `.claude/agents/` directory:
    ```bash
@@ -128,6 +140,11 @@ Comprehensive skill modules with supporting scripts and reference documentation:
 ```
 claude-agents-skills/
 ├── README.md                    # This file
+├── MARKETPLACE.md               # Marketplace integration guide
+├── marketplace.json             # Catalog (root copy)
+├── marketplace-cli.py           # CLI tool for browsing/installing
+├── .claude-plugin/              # Plugin marketplace structure
+│   └── marketplace.json         # Catalog (plugin copy)
 ├── Agents/                      # Agent definitions
 │   ├── README.md                # Agents overview and usage
 │   ├── bug-tracker-resolver.md

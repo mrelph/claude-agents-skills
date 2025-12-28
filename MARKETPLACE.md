@@ -12,6 +12,32 @@ The `marketplace.json` file provides a machine-readable catalog of all available
 - **Metadata queries** - Filter and search by capabilities
 - **Installation automation** - Programmatic installation
 
+## Plugin Marketplace Setup
+
+To make this repository installable as a Claude Code plugin marketplace, the `marketplace.json` file must be located at `.claude-plugin/marketplace.json`. This allows users to install the entire marketplace with:
+
+```bash
+/plugin install https://github.com/yourusername/claude-agents-skills
+```
+
+### Directory Structure for Plugin Support
+
+```
+claude-agents-skills/
+├── .claude-plugin/
+│   └── marketplace.json    # Required for plugin installation
+├── marketplace.json         # Root copy for reference/CLI usage
+├── Agents/
+├── Skills/
+└── ...
+```
+
+**Note:** The `marketplace.json` file exists in two locations:
+- `.claude-plugin/marketplace.json` - Required by Claude Code's plugin system
+- `marketplace.json` (root) - For CLI tools, documentation, and manual queries
+
+Both files should be kept in sync when making updates to the catalog.
+
 ## Marketplace Structure
 
 ### Top-Level Schema
