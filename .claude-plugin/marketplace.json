@@ -1,289 +1,313 @@
 {
-  "name": "Claude Code Marketplace",
+  "name": "claude-agents-skills-marketplace",
+  "owner": "mrelph",
   "version": "1.0.0",
   "description": "A curated collection of specialized agents and skills for Claude Code, extending Claude's capabilities with domain expertise and task automation",
-  "repository": "https://github.com/yourusername/claude-agents-skills",
+  "repository": "https://github.com/mrelph/claude-agents-skills",
   "last_updated": "2025-12-28",
-  "categories": {
-    "agents": {
-      "development": [
-        {
-          "id": "bug-tracker-resolver",
-          "name": "Bug Tracker & Resolver",
-          "description": "Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes",
-          "model": "sonnet",
-          "color": "red",
-          "version": "1.0.0",
-          "file": "Agents/bug-tracker-resolver.md",
-          "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob"],
-          "install_command": "cp Agents/bug-tracker-resolver.md .claude/agents/",
-          "tags": ["debugging", "bug-tracking", "testing", "development"]
-        },
-        {
-          "id": "database-architect",
-          "name": "Database Architect",
-          "description": "PostgreSQL/Supabase expertise - schema design, query optimization, RLS policies, indexing strategies",
-          "model": "sonnet",
-          "color": "cyan",
-          "version": "1.0.0",
-          "file": "Agents/database-architect.md",
-          "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob", "Task", "WebSearch", "WebFetch"],
-          "install_command": "cp Agents/database-architect.md .claude/agents/",
-          "tags": ["database", "postgresql", "supabase", "sql", "performance"]
-        },
-        {
-          "id": "documentation-maintainer",
-          "name": "Documentation Maintainer",
-          "description": "Creates and updates READMEs, API docs, user guides, ensures documentation consistency",
-          "model": "sonnet",
-          "color": "blue",
-          "version": "1.0.0",
-          "file": "Agents/documentation-maintainer.md",
-          "allowed_tools": ["Read", "Write", "Glob", "Grep"],
-          "install_command": "cp Agents/documentation-maintainer.md .claude/agents/",
-          "tags": ["documentation", "readme", "api-docs", "technical-writing"]
-        },
-        {
-          "id": "performance-optimizer",
-          "name": "Performance Optimizer",
-          "description": "Core Web Vitals, bundle size reduction, runtime efficiency, Next.js optimizations",
-          "model": "sonnet",
-          "color": "yellow",
-          "version": "1.0.0",
-          "file": "Agents/performance-optimizer.md",
-          "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob", "Task", "WebSearch"],
-          "install_command": "cp Agents/performance-optimizer.md .claude/agents/",
-          "tags": ["performance", "optimization", "web-vitals", "nextjs", "bundling"]
-        },
-        {
-          "id": "security-code-scanner",
-          "name": "Security Code Scanner",
-          "description": "Vulnerability identification, OWASP Top 10 analysis, risk assessment, secure code recommendations",
-          "model": "sonnet",
-          "color": "purple",
-          "version": "1.0.0",
-          "file": "Agents/security-code-scanner.md",
-          "allowed_tools": ["Read", "Bash", "Grep", "Glob", "Task"],
-          "install_command": "cp Agents/security-code-scanner.md .claude/agents/",
-          "tags": ["security", "vulnerability", "owasp", "code-review", "penetration-testing"]
-        }
+  "plugins": [
+    {
+      "id": "bug-tracker-resolver",
+      "name": "Bug Tracker & Resolver",
+      "description": "Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes",
+      "type": "agent",
+      "category": "development",
+      "model": "sonnet",
+      "color": "red",
+      "version": "1.0.0",
+      "file": "Agents/bug-tracker-resolver.md",
+      "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob"],
+      "install_command": "cp Agents/bug-tracker-resolver.md .claude/agents/",
+      "tags": ["debugging", "bug-tracking", "testing", "development"]
+    },
+    {
+      "id": "database-architect",
+      "name": "Database Architect",
+      "description": "PostgreSQL/Supabase expertise - schema design, query optimization, RLS policies, indexing strategies",
+      "type": "agent",
+      "category": "development",
+      "model": "sonnet",
+      "color": "cyan",
+      "version": "1.0.0",
+      "file": "Agents/database-architect.md",
+      "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob", "Task", "WebSearch", "WebFetch"],
+      "install_command": "cp Agents/database-architect.md .claude/agents/",
+      "tags": ["database", "postgresql", "supabase", "sql", "performance"]
+    },
+    {
+      "id": "documentation-maintainer",
+      "name": "Documentation Maintainer",
+      "description": "Creates and updates READMEs, API docs, user guides, ensures documentation consistency",
+      "type": "agent",
+      "category": "development",
+      "model": "sonnet",
+      "color": "blue",
+      "version": "1.0.0",
+      "file": "Agents/documentation-maintainer.md",
+      "allowed_tools": ["Read", "Write", "Glob", "Grep"],
+      "install_command": "cp Agents/documentation-maintainer.md .claude/agents/",
+      "tags": ["documentation", "readme", "api-docs", "technical-writing"]
+    },
+    {
+      "id": "performance-optimizer",
+      "name": "Performance Optimizer",
+      "description": "Core Web Vitals, bundle size reduction, runtime efficiency, Next.js optimizations",
+      "type": "agent",
+      "category": "development",
+      "model": "sonnet",
+      "color": "yellow",
+      "version": "1.0.0",
+      "file": "Agents/performance-optimizer.md",
+      "allowed_tools": ["Read", "Write", "Bash", "Grep", "Glob", "Task", "WebSearch"],
+      "install_command": "cp Agents/performance-optimizer.md .claude/agents/",
+      "tags": ["performance", "optimization", "web-vitals", "nextjs", "bundling"]
+    },
+    {
+      "id": "security-code-scanner",
+      "name": "Security Code Scanner",
+      "description": "Vulnerability identification, OWASP Top 10 analysis, risk assessment, secure code recommendations",
+      "type": "agent",
+      "category": "development",
+      "model": "sonnet",
+      "color": "purple",
+      "version": "1.0.0",
+      "file": "Agents/security-code-scanner.md",
+      "allowed_tools": ["Read", "Bash", "Grep", "Glob", "Task"],
+      "install_command": "cp Agents/security-code-scanner.md .claude/agents/",
+      "tags": ["security", "vulnerability", "owasp", "code-review", "penetration-testing"]
+    },
+    {
+      "id": "ux-ui-design-expert",
+      "name": "UX/UI Design Expert",
+      "description": "UX/UI guidance, information architecture, accessibility (WCAG), responsive design",
+      "type": "agent",
+      "category": "design",
+      "model": "sonnet",
+      "color": "pink",
+      "version": "1.0.0",
+      "file": "Agents/ux-ui-design-expert.md",
+      "allowed_tools": ["Read", "WebSearch", "WebFetch", "Task"],
+      "install_command": "cp Agents/ux-ui-design-expert.md .claude/agents/",
+      "tags": ["ux", "ui", "design", "accessibility", "wcag", "responsive"]
+    },
+    {
+      "id": "roadmap-feature-planner",
+      "name": "Roadmap & Feature Planner",
+      "description": "Strategic feature planning, implementation coordination, roadmap tracking",
+      "type": "agent",
+      "category": "planning",
+      "model": "sonnet",
+      "color": "green",
+      "version": "1.0.0",
+      "file": "Agents/roadmap-feature-planner.md",
+      "allowed_tools": ["Read", "Write", "Glob", "Grep", "Task"],
+      "install_command": "cp Agents/roadmap-feature-planner.md .claude/agents/",
+      "tags": ["planning", "roadmap", "feature", "strategy", "project-management"]
+    },
+    {
+      "id": "video-integration-specialist",
+      "name": "Video Integration Specialist",
+      "description": "YouTube/Vimeo integration, video player implementation, streaming optimization",
+      "type": "agent",
+      "category": "media",
+      "model": "sonnet",
+      "color": "orange",
+      "version": "1.0.0",
+      "file": "Agents/video-integration-specialist.md",
+      "allowed_tools": ["Read", "Write", "Bash", "WebSearch", "WebFetch", "Task"],
+      "install_command": "cp Agents/video-integration-specialist.md .claude/agents/",
+      "tags": ["video", "streaming", "youtube", "vimeo", "media", "player"]
+    },
+    {
+      "id": "tax-preparation",
+      "name": "Tax Preparation",
+      "description": "Comprehensive tax preparation and planning for individuals and families. US tax preparation, deduction analysis, document processing, multi-year tax projections",
+      "type": "skill",
+      "category": "financial",
+      "version": "1.3.0",
+      "last_updated": "2025-12-09",
+      "directory": "Skills/tax-preparation",
+      "allowed_tools": ["Read", "Bash", "WebSearch", "WebFetch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
+      "install_command": "cp -r Skills/tax-preparation .claude/skills/",
+      "target_users": "individuals, families, self-employed",
+      "tags": ["tax", "finance", "irs", "deductions", "credits", "planning"],
+      "features": [
+        "PDF document reading and data extraction",
+        "W-2, 1099, and tax form processing",
+        "Deduction and credit identification",
+        "Tax optimization strategies",
+        "Multi-year tax projections",
+        "Integration with portfolio-analyzer and retirement-planner"
       ],
-      "design": [
-        {
-          "id": "ux-ui-design-expert",
-          "name": "UX/UI Design Expert",
-          "description": "UX/UI guidance, information architecture, accessibility (WCAG), responsive design",
-          "model": "sonnet",
-          "color": "pink",
-          "version": "1.0.0",
-          "file": "Agents/ux-ui-design-expert.md",
-          "allowed_tools": ["Read", "WebSearch", "WebFetch", "Task"],
-          "install_command": "cp Agents/ux-ui-design-expert.md .claude/agents/",
-          "tags": ["ux", "ui", "design", "accessibility", "wcag", "responsive"]
-        }
+      "scripts": [
+        "filing_status_analyzer.py",
+        "income_calculator.py",
+        "deduction_optimizer.py",
+        "credit_analyzer.py",
+        "estimated_tax_calculator.py",
+        "capital_gains_analyzer.py",
+        "tax_projector.py"
       ],
-      "planning": [
-        {
-          "id": "roadmap-feature-planner",
-          "name": "Roadmap & Feature Planner",
-          "description": "Strategic feature planning, implementation coordination, roadmap tracking",
-          "model": "sonnet",
-          "color": "green",
-          "version": "1.0.0",
-          "file": "Agents/roadmap-feature-planner.md",
-          "allowed_tools": ["Read", "Write", "Glob", "Grep", "Task"],
-          "install_command": "cp Agents/roadmap-feature-planner.md .claude/agents/",
-          "tags": ["planning", "roadmap", "feature", "strategy", "project-management"]
-        }
-      ],
-      "media": [
-        {
-          "id": "video-integration-specialist",
-          "name": "Video Integration Specialist",
-          "description": "YouTube/Vimeo integration, video player implementation, streaming optimization",
-          "model": "sonnet",
-          "color": "orange",
-          "version": "1.0.0",
-          "file": "Agents/video-integration-specialist.md",
-          "allowed_tools": ["Read", "Write", "Bash", "WebSearch", "WebFetch", "Task"],
-          "install_command": "cp Agents/video-integration-specialist.md .claude/agents/",
-          "tags": ["video", "streaming", "youtube", "vimeo", "media", "player"]
-        }
+      "references": [
+        "tax_brackets_deductions.md",
+        "credits_guide.md",
+        "self_employment_guide.md",
+        "investment_taxes.md",
+        "overlooked_deductions.md"
       ]
     },
-    "skills": {
-      "financial": [
-        {
-          "id": "tax-preparation",
-          "name": "Tax Preparation",
-          "description": "Comprehensive tax preparation and planning for individuals and families. US tax preparation, deduction analysis, document processing, multi-year tax projections",
-          "version": "1.3.0",
-          "last_updated": "2025-12-09",
-          "directory": "Skills/tax-preparation",
-          "allowed_tools": ["Read", "Bash", "WebSearch", "WebFetch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
-          "install_command": "cp -r Skills/tax-preparation .claude/skills/",
-          "target_users": "individuals, families, self-employed",
-          "tags": ["tax", "finance", "irs", "deductions", "credits", "planning"],
-          "features": [
-            "PDF document reading and data extraction",
-            "W-2, 1099, and tax form processing",
-            "Deduction and credit identification",
-            "Tax optimization strategies",
-            "Multi-year tax projections",
-            "Integration with portfolio-analyzer and retirement-planner"
-          ],
-          "scripts": [
-            "filing_status_analyzer.py",
-            "income_calculator.py",
-            "deduction_optimizer.py",
-            "credit_analyzer.py",
-            "estimated_tax_calculator.py",
-            "capital_gains_analyzer.py",
-            "tax_projector.py"
-          ],
-          "references": [
-            "tax_brackets_deductions.md",
-            "credits_guide.md",
-            "self_employment_guide.md",
-            "investment_taxes.md",
-            "overlooked_deductions.md"
-          ]
-        },
-        {
-          "id": "portfolio-analyzer",
-          "name": "Portfolio Analyzer",
-          "description": "Investment portfolio analysis, performance metrics, asset allocation, risk assessment, and strategic recommendations",
-          "version": "2.3.0",
-          "last_updated": "2025-12-09",
-          "directory": "Skills/portfolio-analyzer",
-          "allowed_tools": ["Read", "Bash", "WebSearch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
-          "install_command": "cp -r Skills/portfolio-analyzer .claude/skills/",
-          "target_users": "investors, financial planners",
-          "tags": ["investing", "portfolio", "finance", "stocks", "bonds", "etf", "analysis"],
-          "features": [
-            "Portfolio performance analysis",
-            "Asset allocation optimization",
-            "Risk assessment and metrics",
-            "Tax-loss harvesting opportunities",
-            "Rebalancing recommendations",
-            "Integration with retirement-planner and tax-preparation"
-          ]
-        },
-        {
-          "id": "retirement-planner",
-          "name": "Retirement Planner",
-          "description": "Retirement readiness assessment, Social Security optimization, withdrawal strategies, Monte Carlo simulations",
-          "version": "1.0.0",
-          "last_updated": "2025-12-09",
-          "directory": "Skills/retirement-planner",
-          "allowed_tools": ["Read", "Bash", "WebSearch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
-          "install_command": "cp -r Skills/retirement-planner .claude/skills/",
-          "target_users": "pre-retirees, retirees, financial planners",
-          "tags": ["retirement", "finance", "social-security", "401k", "ira", "planning"],
-          "features": [
-            "Retirement readiness assessment",
-            "Social Security optimization",
-            "Withdrawal strategy planning",
-            "Monte Carlo simulations",
-            "Roth conversion analysis",
-            "Integration with portfolio-analyzer and tax-preparation"
-          ]
-        }
-      ],
-      "research": [
-        {
-          "id": "research-consolidator",
-          "name": "Research Consolidator",
-          "description": "Synthesize research from multiple AI models and sources into comprehensive reports with confidence scoring",
-          "version": "1.0.0",
-          "last_updated": "2025-12-09",
-          "directory": "Skills/research-consolidator",
-          "allowed_tools": ["Read", "Bash", "WebSearch", "WebFetch", "Grep", "Glob", "Task", "Write", "AskUserQuestion"],
-          "install_command": "cp -r Skills/research-consolidator .claude/skills/",
-          "target_users": "researchers, analysts, students",
-          "tags": ["research", "synthesis", "analysis", "reporting", "ai"],
-          "features": [
-            "Multi-source research synthesis",
-            "Confidence scoring",
-            "Citation management",
-            "Comprehensive report generation"
-          ]
-        }
-      ],
-      "domain_specific": [
-        {
-          "id": "jr-kraken-18u-navy-lineup",
-          "name": "Jr Kraken 18U Navy Lineup Generator",
-          "description": "Hockey team lineup generation and game strategy planning for Jr Kraken 18U Navy team",
-          "version": "1.0.0",
-          "last_updated": "2025-12-09",
-          "directory": "Skills/jr-kraken-18u-navy-lineup",
-          "allowed_tools": ["Read", "Bash", "Write", "AskUserQuestion"],
-          "install_command": "cp -r Skills/jr-kraken-18u-navy-lineup .claude/skills/",
-          "target_users": "hockey coaches, team managers",
-          "tags": ["hockey", "sports", "lineup", "strategy", "coaching"],
-          "features": [
-            "Line combination generation",
-            "Positional optimization",
-            "Game strategy planning",
-            "Player rotation management"
-          ]
-        }
+    {
+      "id": "portfolio-analyzer",
+      "name": "Portfolio Analyzer",
+      "description": "Investment portfolio analysis, performance metrics, asset allocation, risk assessment, and strategic recommendations",
+      "type": "skill",
+      "category": "financial",
+      "version": "2.3.0",
+      "last_updated": "2025-12-09",
+      "directory": "Skills/portfolio-analyzer",
+      "allowed_tools": ["Read", "Bash", "WebSearch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
+      "install_command": "cp -r Skills/portfolio-analyzer .claude/skills/",
+      "target_users": "investors, financial planners",
+      "tags": ["investing", "portfolio", "finance", "stocks", "bonds", "etf", "analysis"],
+      "features": [
+        "Portfolio performance analysis",
+        "Asset allocation optimization",
+        "Risk assessment and metrics",
+        "Tax-loss harvesting opportunities",
+        "Rebalancing recommendations",
+        "Integration with retirement-planner and tax-preparation"
+      ]
+    },
+    {
+      "id": "retirement-planner",
+      "name": "Retirement Planner",
+      "description": "Retirement readiness assessment, Social Security optimization, withdrawal strategies, Monte Carlo simulations",
+      "type": "skill",
+      "category": "financial",
+      "version": "1.0.0",
+      "last_updated": "2025-12-09",
+      "directory": "Skills/retirement-planner",
+      "allowed_tools": ["Read", "Bash", "WebSearch", "Grep", "Glob", "Task", "Skill", "Write", "AskUserQuestion"],
+      "install_command": "cp -r Skills/retirement-planner .claude/skills/",
+      "target_users": "pre-retirees, retirees, financial planners",
+      "tags": ["retirement", "finance", "social-security", "401k", "ira", "planning"],
+      "features": [
+        "Retirement readiness assessment",
+        "Social Security optimization",
+        "Withdrawal strategy planning",
+        "Monte Carlo simulations",
+        "Roth conversion analysis",
+        "Integration with portfolio-analyzer and tax-preparation"
+      ]
+    },
+    {
+      "id": "research-consolidator",
+      "name": "Research Consolidator",
+      "description": "Synthesize research from multiple AI models and sources into comprehensive reports with confidence scoring",
+      "type": "skill",
+      "category": "research",
+      "version": "1.0.0",
+      "last_updated": "2025-12-09",
+      "directory": "Skills/research-consolidator",
+      "allowed_tools": ["Read", "Bash", "WebSearch", "WebFetch", "Grep", "Glob", "Task", "Write", "AskUserQuestion"],
+      "install_command": "cp -r Skills/research-consolidator .claude/skills/",
+      "target_users": "researchers, analysts, students",
+      "tags": ["research", "synthesis", "analysis", "reporting", "ai"],
+      "features": [
+        "Multi-source research synthesis",
+        "Confidence scoring",
+        "Citation management",
+        "Comprehensive report generation"
+      ]
+    },
+    {
+      "id": "jr-kraken-18u-navy-lineup",
+      "name": "Jr Kraken 18U Navy Lineup Generator",
+      "description": "Hockey team lineup generation and game strategy planning for Jr Kraken 18U Navy team",
+      "type": "skill",
+      "category": "domain-specific",
+      "version": "1.0.0",
+      "last_updated": "2025-12-09",
+      "directory": "Skills/jr-kraken-18u-navy-lineup",
+      "allowed_tools": ["Read", "Bash", "Write", "AskUserQuestion"],
+      "install_command": "cp -r Skills/jr-kraken-18u-navy-lineup .claude/skills/",
+      "target_users": "hockey coaches, team managers",
+      "tags": ["hockey", "sports", "lineup", "strategy", "coaching"],
+      "features": [
+        "Line combination generation",
+        "Positional optimization",
+        "Game strategy planning",
+        "Player rotation management"
       ]
     }
-  },
-  "integrations": {
-    "skill_connections": [
-      {
-        "from": "portfolio-analyzer",
-        "to": "retirement-planner",
-        "description": "Portfolio data feeds into retirement projections and withdrawal strategies"
+  ],
+  "metadata": {
+    "categories": {
+      "agents": {
+        "development": ["bug-tracker-resolver", "database-architect", "documentation-maintainer", "performance-optimizer", "security-code-scanner"],
+        "design": ["ux-ui-design-expert"],
+        "planning": ["roadmap-feature-planner"],
+        "media": ["video-integration-specialist"]
       },
-      {
-        "from": "portfolio-analyzer",
-        "to": "tax-preparation",
-        "description": "Tax-loss harvesting and cost basis coordination for tax optimization"
-      },
-      {
-        "from": "retirement-planner",
-        "to": "tax-preparation",
-        "description": "Roth conversion analysis and withdrawal tax planning"
+      "skills": {
+        "financial": ["tax-preparation", "portfolio-analyzer", "retirement-planner"],
+        "research": ["research-consolidator"],
+        "domain-specific": ["jr-kraken-18u-navy-lineup"]
       }
-    ]
-  },
-  "installation": {
-    "agents": {
-      "directory": ".claude/agents/",
-      "instructions": [
-        "1. Create the agents directory if it doesn't exist: mkdir -p .claude/agents/",
-        "2. Copy the desired agent file: cp Agents/<agent-name>.md .claude/agents/",
-        "3. The agent will be automatically available in Claude Code via the Task tool"
+    },
+    "integrations": {
+      "skill_connections": [
+        {
+          "from": "portfolio-analyzer",
+          "to": "retirement-planner",
+          "description": "Portfolio data feeds into retirement projections and withdrawal strategies"
+        },
+        {
+          "from": "portfolio-analyzer",
+          "to": "tax-preparation",
+          "description": "Tax-loss harvesting and cost basis coordination for tax optimization"
+        },
+        {
+          "from": "retirement-planner",
+          "to": "tax-preparation",
+          "description": "Roth conversion analysis and withdrawal tax planning"
+        }
       ]
     },
-    "skills": {
-      "directory": ".claude/skills/",
-      "instructions": [
-        "1. Create the skills directory if it doesn't exist: mkdir -p .claude/skills/",
-        "2. Copy the entire skill folder: cp -r Skills/<skill-name> .claude/skills/",
-        "3. The skill will be automatically available in Claude Code conversations"
-      ]
+    "installation": {
+      "agents": {
+        "directory": ".claude/agents/",
+        "instructions": [
+          "1. Create the agents directory if it doesn't exist: mkdir -p .claude/agents/",
+          "2. Copy the desired agent file: cp Agents/<agent-name>.md .claude/agents/",
+          "3. The agent will be automatically available in Claude Code via the Task tool"
+        ]
+      },
+      "skills": {
+        "directory": ".claude/skills/",
+        "instructions": [
+          "1. Create the skills directory if it doesn't exist: mkdir -p .claude/skills/",
+          "2. Copy the entire skill folder: cp -r Skills/<skill-name> .claude/skills/",
+          "3. The skill will be automatically available in Claude Code conversations"
+        ]
+      }
+    },
+    "stats": {
+      "total_agents": 8,
+      "total_skills": 5,
+      "agent_categories": 4,
+      "skill_categories": 3
+    },
+    "contributing": {
+      "guidelines": "Follow existing structure patterns, include comprehensive documentation, add appropriate .gitignore entries for data directories, and test with Claude Code before submitting",
+      "agent_template": "Agents/README.md",
+      "skill_template": "Skills/README.md"
+    },
+    "license": "MIT",
+    "resources": {
+      "claude_code_docs": "https://docs.anthropic.com/en/docs/claude-code",
+      "skills_guide": "https://docs.anthropic.com/en/docs/claude-code/skills",
+      "api_docs": "https://docs.anthropic.com/en/api"
     }
-  },
-  "stats": {
-    "total_agents": 8,
-    "total_skills": 5,
-    "agent_categories": 4,
-    "skill_categories": 3
-  },
-  "contributing": {
-    "guidelines": "Follow existing structure patterns, include comprehensive documentation, add appropriate .gitignore entries for data directories, and test with Claude Code before submitting",
-    "agent_template": "Agents/README.md",
-    "skill_template": "Skills/README.md"
-  },
-  "license": "MIT",
-  "resources": {
-    "claude_code_docs": "https://docs.anthropic.com/en/docs/claude-code",
-    "skills_guide": "https://docs.anthropic.com/en/docs/claude-code/skills",
-    "api_docs": "https://docs.anthropic.com/en/api"
   }
 }
