@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-01-22
+
+### Added
+
+- **RSU Calculator Script** (`scripts/rsu_calculator.py`)
+  - Four subcommands: `withholding`, `lots`, `sale`, `basis`
+  - Cost basis calculation from vesting records with proper FMV tracking
+  - Withholding shortfall estimation comparing 22% supplemental rate to actual marginal bracket
+  - Multi-lot tracking with FIFO and Specific ID lot selection methods
+  - Capital gains calculation with automatic short-term vs long-term determination
+  - Form 8949 adjustment generation for incorrect 1099-B cost basis
+  - CSV/JSON import support for broker statement data
+  - Comprehensive text and JSON output formats
+- **RSU-Specific Discovery Questions**
+  - 10 probing questions specifically for RSU holders
+  - RSU tax trap warnings section (double taxation, withholding shortfall, holding periods, lot identification)
+  - Dedicated RSU holder checklist covering documents, calculations, and tax planning
+- **RSU Statement Review & Data Import**
+  - Platform-specific import guidance for major brokers:
+    - E*TRADE (Morgan Stanley at Work)
+    - Fidelity NetBenefits
+    - Charles Schwab Equity Awards
+    - Morgan Stanley Shareworks
+  - CSV column mapping reference table for flexible imports
+  - PDF data extraction workflow for vesting confirmation statements
+  - Example data extraction patterns
+- **RSU Integration with Other Skills**
+  - Export format for RSU holdings to portfolio-analyzer
+  - Concentration risk assessment coordination
+  - Export format for RSU vesting schedules to retirement-planner
+  - Retirement planning scenarios for RSU income (Roth conversions, Medicare IRMAA)
+  - Cross-skill command invocation examples
+
+### Changed
+
+- Updated skill version to 1.4.0
+- Enhanced scripts/README.md with full RSU calculator documentation
+- Added broker column mapping reference for CSV imports
+
 ## [1.3.0] - 2025-12-09
 
 ### Added

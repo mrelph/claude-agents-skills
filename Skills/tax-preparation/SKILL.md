@@ -3,8 +3,8 @@ name: tax-preparation
 description: Comprehensive tax preparation and planning for individuals and families. Use for annual tax return preparation, tax optimization strategies, deduction identification, estimated tax planning, multi-year tax projections, audit preparation, and tax document organization. Analyzes income sources, identifies deductions and credits, optimizes filing strategies, and creates actionable tax plans. Proactively finds tax reduction opportunities, identifies commonly overlooked deductions, and ensures complete documentation. Integrates with portfolio-analyzer for investment tax considerations and retirement-planner for retirement tax strategies.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 1.3.0
-  last-updated: 2025-12-09
+  version: 1.4.0
+  last-updated: 2025-01-22
   target-users: individuals, families, self-employed
 ---
 
@@ -167,6 +167,206 @@ The Read tool supports PDF files and will extract both text and visual content f
 - [ ] Date acquired shows grant date instead of vesting date → Affects holding period
 - [ ] W-2 Box 1 doesn't include RSU vesting income → Contact employer
 - [ ] Multiple vesting lots sold → Track each lot's basis separately
+
+### RSU Statement Review & Data Import
+
+**IMPORTANT**: This skill can import RSU data from broker statements in PDF or CSV format. Use this capability to accurately track cost basis and prevent double taxation.
+
+#### Importing from Brokerage Platforms
+
+**E*TRADE (Morgan Stanley at Work):**
+- Navigate to: Stock Plan > My Account > Gains & Losses or Tax Information
+- Download: "Supplemental Information" or "Stock Plan Transactions" report
+- Key columns: Release Date (vesting), Shares Released, Fair Market Value, Shares Sold-to-Cover
+
+**Fidelity NetBenefits:**
+- Navigate to: Stock Plans > History > Vesting History or Tax Info
+- Download: "Stock Plan Transactions" or "Cost Basis" report
+- Key columns: Release Date, Total Shares, Acquisition Price (this is your FMV/basis)
+
+**Charles Schwab Equity Awards:**
+- Navigate to: Equity Awards > Transaction History or Tax Documents
+- Download: "Stock Plan Activity" or "Realized Gain/Loss" report
+- Key columns: Vest Date, Shares, Market Value, Shares Withheld
+
+**Morgan Stanley Shareworks:**
+- Navigate to: My Portfolio > Transactions or Tax Center
+- Download: "Vesting Details" or "Tax Lots" report
+- Key columns: Vesting Date, Shares Vested, FMV Per Share, Net Shares
+
+#### CSV Column Mapping
+
+When importing CSV files, the `rsu_calculator.py` script accepts these column name variations:
+
+| Required Field | Accepted Column Names |
+|----------------|----------------------|
+| Vesting Date | `vesting_date`, `Vesting Date`, `Release Date`, `Date Acquired`, `Vest Date` |
+| Shares Vested | `shares_vested`, `Shares Vested`, `Shares Released`, `Total Shares`, `Quantity` |
+| FMV at Vesting | `fmv_at_vesting`, `FMV`, `Fair Market Value`, `Acquisition Price`, `Price`, `Market Value` |
+| Shares Withheld | `shares_withheld`, `Shares Withheld`, `Sold-to-Cover`, `Shares Sold for Taxes` |
+| Grant Date | `grant_date`, `Grant Date`, `Award Date` (optional) |
+| Grant ID | `grant_id`, `Grant ID`, `Award ID`, `Grant Number` (optional) |
+
+#### Processing RSU Statement PDFs
+
+When a user provides an RSU statement PDF:
+
+1. **Read the PDF** using the Read tool
+2. **Identify the document type**:
+   - Vesting confirmation → Extract vesting date, shares, FMV
+   - Stock plan summary → Extract all historical vestings
+   - 1099-B → Extract sales with (likely incorrect) basis
+3. **Extract key data** into the RSU data recording format
+4. **Cross-reference** with W-2 to verify vesting income is included
+5. **Flag discrepancies** between documents
+
+**Example PDF Data Extraction:**
+
+When you see a vesting confirmation like:
+```
+Award: RSU-2022-001
+Vesting Date: January 15, 2024
+Shares Vested: 250
+Share Price: $100.00
+Gross Value: $25,000.00
+Shares Sold for Taxes: 87
+Net Shares: 163
+```
+
+Extract and record as:
+```json
+{
+  "vesting_date": "2024-01-15",
+  "shares_vested": 250,
+  "fmv_at_vesting": 100.00,
+  "shares_withheld": 87,
+  "net_shares": 163,
+  "grant_id": "RSU-2022-001"
+}
+```
+
+#### Using the RSU Calculator Script
+
+After importing data, use the RSU calculator for analysis:
+
+```bash
+# Calculate withholding shortfall
+python scripts/rsu_calculator.py withholding \
+  --vesting-income 25000 \
+  --ytd-wages 75000 \
+  --filing-status married_jointly \
+  --state-rate 0.093
+
+# Load and display lot summary
+python scripts/rsu_calculator.py lots --vesting-file vestings.csv
+
+# Calculate sale tax implications
+python scripts/rsu_calculator.py sale \
+  --vesting-file vestings.csv \
+  --sale-date 2024-06-15 \
+  --shares 100 \
+  --sale-price 120.00 \
+  --reported-basis 0
+
+# Quick cost basis calculation
+python scripts/rsu_calculator.py basis \
+  --shares-vested 250 \
+  --fmv 100.00 \
+  --shares-withheld 87
+```
+
+### RSU Integration with Other Skills
+
+#### Integration with portfolio-analyzer
+
+RSU holdings should be tracked in the portfolio-analyzer for comprehensive portfolio analysis. This helps assess concentration risk (too much in employer stock) and coordinate tax-efficient selling decisions.
+
+**Export RSU holdings for portfolio tracking**:
+```bash
+# Create RSU holdings file for portfolio-analyzer
+python scripts/rsu_calculator.py lots --vesting-file vestings.csv --output-format json > ../portfolio-analyzer/data/rsu_holdings.json
+```
+
+**RSU data format for portfolio-analyzer**:
+```json
+{
+  "rsu_holdings": {
+    "symbol": "ACME",
+    "description": "ACME Corp RSU Shares",
+    "quantity": 500,
+    "cost_basis_total": 50000.00,
+    "cost_basis_per_share": 100.00,
+    "current_value": 65000.00,
+    "unrealized_gain": 15000.00,
+    "lots": [
+      {
+        "vesting_date": "2024-01-15",
+        "shares": 250,
+        "cost_basis": 25000.00,
+        "holding_period": "long_term"
+      },
+      {
+        "vesting_date": "2024-07-15",
+        "shares": 250,
+        "cost_basis": 25000.00,
+        "holding_period": "short_term"
+      }
+    ]
+  }
+}
+```
+
+**Concentration risk assessment** - Ask portfolio-analyzer to evaluate:
+- RSU holdings as percentage of total portfolio
+- Sector concentration (employer stock + related holdings)
+- Tax implications of selling for diversification
+- Optimal lot selection for tax-efficient sales
+
+**Invoke portfolio-analyzer for RSU analysis**:
+```
+Skill command: "portfolio-analyzer"
+Args: "--holdings data/rsu_holdings.json --concern concentration"
+```
+
+#### Integration with retirement-planner
+
+RSU vesting schedules significantly impact retirement planning, especially for pre-retirees with unvested equity. Coordinate RSU income with retirement tax strategies.
+
+**RSU income planning considerations**:
+- Large vesting events in final working years increase AGI, affecting Medicare IRMAA
+- Immediate RSU sales at vesting provides tax simplicity and diversification
+- Holding RSUs for long-term treatment delays capital gains tax but adds risk
+- RSU income in early retirement years affects Roth conversion strategy
+
+**Export RSU vesting schedule for retirement planning**:
+```json
+{
+  "rsu_vesting_schedule": {
+    "current_year": {
+      "total_vesting_income": 100000,
+      "tax_impact": "additional_withholding_needed"
+    },
+    "future_vestings": [
+      {"year": 2025, "estimated_income": 120000},
+      {"year": 2026, "estimated_income": 80000}
+    ],
+    "unvested_value_total": 400000,
+    "cliff_vesting_years": [2025, 2027]
+  }
+}
+```
+
+**Retirement planning scenarios to model**:
+1. **Early retirement with unvested RSUs** - Forfeiture impact, accelerated vesting triggers
+2. **RSU income + Roth conversions** - Optimal bracket management
+3. **Medicare IRMAA planning** - Keep MAGI below thresholds ($103k single/$206k MFJ)
+4. **Pension vs RSU trade-off** - Lump sum vs equity value comparison
+
+**Invoke retirement-planner with RSU context**:
+```
+Skill command: "retirement-planner"
+Args: "--scenario rsu-income-planning --vesting-file vestings.json"
+```
 
 ### Data Recording Format
 
@@ -567,6 +767,54 @@ Ask about these events in the tax year:
 12. "Did you contribute to a 529 plan? (May have state deduction)"
 13. "Do you have any carryforwards from prior years - capital losses, charitable contributions, NOLs?"
 
+### RSU-Specific Discovery Questions
+
+**For anyone who mentions RSUs, stock compensation, or works in tech/finance, ask these:**
+
+1. "Did any RSUs vest this year? If so, how many vesting events and what were the FMV prices?"
+2. "Did you sell any RSU shares? Did you keep records of which vesting lots you sold from?"
+3. "Have you checked your 1099-B cost basis against your vesting records? (This is often incorrect)"
+4. "What is your typical withholding rate on RSU vestings? Is it 22% or higher?"
+5. "Do you have RSU vesting statements from your broker (E*TRADE, Fidelity, Schwab, etc.)?"
+6. "Are you planning to hold RSU shares for long-term gains, or do you typically sell immediately?"
+7. "Have you accounted for RSU income in your estimated tax payments or W-4 withholding?"
+8. "Do you have any unvested RSUs that will vest next year? (For tax planning)"
+9. "If you left or joined a company this year, were any RSUs forfeited or accelerated?"
+10. "Do you also have ISOs, NQSOs, or ESPP shares? (Different tax treatment)"
+
+**RSU Tax Trap Warnings to Share:**
+
+- **Double Taxation Trap**: If 1099-B shows $0 basis and you don't correct it, you'll pay tax TWICE on the same income
+- **Withholding Shortfall**: 22% federal withholding is often insufficient - your actual bracket may be 32-37%
+- **Holding Period**: Starts at VESTING, not grant date - selling within 1 year of vesting = short-term gains
+- **Lot Identification**: If you've had multiple vestings, track which lots you sell for optimal tax treatment
+
+### RSU Holder Checklist
+
+**Run through this checklist with all RSU holders:**
+
+#### Documents Needed
+- [ ] Grant agreements for all active RSU grants
+- [ ] Vesting confirmation statements (date, shares, FMV for each vesting)
+- [ ] Stock plan administration statements (E*TRADE, Fidelity, Schwab, Morgan Stanley)
+- [ ] 1099-B for any sales (check Supplemental Information for stock compensation details)
+- [ ] W-2 showing Box 1 includes RSU vesting income
+- [ ] Prior year cost basis records if shares held from previous years
+
+#### Calculations to Verify
+- [ ] Total RSU vesting income matches W-2 Box 1 (along with other wages)
+- [ ] Cost basis per share = FMV at vesting for each lot
+- [ ] Holding period correctly calculated from vesting date (not grant date)
+- [ ] 1099-B basis matches actual basis (usually needs correction)
+- [ ] Withholding adequacy (use `rsu_calculator.py withholding` to check)
+
+#### Tax Planning Items
+- [ ] Current year withholding shortfall estimate
+- [ ] Estimated tax payment needs for Q4 or April
+- [ ] Future vesting schedule for income planning
+- [ ] Concentration risk assessment (too much in employer stock?)
+- [ ] Long-term hold vs immediate sale strategy decision
+
 ---
 
 ## COMMONLY OVERLOOKED DEDUCTIONS & CREDITS
@@ -834,6 +1082,28 @@ Tax laws are complex and change frequently. Verify all information against curre
 ---
 
 ## Version History
+
+### v1.4.0 (2025-01-22)
+- **Added RSU Calculator Script** (`scripts/rsu_calculator.py`)
+  - Cost basis calculation from vesting records
+  - Withholding shortfall estimation with marginal bracket analysis
+  - Multi-lot tracking with FIFO and Specific ID methods
+  - Capital gains calculation with holding period determination
+  - Form 8949 adjustment generation for incorrect 1099-B basis
+  - CSV/JSON import support for broker statement data
+- **Added RSU-Specific Discovery Questions**
+  - 10 probing questions for RSU holders
+  - RSU tax trap warnings (double taxation, withholding shortfall, holding periods)
+  - RSU holder documentation checklist
+- **Added RSU Statement Review & Data Import**
+  - Platform-specific guidance for E*TRADE, Fidelity, Schwab, Morgan Stanley
+  - CSV column mapping for broker exports
+  - PDF data extraction workflow for vesting statements
+- **Added RSU Integration with Other Skills**
+  - Export RSU holdings to portfolio-analyzer for concentration risk assessment
+  - Export RSU vesting schedules to retirement-planner for income planning
+  - Data formats for cross-skill coordination
+  - Scenario planning for RSU income + Roth conversions, Medicare IRMAA
 
 ### v1.3.0 (2025-12-09)
 - **Added comprehensive RSU tax treatment** - Complete guide to RSU cost basis and taxation

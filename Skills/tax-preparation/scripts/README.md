@@ -17,6 +17,7 @@ Python scripts for tax calculations, analysis, and document management.
 | `document_checklist_generator.py` | Personalized document lists | Situation-based, missing doc tracking |
 | `tax_savings_finder.py` | Find tax reduction opportunities | Proactive savings identification |
 | `credit_eligibility_checker.py` | Check credit eligibility | CTC, EITC, education, saver's credit |
+| `rsu_calculator.py` | RSU tax calculations | Cost basis, withholding, lot tracking, Form 8949 |
 
 ---
 
@@ -435,3 +436,218 @@ All scripts include:
 - Amounts are in USD
 - Scripts are standalone (no dependencies between them)
 - Results are estimates; consult a tax professional for final returns
+
+---
+
+## rsu_calculator.py
+
+Comprehensive RSU calculator for cost basis, withholding analysis, lot tracking, and Form 8949 preparation.
+
+### Commands
+
+The script supports four subcommands:
+
+#### `withholding` - Analyze withholding adequacy
+
+```bash
+python rsu_calculator.py withholding \
+  --vesting-income 50000 \
+  --ytd-wages 100000 \
+  --filing-status single \
+  --state-rate 0.093
+```
+
+**Parameters:**
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `--vesting-income` | Yes | - | RSU vesting income amount |
+| `--ytd-wages` | No | 0 | Year-to-date wages before vesting |
+| `--filing-status` | No | single | Filing status |
+| `--state-rate` | No | 0.05 | State tax rate (decimal) |
+| `--output-format` | No | text | text or json |
+
+**Features:**
+- Compares typical employer withholding (22% federal supplemental) to actual tax owed
+- Calculates Social Security and Medicare (including additional Medicare tax)
+- Identifies withholding shortfall and provides action recommendations
+
+#### `lots` - Display vesting lot summary
+
+```bash
+python rsu_calculator.py lots --vesting-file vestings.csv
+```
+
+**Parameters:**
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `--vesting-file` | Yes | - | CSV or JSON file with vesting data |
+| `--output-format` | No | text | text or json |
+
+**CSV Format:**
+```csv
+vesting_date,shares_vested,fmv_at_vesting,shares_withheld,grant_date,grant_id
+2024-01-15,250,100.00,87,2022-01-15,GRANT001
+2024-04-15,250,110.00,96,2022-01-15,GRANT001
+```
+
+**JSON Format:**
+```json
+{
+  "vestings": [
+    {
+      "vesting_date": "2024-01-15",
+      "shares_vested": 250,
+      "fmv_at_vesting": 100.00,
+      "shares_withheld": 87,
+      "grant_date": "2022-01-15",
+      "grant_id": "GRANT001"
+    }
+  ]
+}
+```
+
+#### `sale` - Calculate sale tax implications
+
+```bash
+# Single sale
+python rsu_calculator.py sale \
+  --vesting-file vestings.csv \
+  --sale-date 2024-06-15 \
+  --shares 100 \
+  --sale-price 120 \
+  --method fifo
+
+# From specific lot
+python rsu_calculator.py sale \
+  --vesting-file vestings.csv \
+  --sale-date 2024-06-15 \
+  --shares 100 \
+  --sale-price 120 \
+  --from-vesting-date 2024-01-15 \
+  --method specific
+
+# Multiple sales from file
+python rsu_calculator.py sale \
+  --vesting-file vestings.csv \
+  --sales-file sales.csv
+```
+
+**Parameters:**
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `--vesting-file` | Yes | - | CSV or JSON file with vesting data |
+| `--sales-file` | No | - | CSV or JSON file with sales data |
+| `--sale-date` | No | - | Sale date (YYYY-MM-DD) |
+| `--shares` | No | - | Number of shares sold |
+| `--sale-price` | No | - | Sale price per share |
+| `--from-vesting-date` | No | - | Specific lot to sell from |
+| `--reported-basis` | No | 0 | Basis reported on 1099-B |
+| `--method` | No | fifo | Lot selection: fifo or specific |
+| `--output-format` | No | text | text or json |
+
+**Features:**
+- FIFO or Specific ID lot selection methods
+- Automatic holding period calculation (short vs long-term)
+- Form 8949 adjustment generation when 1099-B basis is incorrect
+- Multi-lot allocation for large sales
+
+**Sales CSV Format:**
+```csv
+sale_date,shares_sold,sale_price,from_vesting_date,reported_basis_1099b
+2024-06-15,100,120.00,,0
+2024-09-01,50,115.00,2024-01-15,0
+```
+
+#### `basis` - Calculate cost basis for a single vesting
+
+```bash
+python rsu_calculator.py basis \
+  --shares-vested 250 \
+  --fmv 100.00 \
+  --shares-withheld 87
+```
+
+**Parameters:**
+| Parameter | Required | Default | Description |
+|-----------|----------|---------|-------------|
+| `--shares-vested` | Yes | - | Number of shares vested |
+| `--fmv` | Yes | - | Fair market value at vesting |
+| `--shares-withheld` | No | 0 | Shares withheld for taxes |
+| `--output-format` | No | text | text or json |
+
+### Example Outputs
+
+**Withholding Analysis:**
+```
+================================================================================
+RSU WITHHOLDING ANALYSIS
+================================================================================
+
+Vesting Income: $50,000.00
+
+TYPICAL EMPLOYER WITHHOLDING:
+  Federal (22%):       $11,000.00
+  Social Security:          $3,100.00
+  Medicare:                 $725.00
+  State:                    $4,650.00
+  ----------------------------------------
+  Total Withheld:           $19,475.00
+
+ESTIMATED ACTUAL TAX OWED:
+  Federal (32% bracket):  $16,000.00
+  Social Security:          $3,100.00
+  Medicare:                 $725.00
+  State:                    $4,650.00
+  ----------------------------------------
+  Total Estimated Tax:      $24,475.00
+
+*** WITHHOLDING SHORTFALL: $5,000.00 (10.0%) ***
+
+ACTION NEEDED:
+  - Increase W-4 withholding at day job, OR
+  - Make estimated tax payment (Form 1040-ES), OR
+  - Set aside funds for tax payment at filing
+================================================================================
+```
+
+**Sale Calculation:**
+```
+================================================================================
+RSU SALE CALCULATION
+================================================================================
+
+Sale Date: 2024-06-15
+Shares Sold: 100.00
+Sale Price: $120.00
+Total Proceeds: $12,000.00
+
+Vesting Date    Shares    Basis/Sh        Basis     Proceeds    Gain/Loss         Type   Days
+--------------------------------------------------------------------------------
+2024-01-15      100.00   $  100.00   $ 10,000.00  $ 12,000.00  $  2,000.00   Short-term    152
+
+  Short-term gain/loss: $2,000.00
+  Long-term gain/loss:  $0.00
+
+--------------------------------------------------------------------------------
+FORM 8949 ADJUSTMENT REQUIRED
+--------------------------------------------------------------------------------
+
+The 1099-B cost basis is incorrect. You must report the correct basis on Form 8949.
+
+  Lot from 2024-01-15:
+    1099-B reported basis: $0.00
+    Correct basis:         $10,000.00
+    Adjustment amount:     $10,000.00
+================================================================================
+```
+
+### Integration with Statement Imports
+
+The calculator accepts CSV exports from common brokerage platforms. Map columns as follows:
+
+| Platform | vesting_date | shares_vested | fmv_at_vesting |
+|----------|--------------|---------------|----------------|
+| E*TRADE | Vest Date | Shares Released | Fair Market Value |
+| Fidelity | Release Date | Total Shares | Acquisition Price |
+| Schwab | Vest Date | Shares | Market Value |
+| Morgan Stanley | Vesting Date | Shares Vested | FMV Per Share |

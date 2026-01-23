@@ -13,7 +13,7 @@ This skill transforms Claude into a US Tax Expert capable of:
 
 ## Version
 
-**Current Version**: 1.3.0 (2025-12-09)
+**Current Version**: 1.4.0 (2025-01-22)
 
 ## Directory Structure
 
@@ -21,6 +21,7 @@ This skill transforms Claude into a US Tax Expert capable of:
 tax-preparation/
 ├── SKILL.md                 # Main skill definition and workflows
 ├── README.md                # This file
+├── CHANGELOG.md             # Version history
 ├── references/              # Reference documents
 │   ├── tax_brackets_deductions.md   # 2024 brackets, limits, thresholds
 │   ├── credits_guide.md             # Tax credit eligibility & calculations
@@ -33,7 +34,8 @@ tax-preparation/
     ├── deduction_analyzer.py          # Standard vs itemized analysis
     ├── document_checklist_generator.py # Personalized checklists
     ├── tax_savings_finder.py          # Opportunity identification
-    └── credit_eligibility_checker.py  # Credit qualification analysis
+    ├── credit_eligibility_checker.py  # Credit qualification analysis
+    └── rsu_calculator.py              # RSU cost basis, withholding, lot tracking
 ```
 
 ## Key Features
@@ -53,13 +55,22 @@ The skill can read tax documents directly:
 - Tables of overlooked deductions by taxpayer type
 - Automatic opportunity identification
 
-### 3. RSU & Stock Compensation
+### 3. RSU & Stock Compensation (Enhanced in v1.4.0)
 Complete handling of:
+- **RSU Calculator Script** (`rsu_calculator.py`):
+  - Withholding shortfall analysis (22% vs actual bracket)
+  - Multi-lot tracking with FIFO and Specific ID methods
+  - Capital gains calculation with holding period determination
+  - Form 8949 adjustment generation
+- **Broker Statement Import**: CSV/JSON import from E*TRADE, Fidelity, Schwab, Morgan Stanley
 - RSU cost basis calculation and verification
 - 1099-B basis correction (common errors)
 - Form 8949 reporting with adjustment codes
 - ISO, NQSO, and ESPP tax treatment
 - Double taxation trap prevention
+- **RSU-specific discovery questions** for proactive tax savings
+- **Integration with portfolio-analyzer** for concentration risk
+- **Integration with retirement-planner** for income planning
 
 ### 4. Documentation Completeness
 - Document checklists by income/deduction type
