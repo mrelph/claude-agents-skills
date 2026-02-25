@@ -1,0 +1,32 @@
+{
+  "personal": {
+    "user_age": 55,
+    "spouse_age": 53,
+    "retirement_age": 62,
+    "spouse_retirement_age": 62,
+    "life_expectancy": 92,
+    "filing_status": "married_jointly"
+  },
+  "income": {
+    "user_salary": 185000,
+    "spouse_salary": 95000,
+    "social_security_user_fra": 3200,
+    "social_security_spouse_fra": 1800
+  },
+  "accounts": {
+    "traditional_401k": 650000,
+    "roth_ira": 180000,
+    "taxable_brokerage": 220000,
+    "hsa": 45000
+  },
+  "expenses": {
+    "current_annual": 120000,
+    "mortgage_remaining": 180000,
+    "mortgage_payoff_year": 2032
+  },
+  "goals": {
+    "annual_retirement_spending": 100000,
+    "legacy_target": 200000,
+    "risk_tolerance": "moderate"
+  }
+}

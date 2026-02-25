@@ -1,65 +1,65 @@
 #!/usr/bin/env python3
 """
 Tax Calculator - Calculate federal income tax based on filing status and income.
-Supports 2024 tax year brackets and standard deductions.
+Supports 2025 tax year brackets and standard deductions.
 """
 
 import argparse
 import json
 from typing import Dict, Tuple
 
-# 2024 Tax Brackets
+# 2025 Tax Brackets
 TAX_BRACKETS = {
     "single": [
-        (11600, 0.10),
-        (47150, 0.12),
-        (100525, 0.22),
-        (191950, 0.24),
-        (243725, 0.32),
-        (609350, 0.35),
+        (11925, 0.10),
+        (48475, 0.12),
+        (103350, 0.22),
+        (197300, 0.24),
+        (250525, 0.32),
+        (626350, 0.35),
         (float('inf'), 0.37)
     ],
     "married_jointly": [
-        (23200, 0.10),
-        (94300, 0.12),
-        (201050, 0.22),
-        (383900, 0.24),
-        (487450, 0.32),
-        (731200, 0.35),
+        (23850, 0.10),
+        (96950, 0.12),
+        (206700, 0.22),
+        (394600, 0.24),
+        (501050, 0.32),
+        (751600, 0.35),
         (float('inf'), 0.37)
     ],
     "married_separately": [
-        (11600, 0.10),
-        (47150, 0.12),
-        (100525, 0.22),
-        (191950, 0.24),
-        (243725, 0.32),
-        (365600, 0.35),
+        (11925, 0.10),
+        (48475, 0.12),
+        (103350, 0.22),
+        (197300, 0.24),
+        (250525, 0.32),
+        (375800, 0.35),
         (float('inf'), 0.37)
     ],
     "head_of_household": [
-        (16550, 0.10),
-        (63100, 0.12),
-        (100500, 0.22),
-        (191950, 0.24),
-        (243700, 0.32),
-        (609350, 0.35),
+        (17000, 0.10),
+        (64850, 0.12),
+        (103350, 0.22),
+        (197300, 0.24),
+        (250500, 0.32),
+        (626350, 0.35),
         (float('inf'), 0.37)
     ]
 }
 
 STANDARD_DEDUCTIONS = {
-    "single": 14600,
-    "married_jointly": 29200,
-    "married_separately": 14600,
-    "head_of_household": 21900
+    "single": 15000,
+    "married_jointly": 30000,
+    "married_separately": 15000,
+    "head_of_household": 22500
 }
 
 ADDITIONAL_DEDUCTION_65_BLIND = {
-    "single": 1950,
-    "married_jointly": 1550,
-    "married_separately": 1550,
-    "head_of_household": 1950
+    "single": 2000,
+    "married_jointly": 1600,
+    "married_separately": 1600,
+    "head_of_household": 2000
 }
 
 

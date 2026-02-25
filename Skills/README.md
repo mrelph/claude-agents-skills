@@ -6,10 +6,12 @@ Comprehensive skill modules with supporting scripts and reference documentation 
 
 | Skill | Version | Description |
 |-------|---------|-------------|
-| [research-consolidator](research-consolidator/) | v1.0.0 | Synthesize research from multiple AI models and sources into comprehensive reports |
-| [tax-preparation](tax-preparation/) | v1.3.0 | US tax preparation, deduction analysis, form processing, tax optimization |
+| [tax-preparation](tax-preparation/) | v1.4.0 | US tax preparation, deduction analysis, form processing, tax optimization |
 | [portfolio-analyzer](portfolio-analyzer/) | v2.3.0 | Investment portfolio analysis, performance metrics, strategic recommendations |
 | [retirement-planner](retirement-planner/) | v1.0.0 | Retirement readiness assessment, Social Security optimization, Monte Carlo simulations |
+| [amazon-rsu-tax-calculations](amazon-rsu-tax-calculations/) | v1.0.0 | Amazon RSU cost basis correction, capital gains calculation, Form 8949 adjustments |
+| [research-consolidator](research-consolidator/) | v1.0.0 | Synthesize research from multiple AI models and sources into comprehensive reports |
+| [kiro-spec-driven-development](kiro-spec-driven-development/) | v1.0.0 | Spec-driven development workflow: requirements, design, and task planning |
 | [jr-kraken-18u-navy-lineup](jr-kraken-18u-navy-lineup/) | v1.0.0 | Hockey team lineup generation and game strategy planning |
 
 ## Usage

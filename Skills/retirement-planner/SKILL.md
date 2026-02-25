@@ -1,6 +1,6 @@
 ---
 name: retirement-planner
-description: Comprehensive pre-retirement planning for individuals and couples. Use for retirement readiness assessments, income projections, Social Security optimization, tax-efficient withdrawal strategies, healthcare planning, Monte Carlo simulations, and scenario modeling. Analyzes current savings, projects future needs, optimizes timing decisions, and creates detailed retirement plans. Integrates with portfolio-analyzer for investment context.
+description: This skill should be used when the user asks "am I ready to retire", "when can I retire", "Social Security claiming strategy", "Roth conversion analysis", "withdrawal strategy", "how much do I need to retire", "Monte Carlo simulation", "retirement income plan", or mentions 401(k), IRA, RMD, pension, Medicare planning, or retirement savings targets. Also triggered by questions about retirement spending, sequence of returns risk, or survivor benefits.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
   version: 1.0.0
@@ -354,16 +354,3 @@ This skill provides sophisticated retirement planning analysis but doesn't repla
 
 Projections are based on assumptions that may not materialize. Markets, taxes, and personal circumstances change. Review and update plans regularly.
 
----
-
-## Version History
-
-### v1.0.0 (2025-10-31)
-- Initial release: Pre-retirement planning for individuals and couples
-- Monte Carlo simulation framework
-- Social Security optimization
-- Tax-efficient withdrawal strategies
-- Healthcare planning integration
-- Integration with portfolio-analyzer skill
-- Scenario modeling and gap analysis
-- Word/Excel output generation

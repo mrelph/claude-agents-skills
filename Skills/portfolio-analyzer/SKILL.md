@@ -1,6 +1,6 @@
 ---
 name: portfolio-analyzer
-description: Analyzes investment portfolios from PDFs, CSVs, or screenshots. Use for monthly portfolio reviews, evaluating investment strategies, assessing portfolio concerns, comparing holdings to market benchmarks, calculating performance metrics, or generating recommendations. Performs comprehensive portfolio analysis including data extraction, metrics calculation, market research with deep web search, and strategic insights. Supports external data source integration for enhanced market context.
+description: This skill should be used when the user asks to "analyze my portfolio", "review my investments", "check my asset allocation", "how is my portfolio performing", "what should I rebalance", "compare to benchmarks", or provides brokerage statements, holdings CSVs, portfolio PDFs, or screenshots. Also triggered by mentions of portfolio risk, concentration, diversification, sector allocation, or investment performance metrics.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
   version: 2.3.0
@@ -106,11 +106,11 @@ python scripts/calculate_portfolio_metrics.py holdings.json > history/metrics_$(
 
 ## Reference Documents (Load ONLY if needed)
 
-**IMPORTANT**: Only load these if you lack the necessary domain knowledge for the specific question.
+**IMPORTANT**: Only load these when the necessary domain knowledge is lacking for the specific question.
 
 **`references/analysis_framework.md`** - Load ONLY when user explicitly asks for concern assessment or needs systematic evaluation checklist
 
-**`references/market_benchmarks.md`** - Load ONLY when you need specific benchmark construction guidance or don't know which index to use
+**`references/market_benchmarks.md`** - Load ONLY when specific benchmark construction guidance is needed or the appropriate index is unclear
 
 Most analyses can be completed without loading these documents. Use your existing knowledge of portfolio analysis principles.
 
@@ -152,45 +152,3 @@ Use the AskUserQuestion tool to clarify critical context before analysis:
 
 This skill provides analytical frameworks but doesn't replace professional financial advice. Consider individual circumstances, time horizon, risk tolerance, and life goals. Market data reflects point-in-time conditions. Automated checks catch mechanical issues but not subtle risks like correlations or liquidity constraints.
 
----
-
-## Version History
-
-### v2.3.0 (2025-10-30)
-- **Enhanced deep research capabilities** with comprehensive financial/economic research framework
-- Added 5 categories of research: Economic Trends, Sector Deep Dives, Portfolio-Specific, Company Analysis, Thematic Investing
-- Added specific Task agent research prompt examples for each category
-- Expanded external data sources (SEC EDGAR, Treasury.gov, BLS.gov)
-- Added research best practices framework
-- Enhanced connection between research findings and portfolio implications
-
-### v2.2.0 (2025-10-30)
-- Added project memory integration for tracking portfolio changes over time
-- Added history directory structure for persistent snapshots
-- Added month-over-month comparison logic
-- Track user preferences (risk tolerance, time horizon, goals) in project memory
-- Track outstanding recommendations and implementation status
-- Compare new positions, closed positions, and allocation drift
-
-### v2.1.0 (2025-10-30)
-- Added Word document generation using word skill for professional reports
-- Added Excel spreadsheet creation for detailed data analysis
-- Added output file naming conventions and structure guidance
-- Added Skill and Write tools to allowed-tools
-- Defined when to create Word vs Excel outputs
-
-### v2.0.0 (2025-10-30)
-- Streamlined skill from 360 to ~120 lines for token efficiency
-- Added deep research capabilities with Task agent integration
-- Added external data source integration (FRED, Morningstar, Yahoo Finance)
-- Added structured output format with severity levels
-- Made reference documents optional to reduce context usage
-- Added user question guidance for clarifying risk tolerance, time horizon, and targets
-- Enhanced web search integration for real-time market data
-
-### v1.0.0 (Initial)
-- Basic portfolio analysis workflow
-- PDF/CSV/screenshot extraction
-- Metrics calculation
-- Market context gathering
-- Strategic analysis and recommendations

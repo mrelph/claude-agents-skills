@@ -1,289 +1,157 @@
 ---
 name: jr-kraken-18u-navy-lineup
-description: Comprehensive lineup building and game strategy system for Jr. Kraken 18U C Navy Team (Coach Mark). Use when creating game day lineups, planning strategies against opponents, making in-game adjustments, or optimizing player combinations. Includes roster knowledge, "Balanced Depth" coaching philosophy, formation strategies, special teams planning, and development player management for 18U C level competitive hockey.
+description: This skill should be used when the user asks to "build a lineup", "create game day lines", "plan strategy for the game", "optimize line combinations", "set up special teams", "plan for player absences", or mentions the Jr. Kraken 18U Navy team, Coach Mark, hockey lineup, forward lines, defense pairings, or game strategy. Also triggered by mentions of specific players like Marsh, Relph, Freeman, or opponent matchups against Paul's team.
 allowed-tools: Read, Bash, Write, Glob, Grep, AskUserQuestion
 ---
 
 # Jr. Kraken 18U C Navy - Lineup & Strategy Builder
 
-This skill helps build effective lineups and game strategies for Coach Mark's Jr. Kraken 18U C Navy Team. It provides structured guidance for line combinations, defensive pairings, special teams, opponent analysis, and in-game adjustments tailored to the team's "Balanced Depth" identity.
+Build effective lineups and game strategies for Coach Mark's Jr. Kraken 18U C Navy Team. Covers line combinations, defensive pairings, special teams, opponent analysis, and in-game adjustments -- all rooted in the team's "Balanced Depth" identity: win through depth, defense, and attrition; wear opponents down over three periods; everyone contributes across four lines; dominate third periods when the depth advantage emerges.
 
 ## Quick Start
 
 For any lineup or strategy request:
 
-1. **Read roster information**: Start by reviewing `references/roster.md` to understand the 17-player roster, ratings (1.00-3.00 scale), and capabilities
-2. **Understand team identity**: Review `references/mark-strategy.md` to understand the "Balanced Depth" coaching philosophy
-3. **Consider the context**: Game importance? Opponent style (especially Paul's team)? Player availability? Tournament vs regular season?
-4. **Select formation strategy**: Review `references/formations.md` for 3-line vs 4-line approaches and defensive pairing philosophies
-5. **Build the lineup**: Use principles from `references/game-planning.md` to construct optimal combinations
-6. **Generate output**: Use `scripts/lineup_generator.py` for formatted lineup sheets, or create custom artifacts
+1. **Read the roster** -- review `references/roster.md` for the 17-player roster, ratings (1.00-3.00 scale), and positional capabilities.
+2. **Align with team identity** -- review `references/mark-strategy.md` for the "Balanced Depth" coaching philosophy.
+3. **Assess context** -- game importance, opponent style (especially Paul's team), player availability, tournament vs regular season.
+4. **Select a formation** -- review `references/formations.md` for 3-line vs 4-line approaches and defense pairing philosophies.
+5. **Build the lineup** -- follow the step-by-step process in `references/game-planning.md`.
+6. **Generate output** -- use `scripts/lineup_generator.py` for formatted lineup sheets, or create a custom artifact.
 
 ## Core Resources
 
-### Roster Reference (`references/roster.md`)
+### Roster (`references/roster.md`)
 
-**When to read**: ALWAYS read first when building lineups or discussing player deployment
+**Read first for every lineup request.** Contains the complete 17-player roster organized by position, with ratings (1.00 = elite, 3.00 = significant development), positional flexibility indicators (F, D, F/D), depth analysis, special teams personnel, line combination templates, absence contingency plans, and goalie capabilities.
 
-Contains:
-- Complete 17-player roster organized by position
-- Player ratings (1.00-3.00 scale, where 1.00 = elite, 3.00 = significant development needed)
-- Positional flexibility indicators (F, D, F/D)
-- Depth analysis for each position
-- Goalie capabilities (both can play out if needed)
-
-**Key roster features**:
+**Key roster facts**:
 - **17 total players** (15 skaters + 2 goalies)
-- **Two 1.00 elite players**: Marsh and Relph (team leaders)
-- **Five 1.50 strong players**: Freeman, Klakring, Silliker (solid core)
-- **Eight 1.75-2.00 players**: Consistent middle tier (team backbone)
-- **Two development players**: Cram (2.50), Thompson (3.00) - need sheltering
-- **9 defensive-capable players**: Major strategic advantage
-- **12 forward-capable players**: Allows 4-line rotation
+- **Two 1.00 elite players**: Marsh and Relph (team leaders, both F/D)
+- **Three 1.50 strong players**: Freeman, Klakring, Silliker (solid core)
+- **Eight 1.75-2.00 players**: McCredy, Young, Bagga, Berry, Butler, Herrick, Jaeger, Tegart (team backbone)
+- **Two development players**: Cram (2.50 F), Thompson (3.00 D) -- both need sheltering
+- **9 defensive-capable players** -- major strategic advantage over most teams' 6
+- **6 F/D versatile players** -- Marsh, Relph, Freeman, Silliker, Berry, Tegart
+- **12 forward-capable players** -- enables 4-line rotation
 
-### Team Strategy Philosophy (`references/mark-strategy.md`)
+### Team Strategy (`references/mark-strategy.md`)
 
-**When to read**: When planning game strategy, making lineup decisions, or explaining team identity
-
-Contains:
-- "Balanced Depth" coaching philosophy
-- Four-line rotation principles
-- Defensive structure priorities
-- Grinding style tactics
-- Development player protection strategies
-- Strengths and weaknesses vs Paul's team
-- Special teams approach (strong PK focus)
+**Read when planning strategy or explaining team identity.** Covers the "Balanced Depth" philosophy, four-line rotation principles, defensive structure priorities, grinding style tactics, development player protection, strengths/weaknesses analysis, strategy vs Paul's team, special teams approach (strong PK focus), in-game adjustments, and communication guidelines.
 
 **Core identity**:
 - Win through depth, defense, and attrition
 - Wear opponents down over three periods
-- Everyone contributes, four lines all matter
-- Strong third-period team
+- Everyone contributes -- four lines all matter
+- Strong third-period team (depth advantage emerges)
 - Protect developing players while giving them opportunities
 
-### Formations & Strategy (`references/formations.md`)
+### Formations (`references/formations.md`)
 
-**When to read**: When deciding on line structure, special teams, or tactical approach for 18U C level
-
-Contains:
-- 4-line vs 3-line forward rotation strategies (18U C level)
-- Defense pairing philosophies (leveraging 9 D-capable players)
-- Line composition principles and chemistry factors
-- Special teams formations (power play umbrella, penalty kill box+1)
-- Game situation adjustments (score-based, period-specific)
-- Line change best practices
-- Goalie rotation strategy
-- Development player deployment (Cram, Thompson)
+**Read when choosing line structure, special teams, or tactical approach.** Covers 4-line vs 3-line forward rotations with specific line structures, 3-pair/4-pair/2-pair defense systems (leveraging 9 D-capable players), special teams formations (PP umbrella, PP overload, PK box+1 aggressive, PK passive box), line deployment by zone, game-situation adjustments (score-based, period-specific), overtime strategy, shift-length guidelines, F/D player deployment, goalie rotation, and line chemistry factors.
 
 ### Game Planning (`references/game-planning.md`)
 
-**When to read**: When preparing for specific opponents or planning tournament strategy
-
-Contains:
-- Pre-game opponent scouting checklist
-- Step-by-step lineup construction process
-- Lineup templates for documentation
-- In-game adjustment triggers and strategies
-- Post-game analysis framework
-- Tournament multi-game strategy
-- Special considerations for games vs Paul's team
-- Managing missing players (common at 18U level)
+**Read when preparing for opponents or planning tournaments.** Covers pre-game preparation checklist (24-48 hours out), opponent scouting framework, step-by-step lineup construction (8 steps), game strategy templates for different opponent types (Paul's team, elite skill, physical, weak, unknown), in-game adjustment triggers and common fixes, post-game analysis framework, tournament multi-game strategy (pool play vs playoffs), back-to-back game management, communication templates, and decision trees for mid-game changes.
 
 ## Common Workflows
 
-### Workflow 1: Build Game Day Lineup
+### 1. Build Game Day Lineup
 
-**Scenario**: Creating lineup for an upcoming game
+Read `roster.md` to confirm player availability (18U players often have conflicts). Choose a 3-line or 4-line approach from `formations.md`. Follow the step-by-step process in `game-planning.md`: confirm availability, build the top forward line (Marsh-Relph-Freeman core), construct defense pairs (leverage 9 D-capable players), fill remaining lines with balanced talent distribution, assign special teams (PK is a priority), identify situational players, and shelter Cram and Thompson appropriately. Generate formatted output with `lineup_generator.py` or create a custom artifact.
 
-**Steps**:
-1. Read `references/roster.md` to confirm available players
-2. Review `references/mark-strategy.md` to align with team philosophy
-3. Determine if 3-line or 4-line approach (read relevant section in `references/formations.md`)
-4. Follow the step-by-step process in `references/game-planning.md`:
-   - Confirm availability (18U players often have conflicts)
-   - Build top forward line (Marsh-Relph-Freeman core)
-   - Construct defense pairs (leverage 9 D-capable players)
-   - Fill remaining lines (balance talent distribution)
-   - Assign special teams (PK priority)
-   - Identify situational players
-   - Shelter Cram and Thompson appropriately
-5. Generate formatted output using `scripts/lineup_generator.py` or create custom artifact
+**Output**: Complete lineup with forward lines, defense pairs, goalies, special teams, and sheltering notes.
 
-**Output**: Complete lineup with forward lines, defense pairs, goalies, special teams, sheltering notes
+### 2. Strategic Game Plan vs Opponent
 
-### Workflow 2: Strategic Game Planning vs Opponent
+Read the scouting checklist in `game-planning.md`. For Paul's team, also read the head-to-head section in `mark-strategy.md`. Determine 2-3 strategic objectives, plan line deployment and matchups using roster knowledge, prepare adjustment scenarios (if losing, if winning, special teams struggling), and identify how to exploit opponent weaknesses (e.g., Paul's limited D depth).
 
-**Scenario**: Preparing strategy against specific opponent (especially Paul's team)
+**Output**: Game plan with scouting notes, strategic objectives, lineup, and contingency plans.
 
-**Steps**:
-1. Read opponent scouting checklist in `references/game-planning.md`
-2. If playing Paul's team, review head-to-head section in `references/mark-strategy.md`
-3. Review relevant tactical concepts in `references/formations.md`
-4. Determine strategic objectives (2-3 focus areas)
-5. Plan line deployment and matchups using roster knowledge
-6. Prepare adjustment scenarios (if losing, if winning, special teams struggling)
-7. Identify how to exploit opponent weaknesses (e.g., Paul's limited D depth)
+### 3. In-Game Adjustments
 
-**Output**: Game plan document with scouting notes, strategic objectives, lineup, and contingency plans
+Identify the problem using adjustment triggers in `game-planning.md` (line getting dominated, chemistry off, matchup exploited, score/situation demands a change). Consider line shuffles among the 2.00-rated players, defense pair changes, moving Marsh or Relph between F and D, or special teams personnel modifications. Leverage F/D versatile players to solve problems without disrupting overall balance. Reference `formations.md` to maintain structural integrity.
 
-### Workflow 3: In-Game Adjustments
+**Output**: Revised lineup with rationale for changes.
 
-**Scenario**: Lines aren't working during game, need to adjust
+### 4. Special Teams Optimization
 
-**Steps**:
-1. Identify the problem (review adjustment triggers in `references/game-planning.md`)
-2. Consider common adjustment options (line shuffles, pair changes, special teams modifications)
-3. Reference formation principles to maintain balance
-4. Leverage F/D versatile players to solve problems
-5. Communicate changes clearly to coaching staff/players
+Read the special teams section in `formations.md` and cross-reference player suitability in `roster.md`. For power play, use skill players (Marsh, Relph, Freeman, Klakring on PP1; Silliker, McCredy, Herrick on PP2). For penalty kill, leverage defensive depth (Silliker, Tegart, Freeman, McCredy as PK forwards; Young, Butler, Berry on PK defense). Plan backup units to cover absences.
 
-**Output**: Revised lineup with rationale for changes
+**Output**: Special teams units with formations and player positioning.
 
-### Workflow 4: Special Teams Optimization
+### 5. Tournament Planning
 
-**Scenario**: Setting up power play or penalty kill units
+Review tournament considerations in `game-planning.md`. Plan pool play approach (4 lines, balanced ice time, everyone contributes, development focus) vs playoff approach (3 lines, top players get more ice time, hot goalie gets preference). Schedule goalie rotation (Haffey/Schuchart split, alternate for back-to-back days). Build depth charts for each game, manage fatigue across the weekend, and give development players meaningful opportunities in appropriate games. Four-line depth is a major advantage in multi-game tournaments.
 
-**Steps**:
-1. Read special teams section in `references/formations.md`
-2. Review roster for best suited players (`references/roster.md`)
-3. **Power Play**: Utilize skill players (Marsh, Relph, Freeman, Klakring)
-4. **Penalty Kill**: Leverage defensive depth (Berry, Butler, Silliker, Tegart)
-5. Plan backup units (important with player absences)
+**Output**: Tournament game plans with adjusted lineups for each game.
 
-**Output**: Special teams units with formations and player positioning
+### 6. Managing Player Absences
 
-### Workflow 5: Tournament Planning
+Assess which position is affected. Use F/D versatile players to fill gaps -- 9 D-capable players is the key advantage. Promote from lower lines, adjust strategy to match available personnel, and communicate changes to the team. See the absence contingency plans in `roster.md` for specific scenarios (Marsh out, Relph out, both elite players out, multiple forwards missing, D missing).
 
-**Scenario**: Planning lineup strategy for multi-game weekend
-
-**Steps**:
-1. Review tournament considerations in `references/game-planning.md`
-2. Plan game-by-game approach (balanced early, competitive later)
-3. Consider goalie rotation (Haffey/Schuchart split)
-4. Build depth charts for each game
-5. Plan ice time management strategy (four-line depth is advantage)
-6. Ensure development players get opportunities in appropriate games
-
-**Output**: Tournament game plans with adjusted lineups for each game
-
-### Workflow 6: Managing Player Absences
-
-**Scenario**: Key players unavailable for game (common at 18U)
-
-**Steps**:
-1. Assess which position is affected
-2. Use F/D versatile players to fill gaps (9 D-capable players is key advantage)
-3. Promote from lower lines
-4. Adjust strategy based on available personnel
-5. Communicate lineup changes to team
-
-**Output**: Modified lineup that maintains competitive balance despite absences
+**Output**: Modified lineup that maintains competitive balance despite absences.
 
 ## Lineup Building Principles
 
 ### Always Consider
 
-**Team Identity - "Balanced Depth"**:
-- Spread talent across all four lines (don't overload top line)
+**Team Identity -- "Balanced Depth"**:
+- Spread talent across all four lines (do not overload top line)
 - Everyone contributes meaningfully
 - Wear opponents down over 60 minutes
 - Third period is our period (depth advantage emerges)
 - Defense-first structure
 
 **Development Focus**:
-- This is C-level competitive hockey - balance winning with growth
+- Balance winning with growth at C-level competitive hockey
 - Rotate players through different line positions
-- Provide opportunities in appropriate situations
-- Everyone gets meaningful ice time (especially tournaments)
+- Give everyone meaningful ice time (especially tournaments)
 - **Critical**: Shelter Cram (2.50) and Thompson (3.00) but give them chances
 
 **Strategic Assets**:
-- **9 defensive-capable players** - biggest advantage, use it!
-- **6 F/D versatile players** - maximize flexibility
-- **Four-line capability** - can roll lines when others can't
-- **Strong penalty kill foundation** - defensive depth pays off
+- **9 defensive-capable players** -- biggest advantage, use it
+- **6 F/D versatile players** -- maximize flexibility
+- **Four-line capability** -- roll lines when others cannot
+- **Strong penalty kill foundation** -- defensive depth pays off
 
 **Chemistry Indicators**:
-- Players who've succeeded together before
-- Complementary playing styles
-- Communication on ice
-- Work rate matching
-- Speed/skill/size balance
+- Players who have succeeded together before
+- Complementary playing styles (shooter + playmaker, speed + grit)
+- On-ice communication and work rate matching
+- Speed/skill/size balance within lines
 
 ### Avoid
 
-- Overloading top line (spread the wealth)
-- Same combinations every game (explore options)
-- Ignoring F/D versatile players (they're strategic gold)
+- Overloading the top line (spread the wealth)
+- Running the same combinations every game (explore options)
+- Ignoring F/D versatile players (they are strategic gold)
 - Forgetting about special teams when building 5v5 lines
 - Making too many changes at once (adjust gradually)
 - Overexposing Cram or Thompson in tough situations
 - Trying to match Paul's elite speed (play to our strengths)
 
-## Special Considerations
+## Key Decision Points
 
-### Top Elite Players (1.00 Rating)
+**3-line vs 4-line forward rotation**:
+- Use **4 lines** for most games (our strength), when depth will wear opponents down, and when balancing ice time matters.
+- Use **3 lines** for close playoff games, late in tight games, or when short-handed due to absences.
 
-**Shaya Marsh (F/D, 1.00)** and **Massey Relph (F/D, 1.00)**:
-- Core of top line and special teams units
-- Most ice time in critical situations
-- Both can play forward OR defense (huge flexibility)
-- Leadership roles on ice
-- Coach's son (Relph) - balanced treatment, high expectations
+**Development vs winning balance**:
+- League games: 4 lines, balanced ice time, focus on structure and development.
+- Close/playoff games: 3 lines, best players get more ice time, but everyone still plays.
+- Tournaments: Pool play = development focus; playoffs = competitive focus.
 
-### Development Players (2.50+)
+**Goalie selection**:
+- Recent performance matters most. Consider opponent strength (Haffey for skill teams, Schuchart for physical teams). Split back-to-back games. Communicate the decision 24-48 hours ahead.
 
-**Ender Cram (F, 2.50)**:
-- Needs sheltered minutes with strong linemates
-- Pair with 1.50-1.75 players for support
-- Third/fourth line deployment
-- Offensive zone starts when possible
-- Give chances to develop, but protect from tough matchups
-
-**Timothy Thompson (D, 3.00)**:
-- Needs significant sheltering and skating development
-- Always pair with strong, experienced D partner
-- Limited ice time in critical situations
-- Third defense pair typically
-- Focus on simple, structured play
-- Extra practice time on skating recommended
-
-### Versatile F/D Players (Strategic Gold)
-
-Six players can play both forward AND defense:
-- **Marsh (1.00)** - elite at both, can solve any problem
-- **Relph (1.00)** - elite at both, ultimate flexibility
-- **Freeman (1.50)** - strong at both positions
-- **Berry (2.00)** - solid depth at both
-- **Silliker (1.50)** - can help on defense if needed
-- **Tegart (2.00)** - versatile depth player
-
-**Strategic Uses**:
-- Fill gaps when injuries/absences occur (huge at 18U level)
-- Create unique matchup advantages
-- Provide rest to tired position groups
-- Experiment with different combinations
-- Add depth where needed most in specific games
-- **This is our biggest advantage** - 9 D-capable players vs most teams' 6
-
-### Goalie Management
-
-**Two capable goalies**:
-- **Cas Haffey** - Can also play forward if desperate
-- **Gregor Schuchart** - Can also play defense if desperate
-
-**Season strategy**:
-- Roughly 50/50 game split
-- Both get tournament experience
-- Consider opponent strength, back-to-backs
-- Communicate starter 24-48 hours ahead
-- Emergency skater flexibility unique advantage
+**Against Paul's team**:
+- Read the detailed head-to-head strategy in `mark-strategy.md` and the game plan template in `game-planning.md`. Their strengths: 4 elite (1.25) forwards, speed-based attack, strong power play. Their weakness: only 6 D-capable players (vs our 9). Key approach: grind them down with four lines, heavy forecheck against their tired D-men, strong penalty kill to neutralize their PP, physical but disciplined play, and dominate the third period when our depth emerges.
 
 ## Using the Lineup Generator Script
 
-The `scripts/lineup_generator.py` tool creates formatted lineup sheets for the 18U Navy team.
+The `scripts/lineup_generator.py` tool creates formatted lineup sheets.
 
-**Basic usage**:
 ```python
 from lineup_generator import NavyLineupGenerator
 
@@ -293,7 +161,7 @@ lineup = NavyLineupGenerator()
 lineup.add_line(1, "Marsh", "Relph", "Freeman", "Elite/Offensive")
 lineup.add_line(2, "Klakring", "Silliker", "McCredy", "Two-Way")
 
-# Add defense pairs  
+# Add defense pairs
 lineup.add_defense_pair(1, "Young", "Berry", "Shutdown")
 lineup.add_defense_pair(2, "Butler", "Tegart", "Balanced")
 lineup.add_defense_pair(3, "Thompson", "Bagga", "Sheltered")
@@ -310,131 +178,45 @@ print(lineup.generate_lineup_sheet(
 ))
 ```
 
-**When to use**:
-- Creating official lineup sheets for games
-- Generating multiple lineup scenarios for comparison
-- Documenting lineup decisions
-- Sharing with assistant coaches/parents
+Use the script for official lineup sheets, comparing multiple scenarios, documenting decisions, and sharing with coaches/parents. The script also includes pre-built templates accessible via `generate_standard_four_line_lineup()`, `generate_competitive_three_line_lineup()`, and `generate_vs_paul_lineup()`.
 
 ## Output Formats
 
-Depending on the request, create outputs in the most appropriate format:
+Choose the format that fits the request:
 
-**Text-based lineups**: Simple, clear text format using the script or manual formatting
+- **Text lineups** -- use the script or manual formatting for quick game-day sheets
+- **Document artifacts** -- Word/PDF for printing and distribution; use Kraken brand colors from project files
+- **Interactive artifacts** -- React components for lineup experimentation and drag-and-drop visualization
+- **Spreadsheets** -- Excel files for tracking lineups across the season, analyzing player combinations, and recording ice time
+- **Presentation slides** -- PowerPoint for team meetings or parent presentations
+- **Email templates** -- formatted lineup emails using team contact lists from project files; include game details, lineup, and tactical focus
 
-**Document artifacts**: Word/PDF documents for printing and distribution (use brand colors from project files)
+## Sheltering Guidelines
 
-**Interactive artifacts**: React components for lineup experimentation and visualization
+These two players require special deployment considerations in every lineup. See `roster.md` for full details.
 
-**Spreadsheets**: Excel files for tracking lineups across season, analyzing player combinations
+**Ender Cram (F, 2.50)**:
+- Deploy on the third or fourth line only
+- Pair with 1.50-1.75+ rated linemates for support
+- Prefer offensive zone starts when possible
+- Limit penalty kill duty
+- Give development chances but protect from tough matchups
+- Target ice time: 8-12 minutes (regular), 5-8 minutes (competitive/playoff)
 
-**Presentation slides**: PowerPoint for team meetings or parent presentations
-
-**Email templates**: Formatted lineup emails using team contact lists from project files
-
-## Common Questions & Scenarios
-
-**Q: How do I balance development vs winning at 18U C level?**
-- League games: 4 lines, balanced ice time, focus on structure
-- Close games: 3 lines, best players more ice time, but everyone plays
-- Tournaments: Pool play = development, playoffs = competitive
-- Always shelter Cram and Thompson, but give them opportunities
-
-**Q: When should I use 3 vs 4 forward lines?**
-- **4 lines**: Most games (our strength!), when depth wears opponents down, balanced skill distribution
-- **3 lines**: Very close playoff games, when opponents are very weak (maximize top players' growth), short-handed due to absences
-
-**Q: How do I leverage our 9 D-capable players advantage?**
-- Fresh legs on defense all game (opponents tire faster)
-- Aggressive forechecking (know we have D depth)
-- Match lines - put defensive-minded forwards against tough opponents
-- Cover absences easily (biggest advantage at 18U level)
-- Move players around based on opponent style
-
-**Q: What if key players are absent?** (common at 18U)
-- **Use F/D players**: Move Marsh, Relph, Freeman, Berry, Silliker, Tegart where needed
-- **Promote from lower lines**: 2.00 players step up
-- **Adjust strategy**: More defensive, structured approach
-- **Don't panic**: Depth is our strength, we can handle it
-
-**Q: How do I handle Cram and Thompson?**
-- **Cram (2.50)**: Third/fourth line, pair with 1.50+ players, offensive zone starts, limited PK
-- **Thompson (3.00)**: Third pair D, always with strong partner (Young, Berry, Butler), limited critical situations, simple assignments
-- **Both**: Give opportunities to develop, but protect from overwhelming situations
-
-**Q: What's our strategy against Paul's team?**
-- **Their strength**: Elite top-6 forwards (four 1.25 players)
-- **Their weakness**: Only 6 D-capable players (vs our 9)
-- **Our approach**: 
-  - Grind them down with four lines
-  - Heavy forecheck (force their tired D to make mistakes)
-  - Strong penalty kill (they'll try to use PP)
-  - Third period is ours (depth advantage emerges)
-  - Match our top line against their top line, wear them with depth
-
-**Q: Which goalie should start?**
-- Recent performance matters most
-- Consider opponent strength (Haffey for skill teams, Schuchart for physical)
-- Back-to-back games: split duty
-- Communicate decision 24-48 hours ahead
-- Both goalies always prepare fully
+**Timothy Thompson (D, 3.00)**:
+- Deploy on the third defense pair only
+- **Always** pair with a strong, experienced partner (Young, Berry, or Butler)
+- Limit ice time in critical situations
+- Assign simple, structured defensive tasks
+- Skating development is his primary growth area
+- Target ice time: 6-10 minutes (regular), 3-6 minutes (competitive/playoff)
 
 ## Tips for Success
 
-1. **Embrace four-line depth**: It's our identity and biggest strength
-2. **Trust the system**: Defense-first structure, grind it out, win third periods
-3. **Leverage versatility**: 6 F/D players = problem-solving capability
-4. **Track what works**: Keep notes on successful combinations
-5. **Communicate clearly**: Explain changes to players and parents
-6. **Stay flexible**: Be ready to adjust based on game flow and absences
-7. **Protect developing players**: Give Cram and Thompson opportunities in right situations
-8. **Focus on structure**: We win through team defense, not just skill
-9. **Plan for absences**: At 18U, always have backup plan
-10. **Review regularly**: Assess lineup effectiveness after games
-
-## Matchup Strategy: Navy vs White (Paul's Team)
-
-When playing Paul's team, consider:
-
-**What we do better**:
-- Four-line depth (we can roll, they need their top 6)
-- Defensive depth (9 vs 6 D-capable)
-- Grinding, physical style
-- Third period stamina
-- Penalty kill depth
-
-**What they do better**:
-- Elite top-6 skill (four 1.25 players)
-- Speed-based offense
-- Power play weapons
-- Offensive talent concentration
-
-**Our winning strategy**:
-1. Heavy forecheck - force turnovers from their tired D
-2. Roll four lines - wear them down
-3. Strong penalty kill - neutralize their PP advantage
-4. Physical play - make them earn everything
-5. Control third period - depth advantage emerges
-6. Exploit their six D-man limitation - they have no injury margin
-
-## Integration with Other Team Functions
-
-This skill complements other aspects of team management:
-- **Schedule planning**: Understanding lineup fatigue over season
-- **Player development**: Targeted ice time in specific situations
-- **Team communication**: Explaining lineup philosophy to parents
-- **Tournament selection**: Knowing lineup depth for different competition levels
-- **Email communication**: Use project email lists for lineup distribution
-- **Brand consistency**: Use Kraken colors from project files for materials
-
-## Additional Notes
-
-- **Practice application**: Use practice time to test new line combinations
-- **Video review**: Record and analyze successful/struggling line combinations
-- **Player feedback**: Regular check-ins help understand comfort levels
-- **Parent communication**: Be transparent about ice time philosophy and lineup decisions (especially for development players)
-- **Seasonal progression**: Lineups should evolve as players develop and chemistry builds
-- **Absence planning**: CRITICAL at 18U - always have contingency plans
-- **Development tracking**: Monitor Cram and Thompson progress throughout season
+1. **Embrace four-line depth** -- it is our identity and biggest strength. Roll all four lines in most games and trust the system.
+2. **Leverage versatility** -- 6 F/D players solve most lineup problems. Use them to fill gaps, adjust mid-game, and create matchup advantages.
+3. **Shelter development players** -- give Cram and Thompson opportunities in the right situations. Protect them from overwhelming matchups while building their confidence.
+4. **Track what works** -- keep notes on successful line combinations, special teams units, and opponent strategies. Review and adjust after every game.
+5. **Plan for absences** -- at 18U, players frequently miss games for school, family, and other commitments. Always have a contingency lineup ready, and use the absence plans in `roster.md`.
 
 When building lineups, always remember: **We are Coach Mark's Navy team. We win through Balanced Depth, defensive structure, four-line rotation, and grinding determination. We wear opponents down and win third periods.**

@@ -1,6 +1,6 @@
 ---
 name: research-consolidator
-description: Consolidates deep research outputs from multiple AI models and sources into comprehensive, well-organized final reports. Use for synthesizing research from Claude, GPT, Gemini, Perplexity, web searches, and document analyses. Identifies conflicts, tracks source attribution, scores confidence levels, and highlights research gaps. Produces executive summaries with detailed supporting sections.
+description: This skill should be used when the user asks to "consolidate research", "synthesize findings from multiple sources", "compare research from Claude and GPT", "merge research outputs", "combine AI research results", "create a research report from these sources", or has research from multiple AI models, web searches, or documents to combine into a unified analysis. Also triggered by mentions of cross-referencing findings, confidence scoring, or source attribution.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
   version: 1.0.0
@@ -10,9 +10,9 @@ metadata:
 
 # Research Consolidator Skill
 
-You are an Expert Research Analyst specializing in synthesizing information from multiple sources. Your role is to take diverse research outputs—from AI models, web searches, and document analyses—and consolidate them into clear, comprehensive, and actionable reports.
+Consolidate diverse research outputs--from AI models, web searches, and document analyses--into clear, comprehensive, and actionable reports.
 
-Your core principles:
+Core principles:
 - **Objectivity**: Present findings without bias toward any single source
 - **Transparency**: Always attribute findings to their sources
 - **Critical Analysis**: Identify conflicts, gaps, and varying confidence levels
@@ -468,14 +468,10 @@ JSON export of all structured data for further processing.
 
 ---
 
-## Version History
+## Reference Documents
 
-### v1.0.0 (2025-12-09)
-- Initial release
-- Multi-source intake and parsing
-- Cross-source claim alignment
-- Conflict identification and resolution framework
-- Confidence scoring system
-- Gap identification
-- Executive report generation with full attribution
-- Support for AI models, web research, and documents
+- `references/synthesis_methodology.md` -- Detailed synthesis methodology, source hierarchy, claim extraction framework, confidence scoring system, and quality assurance checklist
+- `references/report_templates.md` -- Standard report templates (executive, comparison matrix, findings summary, JSON data export) with customization guidance
+- `references/api_reference.md` -- Technical reference for data structures, script APIs, JSON schemas, pipeline integration, and error handling
+- `references/user_guide.md` -- Complete user guide with source preparation, basic/advanced consolidation workflows, use cases, troubleshooting, and FAQ
+- `references/workflow_guide.md` -- Step-by-step visual workflows for standard consolidation, AI model comparison, conflict resolution, gap analysis, and executive reporting

@@ -1,0 +1,11 @@
+{
+  "holdings": [
+    {"symbol": "VTI", "description": "Vanguard Total Stock Market ETF", "quantity": 150, "price": 265.40, "value": 39810.00, "cost_basis": 32500.00, "gain_loss": 7310.00},
+    {"symbol": "VXUS", "description": "Vanguard Total International Stock ETF", "quantity": 200, "price": 58.20, "value": 11640.00, "cost_basis": 10800.00, "gain_loss": 840.00},
+    {"symbol": "BND", "description": "Vanguard Total Bond Market ETF", "quantity": 100, "price": 72.50, "value": 7250.00, "cost_basis": 7500.00, "gain_loss": -250.00},
+    {"symbol": "AMZN", "description": "Amazon.com Inc", "quantity": 25, "price": 198.50, "value": 4962.50, "cost_basis": 3200.00, "gain_loss": 1762.50},
+    {"symbol": "AAPL", "description": "Apple Inc", "quantity": 30, "price": 242.00, "value": 7260.00, "cost_basis": 5400.00, "gain_loss": 1860.00}
+  ],
+  "as_of_date": "2025-02-25",
+  "account_type": "Taxable Brokerage"
+}

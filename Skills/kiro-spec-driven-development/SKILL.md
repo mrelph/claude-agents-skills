@@ -1,6 +1,6 @@
 ---
 name: kiro-spec-driven-development
-description: Structured spec-driven development workflow that transforms feature ideas into requirements, design documents, and implementation plans using Kiro methodology
+description: This skill should be used when the user asks to "create a spec", "plan a feature before coding", "write requirements", "design before implementing", "spec-driven development", "break down a feature into tasks", "create a design document", or wants to follow a structured requirements-to-design-to-tasks workflow before writing code. Also triggered by mentions of Kiro methodology or iterative spec refinement.
 allowed-tools: Read, Write, Bash, Grep, Glob, Task, AskUserQuestion, TodoWrite
 category: development
 metadata:
@@ -14,7 +14,7 @@ Transform vague feature ideas into well-defined, implementable specifications th
 
 ## When to Use This Skill
 
-Invoke this skill when you need to:
+Use this skill to:
 - Plan a new feature systematically before coding
 - Create requirement specifications and design documents
 - Break down complex features into actionable tasks
@@ -23,7 +23,7 @@ Invoke this skill when you need to:
 
 ## How It Works
 
-This skill guides you through Kiro's spec-driven methodology using specialized sub-agents for each phase:
+This skill follows Kiro's spec-driven methodology using specialized sub-agents for each phase:
 
 ### Phase 1: Requirements Gathering
 Creates a requirements document that captures **WHAT** needs to be built:
@@ -77,7 +77,7 @@ This skill orchestrates multiple specialized sub-agents (all in `references/`):
 
 ## Parallel Execution
 
-For faster iteration, you can run multiple versions in parallel:
+For faster iteration, run multiple versions in parallel:
 - The skill will ask: "How many spec-requirements agents to use? (1-128)"
 - Multiple sub-agents generate different versions
 - `spec-judge` uses tree-based evaluation to select the best version
@@ -143,7 +143,7 @@ See `references/` directory for:
 3. Use parallel execution for faster iteration
 4. Keep specs in `.claude/specs/` directory
 5. Reference project's `CLAUDE.md` for coding standards
-6. Mark tasks as complete in `tasks.md` as you implement them
+6. Mark tasks as complete in `tasks.md` during implementation
 
 ## Integration
 
@@ -154,4 +154,4 @@ Works seamlessly with:
 
 ---
 
-This skill helps you build better software by ensuring features are thoroughly planned before implementation begins, reducing rework and improving team communication.
+This skill ensures features are thoroughly planned before implementation begins, reducing rework and improving team communication.
