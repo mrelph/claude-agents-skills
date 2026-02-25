@@ -8,24 +8,30 @@ Specialized task-focused agents that can be spawned via the Task tool in Claude 
 
 | Agent | Description |
 |-------|-------------|
-| [bug-tracker-resolver](bug-tracker-resolver.md) | Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes |
-| [database-architect](database-architect.md) | PostgreSQL/Supabase expertise - schema design, query optimization, RLS policies, indexing strategies |
-| [documentation-maintainer](documentation-maintainer.md) | Creates and updates READMEs, API docs, user guides, ensures documentation consistency |
-| [performance-optimizer](performance-optimizer.md) | Core Web Vitals, bundle size reduction, runtime efficiency, Next.js optimizations |
-| [security-code-scanner](security-code-scanner.md) | Vulnerability identification, OWASP Top 10 analysis, risk assessment, secure code recommendations |
+| [bug-tracker-resolver](bug-tracker-resolver/bug-tracker-resolver.md) | Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes |
+| [database-architect](database-architect/database-architect.md) | PostgreSQL/Supabase expertise - schema design, query optimization, RLS policies, indexing strategies |
+| [documentation-maintainer](documentation-maintainer/documentation-maintainer.md) | Creates and updates READMEs, API docs, user guides, ensures documentation consistency |
+| [performance-optimizer](performance-optimizer/performance-optimizer.md) | Core Web Vitals, bundle size reduction, runtime efficiency, Next.js optimizations |
+| [security-code-scanner](security-code-scanner/security-code-scanner.md) | Vulnerability identification, OWASP Top 10 analysis, risk assessment, secure code recommendations |
 
 ### Design & Planning Agents
 
 | Agent | Description |
 |-------|-------------|
-| [ux-ui-design-expert](ux-ui-design-expert.md) | UX/UI guidance, information architecture, accessibility (WCAG), responsive design |
-| [roadmap-feature-planner](roadmap-feature-planner.md) | Strategic feature planning, implementation coordination, roadmap tracking |
+| [ux-ui-design-expert](ux-ui-design-expert/ux-ui-design-expert.md) | UX/UI guidance, information architecture, accessibility (WCAG), responsive design |
+| [roadmap-feature-planner](roadmap-feature-planner/roadmap-feature-planner.md) | Strategic feature planning, implementation coordination, roadmap tracking |
+
+### Skills & Tools Agents
+
+| Agent | Description |
+|-------|-------------|
+| [claude-desktop-skills-builder](claude-desktop-skills-builder/claude-desktop-skills-builder.md) | Creates, designs, and refines Claude Desktop Skills - MCP servers, prompts, scripts, tool integrations |
 
 ### Media Agents
 
 | Agent | Description |
 |-------|-------------|
-| [video-integration-specialist](video-integration-specialist.md) | YouTube/Vimeo integration, video player implementation, streaming optimization |
+| [video-integration-specialist](video-integration-specialist/video-integration-specialist.md) | YouTube/Vimeo integration, video player implementation, streaming optimization |
 
 ## Usage
 
@@ -93,6 +99,9 @@ allowed-tools: Read, Write, Bash, Grep, Glob, Task, WebSearch
 ### Research & Analysis
 - **ux-ui-design-expert**: Read, WebSearch, WebFetch, Task
 - **roadmap-feature-planner**: Read, Write, Glob, Grep, Task
+
+### Skills & Tools
+- **claude-desktop-skills-builder**: Read, Write, Bash, Grep, Glob, Task, WebSearch
 
 ### Specialized
 - **bug-tracker-resolver**: Read, Write, Bash, Grep, Glob
