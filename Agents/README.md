@@ -1,160 +1,42 @@
-# Claude Code Agents
+# Agents (Legacy)
 
-Specialized task-focused agents that can be spawned via the Task tool in Claude Code for specific development and business tasks.
+> **Note:** Five development agents have been migrated to the `dev-tools` plugin under `plugins/dev-tools/`. Install with `/plugin install dev-tools@mrelph/claude-agents-skills`.
 
-## Available Agents
+## Remaining Agents
 
-### Development Agents
+These agents are not yet migrated to plugin format:
 
-| Agent | Description |
-|-------|-------------|
-| [bug-tracker-resolver](bug-tracker-resolver/bug-tracker-resolver.md) | Manages bugs in Bugs.md, performs root cause analysis, creates resolution plans, implements and tests fixes |
-| [database-architect](database-architect/database-architect.md) | PostgreSQL/Supabase expertise - schema design, query optimization, RLS policies, indexing strategies |
-| [documentation-maintainer](documentation-maintainer/documentation-maintainer.md) | Creates and updates READMEs, API docs, user guides, ensures documentation consistency |
-| [performance-optimizer](performance-optimizer/performance-optimizer.md) | Core Web Vitals, bundle size reduction, runtime efficiency, Next.js optimizations |
-| [security-code-scanner](security-code-scanner/security-code-scanner.md) | Vulnerability identification, OWASP Top 10 analysis, risk assessment, secure code recommendations |
-
-### Design & Planning Agents
+### Design & Planning
 
 | Agent | Description |
 |-------|-------------|
-| [ux-ui-design-expert](ux-ui-design-expert/ux-ui-design-expert.md) | UX/UI guidance, information architecture, accessibility (WCAG), responsive design |
-| [roadmap-feature-planner](roadmap-feature-planner/roadmap-feature-planner.md) | Strategic feature planning, implementation coordination, roadmap tracking |
-
-### Skills & Tools Agents
-
-| Agent | Description |
-|-------|-------------|
-| [claude-desktop-skills-builder](claude-desktop-skills-builder/claude-desktop-skills-builder.md) | Creates, designs, and refines Claude Desktop Skills - MCP servers, prompts, scripts, tool integrations |
-
-### Media Agents
-
-| Agent | Description |
-|-------|-------------|
-| [video-integration-specialist](video-integration-specialist/video-integration-specialist.md) | YouTube/Vimeo integration, video player implementation, streaming optimization |
-
-## Usage
-
-### In Claude Code
-
-Agents are automatically available when placed in your project's `.claude/agents/` directory:
-
-```bash
-# Copy an agent to your project
-mkdir -p /path/to/project/.claude/agents/
-cp database-architect.md /path/to/project/.claude/agents/
-```
-
-The agent will then be available via the Task tool:
-
-```
-Use the database-architect agent to design a schema for user authentication.
-```
-
-### Agent Structure
-
-Each agent is a markdown file with YAML frontmatter:
-
-```yaml
----
-name: agent-name
-description: What this agent specializes in
-model: sonnet          # or opus, haiku
-color: blue            # UI color coding
-allowed-tools: Read, Write, Bash, Grep, Glob, Task, WebSearch
----
-
-# Agent Name
-
-## Role & Expertise
-[What the agent specializes in...]
-
-## Workflow
-[How the agent approaches tasks...]
-
-## Best Practices
-[Guidelines the agent follows...]
-```
-
-### Key Frontmatter Fields
-
-| Field | Description |
-|-------|-------------|
-| `name` | Unique identifier for the agent |
-| `description` | Brief summary shown in agent selection |
-| `model` | Which Claude model to use (sonnet, opus, haiku) |
-| `color` | UI color for agent identification |
-| `allowed-tools` | Tools the agent can access |
-
-## Agent Capabilities by Tool Access
-
-### Full Development Access
-- **database-architect**: Read, Write, Bash, Grep, Glob, Task, WebSearch, WebFetch
-- **performance-optimizer**: Read, Write, Bash, Grep, Glob, Task, WebSearch
-- **security-code-scanner**: Read, Bash, Grep, Glob, Task
-
-### Documentation Focus
-- **documentation-maintainer**: Read, Write, Glob, Grep
-
-### Research & Analysis
-- **ux-ui-design-expert**: Read, WebSearch, WebFetch, Task
-- **roadmap-feature-planner**: Read, Write, Glob, Grep, Task
+| [ux-ui-design-expert](ux-ui-design-expert/ux-ui-design-expert.md) | UX/UI guidance, accessibility (WCAG), responsive design |
+| [roadmap-feature-planner](roadmap-feature-planner/roadmap-feature-planner.md) | Strategic feature planning, roadmap tracking |
 
 ### Skills & Tools
-- **claude-desktop-skills-builder**: Read, Write, Bash, Grep, Glob, Task, WebSearch
 
-### Specialized
-- **bug-tracker-resolver**: Read, Write, Bash, Grep, Glob
-- **video-integration-specialist**: Read, Write, Bash, WebSearch, WebFetch, Task
+| Agent | Description |
+|-------|-------------|
+| [claude-desktop-skills-builder](claude-desktop-skills-builder/claude-desktop-skills-builder.md) | Creates Claude Desktop Skills - MCP servers, prompts, tool integrations |
 
-## Creating New Agents
+### Media
 
-1. Create a new `.md` file in this directory
-2. Add YAML frontmatter with required fields
-3. Define the agent's role, expertise, and workflow
-4. Specify appropriate tool access
-5. Test the agent with representative tasks
+| Agent | Description |
+|-------|-------------|
+| [video-integration-specialist](video-integration-specialist/video-integration-specialist.md) | YouTube/Vimeo integration, video player implementation |
 
-### Template
+### Marketplace
 
-```markdown
----
-name: my-new-agent
-description: Brief description of agent's purpose
-model: sonnet
-color: green
-allowed-tools: Read, Write, Bash, Grep, Glob
----
+| Agent | Description |
+|-------|-------------|
+| [marketplace-manager](marketplace-manager/marketplace-manager.md) | Automates marketplace management |
 
-# My New Agent
+## Migrated Agents
 
-## Role & Expertise
+The following agents are now in the `dev-tools` plugin:
 
-[Describe what this agent specializes in...]
-
-## Workflow
-
-1. [Step one...]
-2. [Step two...]
-3. [Step three...]
-
-## Best Practices
-
-- [Guideline one...]
-- [Guideline two...]
-
-## Limitations
-
-- [What this agent should NOT do...]
-```
-
-## Best Practices
-
-1. **Scope appropriately**: Each agent should have a focused area of expertise
-2. **Limit tool access**: Only grant tools the agent actually needs
-3. **Document workflows**: Clear step-by-step processes help agents perform consistently
-4. **Include limitations**: Explicitly state what the agent should not attempt
-5. **Use appropriate models**:
-   - `haiku` for quick, simple tasks
-   - `sonnet` for most development work
-   - `opus` for complex reasoning tasks
+- `bug-tracker-resolver`
+- `database-architect`
+- `security-code-scanner`
+- `performance-optimizer`
+- `documentation-maintainer`
