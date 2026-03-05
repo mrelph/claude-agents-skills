@@ -33,6 +33,9 @@ Thumbs.db
 Skills/*/data/
 Skills/*/history/
 
+# Worktrees
+.worktrees/
+
 # Temp files
 *.tmp
 *.temp
