@@ -1,0 +1,9 @@
+{
+  "name": "tax-preparation",
+  "description": "US tax preparation: deduction analysis, RSU calculations, form processing, and tax optimization",
+  "version": "2.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["tax", "finance", "deductions", "RSU", "IRS", "W-2", "1099"]
+}

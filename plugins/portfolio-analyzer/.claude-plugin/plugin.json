@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-analyzer",
+  "description": "Investment portfolio analysis, risk assessment, asset allocation, and strategic recommendations",
+  "version": "3.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["investing", "portfolio", "finance", "analysis", "risk"]
+}

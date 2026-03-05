@@ -1,0 +1,9 @@
+{
+  "name": "retirement-planner",
+  "description": "Retirement readiness assessment, Social Security optimization, and withdrawal strategies",
+  "version": "2.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["retirement", "social-security", "401k", "finance", "planning"]
+}

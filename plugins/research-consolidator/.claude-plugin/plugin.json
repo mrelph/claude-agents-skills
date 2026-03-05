@@ -1,0 +1,9 @@
+{
+  "name": "research-consolidator",
+  "description": "Synthesize research from multiple AI models and sources with confidence scoring and gap analysis",
+  "version": "2.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["research", "synthesis", "analysis", "multi-source", "consolidation"]
+}

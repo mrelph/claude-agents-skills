@@ -1,0 +1,9 @@
+{
+  "name": "dev-tools",
+  "description": "Development agents: bug tracking, DB architecture, security scanning, performance optimization, documentation",
+  "version": "1.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["development", "debugging", "security", "performance", "database", "documentation"]
+}
