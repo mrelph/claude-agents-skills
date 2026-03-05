@@ -1,0 +1,32 @@
+{
+  "tax_year": 2025,
+  "filing_status": "married_jointly",
+  "income": {
+    "w2_wages": 185000,
+    "interest_income": 1250,
+    "dividend_income": 3400,
+    "qualified_dividends": 2800,
+    "capital_gains_short": 0,
+    "capital_gains_long": 5200
+  },
+  "deductions": {
+    "mortgage_interest": 12500,
+    "property_taxes": 8500,
+    "state_income_taxes": 9200,
+    "charitable_cash": 3000,
+    "charitable_goods": 500
+  },
+  "adjustments": {
+    "traditional_ira": 0,
+    "hsa_contributions": 8550,
+    "student_loan_interest": 0
+  },
+  "credits": {
+    "child_tax_credit_children": 2,
+    "dependent_care_expenses": 6000
+  },
+  "withholding": {
+    "federal": 28000,
+    "state": 11000
+  }
+}

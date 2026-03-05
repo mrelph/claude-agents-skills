@@ -1,0 +1,37 @@
+{
+  "employee": "Amazon Employee",
+  "tax_year": 2025,
+  "vesting_lots": [
+    {
+      "grant_id": "RSU-2022-001",
+      "grant_date": "2022-03-15",
+      "vesting_date": "2024-05-15",
+      "shares": 12,
+      "fmv_at_vesting": 178.50
+    },
+    {
+      "grant_id": "RSU-2022-001",
+      "grant_date": "2022-03-15",
+      "vesting_date": "2024-11-15",
+      "shares": 12,
+      "fmv_at_vesting": 205.30
+    },
+    {
+      "grant_id": "RSU-2023-002",
+      "grant_date": "2023-06-01",
+      "vesting_date": "2025-02-15",
+      "shares": 8,
+      "fmv_at_vesting": 228.75
+    }
+  ],
+  "sales": [
+    {
+      "sale_date": "2025-01-10",
+      "shares_sold": 12,
+      "sale_price": 220.00,
+      "from_vesting_date": "2024-05-15",
+      "broker_reported_basis": 0,
+      "broker_reported_basis_note": "Broker reported $0 - INCORRECT"
+    }
+  ]
+}
