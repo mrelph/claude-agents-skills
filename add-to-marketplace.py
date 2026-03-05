@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """
-Automation script to add new agents and skills to the Claude Code marketplace.
-Processes items from the staging/ directory and updates marketplace.json files.
+Add a new plugin to the Claude Code marketplace.
+
+Scaffolds the plugin directory structure and adds an entry to marketplace.json.
+
+Usage:
+    ./add-to-marketplace.py                          # Interactive mode
+    ./add-to-marketplace.py --name my-plugin         # Create with name
+    ./add-to-marketplace.py --from-staging           # Process from staging/
 """
 
 import json
 import os
-import sys
-import shutil
 import re
+import shutil
+import sys
 import argparse
-import subprocess
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -25,35 +30,14 @@ def save_marketplace(data: Dict, path: str = ".claude-plugin/marketplace.json"):
     """Save marketplace.json file with proper formatting."""
     with open(path, 'w') as f:
         json.dump(data, f, indent=2)
-    print(f"✓ Updated {path}")
-
-
-def extract_frontmatter(file_path: str) -> Optional[Dict]:
-    """Extract YAML frontmatter from markdown file."""
-    with open(file_path, 'r') as f:
-        content = f.read()
-
-    # Match YAML frontmatter between --- markers
-    match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
-    if not match:
-        return None
-
-    frontmatter = {}
-    for line in match.group(1).split('\n'):
-        if ':' in line:
-            key, value = line.split(':', 1)
-            frontmatter[key.strip()] = value.strip()
-
-    return frontmatter
+        f.write('\n')
+    print(f"Updated {path}")
 
 
 def to_kebab_case(text: str) -> str:
     """Convert text to kebab-case."""
-    # Replace spaces and underscores with hyphens
     text = re.sub(r'[\s_]+', '-', text)
-    # Remove special characters
     text = re.sub(r'[^a-zA-Z0-9-]', '', text)
-    # Convert to lowercase
     return text.lower()
 
 
@@ -65,311 +49,206 @@ def get_user_input(prompt: str, default: str = "") -> str:
     return value if value else default
 
 
-def get_keywords_input() -> List[str]:
-    """Get keywords from user input."""
-    print("\nEnter keywords (comma-separated):")
-    keywords_str = input("> ").strip()
-    return [k.strip() for k in keywords_str.split(',') if k.strip()]
+def scaffold_plugin(name: str, description: str, version: str,
+                    category: str, keywords: List[str],
+                    plugin_type: str = "skill") -> Path:
+    """Create the plugin directory structure."""
+    plugin_dir = Path(f"plugins/{name}")
 
-
-def get_slash_command_input(default_name: str) -> Optional[str]:
-    """Get slash command configuration from user input."""
-    wants_slash = get_user_input("\nDefine a slash command for this skill? (y/n)", "y").lower()
-
-    if wants_slash == 'y':
-        slash_cmd = get_user_input("Slash command name (without /)", default_name)
-        return slash_cmd if slash_cmd else default_name
-
-    return None
-
-
-def process_agent(agent_file: str, marketplace_data: Dict, interactive: bool = True) -> Dict:
-    """Process an agent file from staging and create marketplace entry."""
-    agent_path = Path(agent_file)
-
-    if not agent_path.exists():
-        print(f"✗ Error: Agent file not found: {agent_file}")
+    if plugin_dir.exists():
+        print(f"Error: Plugin directory already exists: {plugin_dir}")
         return None
 
-    # Extract frontmatter if available
-    frontmatter = extract_frontmatter(str(agent_path))
+    # Create directory structure
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
 
-    # Determine agent name
-    if frontmatter and 'name' in frontmatter:
-        agent_name = frontmatter['name']
-    else:
-        agent_name = agent_path.stem
+    if plugin_type == "skill":
+        (plugin_dir / f"skills/{name}").mkdir(parents=True)
+        (plugin_dir / "scripts").mkdir()
+        (plugin_dir / "references").mkdir()
+        (plugin_dir / "examples").mkdir()
+    elif plugin_type == "agent":
+        (plugin_dir / "agents").mkdir(parents=True)
 
-    agent_name = to_kebab_case(agent_name)
-
-    print(f"\n📝 Processing agent: {agent_name}")
-
-    # Get metadata
-    if interactive:
-        description = get_user_input("Description",
-            frontmatter.get('description', '') if frontmatter else '')
-        version = get_user_input("Version", "1.0.0")
-        category = get_user_input("Category (development/design/planning/media)",
-            frontmatter.get('category', 'development') if frontmatter else 'development')
-        keywords = get_keywords_input()
-    else:
-        description = frontmatter.get('description', '') if frontmatter else ''
-        version = "1.0.0"
-        category = frontmatter.get('category', 'development') if frontmatter else 'development'
-        keywords = []
-
-    # Create agent directory
-    agent_dir = Path(f"Agents/{agent_name}")
-    agent_dir.mkdir(parents=True, exist_ok=True)
-
-    # Move agent file
-    dest_file = agent_dir / f"{agent_name}.md"
-    shutil.copy2(agent_path, dest_file)
-    print(f"✓ Created {dest_file}")
-
-    # Create marketplace entry
-    entry = {
-        "name": agent_name,
-        "source": f"./Agents/{agent_name}",
+    # Create plugin.json manifest
+    manifest = {
+        "name": name,
         "description": description,
         "version": version,
-        "author": {
-            "name": marketplace_data.get("owner", {}).get("name", "mrelph")
-        },
-        "keywords": keywords,
-        "category": category
+        "author": {"name": "mrelph"},
+        "repository": "https://github.com/mrelph/claude-agents-skills",
+        "license": "MIT",
+        "keywords": keywords
     }
 
-    return entry
+    with open(plugin_dir / ".claude-plugin" / "plugin.json", 'w') as f:
+        json.dump(manifest, f, indent=2)
+        f.write('\n')
+
+    # Create SKILL.md template for skill plugins
+    if plugin_type == "skill":
+        skill_template = f"""---
+name: {name}
+description: {description}
+allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Write, AskUserQuestion
+metadata:
+  version: {version}
+---
+
+# {name.replace('-', ' ').title()}
+
+## Overview
+
+[Description of what this skill does...]
+
+## Workflow
+
+### 1. [First Step]
+
+[Instructions...]
+
+## Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `${{CLAUDE_PLUGIN_ROOT}}/scripts/example.py` | [Description] |
+
+## Reference Documents
+
+| Reference | Contents |
+|-----------|----------|
+| `${{CLAUDE_PLUGIN_ROOT}}/references/guide.md` | [Description] |
+
+## Limitations
+
+[What this skill cannot do...]
+"""
+        with open(plugin_dir / f"skills/{name}/SKILL.md", 'w') as f:
+            f.write(skill_template)
+
+    # Create README
+    readme = f"""# {name.replace('-', ' ').title()}
+
+**Version:** {version}
+
+{description}
+
+## Installation
+
+```bash
+/plugin marketplace add mrelph/claude-agents-skills
+/plugin install {name}@mrelph/claude-agents-skills
+```
+"""
+    with open(plugin_dir / "README.md", 'w') as f:
+        f.write(readme)
+
+    print(f"Created plugin scaffold at {plugin_dir}")
+    return plugin_dir
 
 
-def process_skill(skill_dir: str, marketplace_data: Dict, interactive: bool = True) -> Dict:
-    """Process a skill directory from staging and create marketplace entry."""
-    skill_path = Path(skill_dir)
-
-    if not skill_path.exists() or not skill_path.is_dir():
-        print(f"✗ Error: Skill directory not found: {skill_dir}")
-        return None
-
-    skill_name = to_kebab_case(skill_path.name)
-
-    print(f"\n📝 Processing skill: {skill_name}")
-
-    # Try to extract metadata from SKILL.md
-    skill_md = skill_path / "SKILL.md"
-    frontmatter = None
-    if skill_md.exists():
-        frontmatter = extract_frontmatter(str(skill_md))
-
-    # Get metadata
-    if interactive:
-        description = get_user_input("Description",
-            frontmatter.get('description', '') if frontmatter else '')
-        version = get_user_input("Version",
-            frontmatter.get('metadata', {}).get('version', '1.0.0') if frontmatter else '1.0.0')
-        category = get_user_input("Category (financial/research/domain-specific/development)",
-            frontmatter.get('category', 'domain-specific') if frontmatter else 'domain-specific')
-        keywords = get_keywords_input()
-        slash_command = get_slash_command_input(skill_name)
-    else:
-        description = frontmatter.get('description', '') if frontmatter else ''
-        version = frontmatter.get('metadata', {}).get('version', '1.0.0') if frontmatter else '1.0.0'
-        category = frontmatter.get('category', 'domain-specific') if frontmatter else 'domain-specific'
-        keywords = []
-        slash_command = None
-
-    # Create skill directory
-    dest_dir = Path(f"Skills/{skill_name}")
-
-    # Move skill directory
-    if dest_dir.exists():
-        print(f"✗ Error: Skill directory already exists: {dest_dir}")
-        return None
-
-    shutil.copytree(skill_path, dest_dir)
-    print(f"✓ Created {dest_dir}")
-
-    # Create marketplace entry
-    entry = {
-        "name": skill_name,
-        "source": f"./Skills/{skill_name}",
-        "description": description,
-        "version": version,
-        "author": {
-            "name": marketplace_data.get("owner", {}).get("name", "mrelph")
-        },
-        "keywords": keywords,
-        "category": category
-    }
-
-    # Add slash command if defined
-    if slash_command:
-        entry["slash_command"] = slash_command
-        print(f"✓ Slash command configured: /{slash_command}")
-
-    return entry
-
-
-def add_entry_to_marketplace(marketplace_data: Dict, entry: Dict) -> Dict:
-    """Add a new entry to marketplace data."""
+def add_to_marketplace(marketplace_data: Dict, name: str, description: str,
+                       version: str, category: str, keywords: List[str]) -> Dict:
+    """Add a plugin entry to marketplace data."""
     if "plugins" not in marketplace_data:
         marketplace_data["plugins"] = []
 
-    # Check if entry already exists
+    # Check for existing
     for existing in marketplace_data["plugins"]:
-        if existing["name"] == entry["name"]:
-            print(f"⚠ Warning: Entry '{entry['name']}' already exists in marketplace. Updating...")
-            existing.update(entry)
+        if existing["name"] == name:
+            print(f"Warning: Plugin '{name}' already exists. Updating...")
+            existing.update({
+                "description": description,
+                "version": version,
+                "category": category,
+                "keywords": keywords
+            })
             return marketplace_data
 
-    # Add new entry
-    marketplace_data["plugins"].append(entry)
-    print(f"✓ Added '{entry['name']}' to marketplace")
+    entry = {
+        "name": name,
+        "source": f"./plugins/{name}",
+        "description": description,
+        "version": version,
+        "author": {"name": "mrelph"},
+        "keywords": keywords,
+        "category": category
+    }
 
+    marketplace_data["plugins"].append(entry)
+    print(f"Added '{name}' to marketplace")
     return marketplace_data
 
 
-def package_skills():
-    """Run the skill packaging script to create distribution ZIPs."""
-    print("\n" + "=" * 60)
-    print("PACKAGING SKILLS")
-    print("=" * 60)
-
-    try:
-        # Run package-skills.py
-        result = subprocess.run(
-            [sys.executable, "package-skills.py"],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        print(result.stdout)
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"✗ Error packaging skills: {e}")
-        print(e.stdout)
-        print(e.stderr)
-        return False
-    except FileNotFoundError:
-        print("⚠ package-skills.py not found. Skipping skill packaging.")
-        return False
-
-
 def interactive_mode():
-    """Run in interactive mode to add items from staging."""
+    """Run in interactive mode to create a new plugin."""
     print("=" * 60)
-    print("Claude Code Marketplace - Add New Agent/Skill")
+    print("Claude Code Marketplace - Add New Plugin")
     print("=" * 60)
 
-    # Check staging directory
-    staging_agents = list(Path("staging/agents").glob("*.md"))
-    staging_skills = [d for d in Path("staging/skills").iterdir() if d.is_dir()]
-
-    print(f"\nFound in staging:")
-    print(f"  Agents: {len(staging_agents)}")
-    print(f"  Skills: {len(staging_skills)}")
-
-    if not staging_agents and not staging_skills:
-        print("\n✗ No items found in staging directory.")
-        print("  Add files to staging/agents/ or staging/skills/ first.")
+    name = to_kebab_case(get_user_input("\nPlugin name"))
+    if not name:
+        print("Error: Name is required")
         return
 
-    # Load marketplace
+    description = get_user_input("Description")
+    version = get_user_input("Version", "1.0.0")
+    category = get_user_input("Category (financial/research/development/domain-specific)", "development")
+    plugin_type = get_user_input("Type (skill/agent)", "skill")
+
+    print("\nEnter keywords (comma-separated):")
+    keywords_str = input("> ").strip()
+    keywords = [k.strip() for k in keywords_str.split(',') if k.strip()]
+
+    # Scaffold
+    plugin_dir = scaffold_plugin(name, description, version, category, keywords, plugin_type)
+    if not plugin_dir:
+        return
+
+    # Update marketplace
     marketplace_data = load_marketplace()
+    marketplace_data = add_to_marketplace(marketplace_data, name, description,
+                                          version, category, keywords)
+    save_marketplace(marketplace_data)
 
-    # Process agents
-    if staging_agents:
-        print("\n" + "=" * 60)
-        print("AGENTS")
-        print("=" * 60)
-        for agent_file in staging_agents:
-            print(f"\nFound: {agent_file.name}")
-            proceed = get_user_input("Process this agent? (y/n)", "y").lower()
-
-            if proceed == 'y':
-                entry = process_agent(str(agent_file), marketplace_data, interactive=True)
-                if entry:
-                    marketplace_data = add_entry_to_marketplace(marketplace_data, entry)
-                    # Remove from staging
-                    agent_file.unlink()
-                    print(f"✓ Removed from staging")
-
-    # Process skills
-    if staging_skills:
-        print("\n" + "=" * 60)
-        print("SKILLS")
-        print("=" * 60)
-        for skill_dir in staging_skills:
-            print(f"\nFound: {skill_dir.name}")
-            proceed = get_user_input("Process this skill? (y/n)", "y").lower()
-
-            if proceed == 'y':
-                entry = process_skill(str(skill_dir), marketplace_data, interactive=True)
-                if entry:
-                    marketplace_data = add_entry_to_marketplace(marketplace_data, entry)
-                    # Remove from staging
-                    shutil.rmtree(skill_dir)
-                    print(f"✓ Removed from staging")
-
-    # Save marketplace files
-    print("\n" + "=" * 60)
-    print("SAVING")
-    print("=" * 60)
-    save_marketplace(marketplace_data, ".claude-plugin/marketplace.json")
-    save_marketplace(marketplace_data, "marketplace.json")
-
-    # Package skills for distribution
-    if staging_skills or any(entry for entry in marketplace_data.get("plugins", []) if entry.get("source", "").startswith("./Skills/")):
-        package_skills()
-
-    print("\n✓ Done! Don't forget to commit and push your changes.")
+    print(f"\nDone! Plugin scaffolded at {plugin_dir}")
+    print(f"Next steps:")
+    print(f"  1. Add your SKILL.md content to {plugin_dir}/skills/{name}/SKILL.md")
+    print(f"  2. Add scripts to {plugin_dir}/scripts/")
+    print(f"  3. Add references to {plugin_dir}/references/")
+    print(f"  4. Use ${{CLAUDE_PLUGIN_ROOT}}/ prefix for all internal paths")
+    print(f"  5. Commit and push")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Add new agents and skills to Claude Code marketplace"
+        description="Add a new plugin to Claude Code marketplace"
     )
-    parser.add_argument('--agent', help='Path to agent .md file in staging')
-    parser.add_argument('--skill', help='Path to skill directory in staging')
-    parser.add_argument('--batch', action='store_true',
-                       help='Process all items in staging without prompts')
-    parser.add_argument('--non-interactive', action='store_true',
-                       help='Run without interactive prompts')
+    parser.add_argument('--name', help='Plugin name')
+    parser.add_argument('--description', help='Plugin description')
+    parser.add_argument('--version', default='1.0.0', help='Version')
+    parser.add_argument('--category', default='development', help='Category')
+    parser.add_argument('--keywords', help='Comma-separated keywords')
+    parser.add_argument('--type', choices=['skill', 'agent'], default='skill',
+                        help='Plugin type')
 
     args = parser.parse_args()
 
-    # Interactive mode
-    if not args.agent and not args.skill and not args.batch:
+    if not args.name:
         interactive_mode()
         return
 
-    # Load marketplace
-    marketplace_data = load_marketplace()
+    name = to_kebab_case(args.name)
+    keywords = [k.strip() for k in args.keywords.split(',')] if args.keywords else []
 
-    # Process specific agent
-    if args.agent:
-        entry = process_agent(args.agent, marketplace_data,
-                            interactive=not args.non_interactive)
-        if entry:
-            marketplace_data = add_entry_to_marketplace(marketplace_data, entry)
-            save_marketplace(marketplace_data, ".claude-plugin/marketplace.json")
-            save_marketplace(marketplace_data, "marketplace.json")
-            print("\n✓ Done!")
-
-    # Process specific skill
-    if args.skill:
-        entry = process_skill(args.skill, marketplace_data,
-                            interactive=not args.non_interactive)
-        if entry:
-            marketplace_data = add_entry_to_marketplace(marketplace_data, entry)
-            save_marketplace(marketplace_data, ".claude-plugin/marketplace.json")
-            save_marketplace(marketplace_data, "marketplace.json")
-            package_skills()
-            print("\n✓ Done!")
-
-    # Batch mode
-    if args.batch:
-        print("Batch processing not yet implemented")
+    plugin_dir = scaffold_plugin(name, args.description or '', args.version,
+                                  args.category, keywords, args.type)
+    if plugin_dir:
+        marketplace_data = load_marketplace()
+        marketplace_data = add_to_marketplace(marketplace_data, name,
+                                              args.description or '', args.version,
+                                              args.category, keywords)
+        save_marketplace(marketplace_data)
 
 
 if __name__ == "__main__":

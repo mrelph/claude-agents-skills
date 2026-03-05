@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """
-Claude Code Marketplace CLI
+Claude Code Plugin Marketplace CLI
 
-A command-line tool for browsing and installing agents and skills from the marketplace.
+A command-line tool for browsing and managing plugins from the marketplace.
 
 Usage:
-    ./marketplace-cli.py list                    # List all items
-    ./marketplace-cli.py list agents             # List all agents
-    ./marketplace-cli.py list skills             # List all skills
-    ./marketplace-cli.py search security         # Search by keyword
-    ./marketplace-cli.py info database-architect # Show details for an item
-    ./marketplace-cli.py install <id>            # Install an agent or skill
-    ./marketplace-cli.py stats                   # Show marketplace statistics
+    ./marketplace-cli.py list                        # List all plugins
+    ./marketplace-cli.py list --category financial    # Filter by category
+    ./marketplace-cli.py search security              # Search by keyword
+    ./marketplace-cli.py info tax-preparation         # Show plugin details
+    ./marketplace-cli.py install <name>               # Install a plugin
+    ./marketplace-cli.py validate                     # Validate marketplace JSON
 """
 
 import argparse
@@ -20,11 +19,11 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Optional
 
 
 class MarketplaceCLI:
-    def __init__(self, marketplace_file: str = "marketplace.json"):
+    def __init__(self, marketplace_file: str = ".claude-plugin/marketplace.json"):
         self.marketplace_file = marketplace_file
         self.data = self._load_marketplace()
         self.repo_root = Path(__file__).parent
@@ -41,209 +40,176 @@ class MarketplaceCLI:
             print(f"Error: Invalid JSON in {self.marketplace_file}: {e}", file=sys.stderr)
             sys.exit(1)
 
-    def _get_all_items(self) -> List[Dict[str, Any]]:
-        """Get all agents and skills as a flat list."""
-        items = []
+    def _get_plugins(self) -> List[Dict]:
+        """Get all plugins from marketplace."""
+        return self.data.get("plugins", [])
 
-        # Add all agents
-        for category, agents in self.data['categories']['agents'].items():
-            for agent in agents:
-                items.append({**agent, 'type': 'agent', 'category': category})
+    def list_plugins(self, category: Optional[str] = None):
+        """List all plugins, optionally filtered by category."""
+        plugins = self._get_plugins()
 
-        # Add all skills
-        for category, skills in self.data['categories']['skills'].items():
-            for skill in skills:
-                items.append({**skill, 'type': 'skill', 'category': category})
+        if category:
+            plugins = [p for p in plugins if p.get("category") == category]
 
-        return items
-
-    def list_items(self, item_type: Optional[str] = None):
-        """List all items or filter by type (agents/skills)."""
-        items = self._get_all_items()
-
-        if item_type:
-            items = [item for item in items if item['type'] == item_type.rstrip('s')]
-
-        if not items:
-            print(f"No {item_type or 'items'} found.")
+        if not plugins:
+            print(f"No plugins found{f' in category {category}' if category else ''}.")
             return
 
-        # Group by type
-        agents = [item for item in items if item['type'] == 'agent']
-        skills = [item for item in items if item['type'] == 'skill']
+        print(f"\nPlugin Marketplace: {self.data.get('name', 'unknown')}")
+        print(f"Version: {self.data.get('version', 'unknown')}")
+        print(f"{'='*80}\n")
 
-        if agents:
-            print("\n🤖 AGENTS\n" + "="*80)
-            for agent in agents:
-                print(f"\n{agent['id']}")
-                print(f"  Name: {agent['name']}")
-                print(f"  Category: {agent['category']}")
-                print(f"  Model: {agent['model']}")
-                print(f"  Description: {agent['description'][:80]}...")
-                print(f"  Tags: {', '.join(agent['tags'])}")
+        for plugin in plugins:
+            print(f"  {plugin['name']}")
+            print(f"    Version:  {plugin.get('version', '?')}")
+            print(f"    Category: {plugin.get('category', '?')}")
+            print(f"    {plugin.get('description', '')[:75]}")
+            print(f"    Keywords: {', '.join(plugin.get('keywords', []))}")
+            print()
 
-        if skills:
-            print("\n\n🛠️  SKILLS\n" + "="*80)
-            for skill in skills:
-                print(f"\n{skill['id']}")
-                print(f"  Name: {skill['name']}")
-                print(f"  Version: {skill['version']}")
-                print(f"  Category: {skill['category']}")
-                print(f"  Description: {skill['description'][:80]}...")
-                print(f"  Tags: {', '.join(skill['tags'])}")
+        print(f"Total: {len(plugins)} plugin(s)")
 
     def search(self, query: str):
-        """Search for items by keyword."""
+        """Search for plugins by keyword."""
         query = query.lower()
-        items = self._get_all_items()
+        plugins = self._get_plugins()
 
         results = []
-        for item in items:
+        for plugin in plugins:
             searchable = ' '.join([
-                item['id'],
-                item['name'],
-                item['description'],
-                ' '.join(item['tags'])
+                plugin.get('name', ''),
+                plugin.get('description', ''),
+                ' '.join(plugin.get('keywords', []))
             ]).lower()
 
             if query in searchable:
-                results.append(item)
+                results.append(plugin)
 
         if not results:
             print(f"No results found for '{query}'")
             return
 
         print(f"\nFound {len(results)} result(s) for '{query}':\n")
-        for item in results:
-            print(f"\n{item['id']} ({item['type'].upper()})")
-            print(f"  Name: {item['name']}")
-            print(f"  Description: {item['description'][:80]}...")
-            print(f"  Tags: {', '.join(item['tags'])}")
+        for plugin in results:
+            print(f"  {plugin['name']} (v{plugin.get('version', '?')})")
+            print(f"    {plugin.get('description', '')[:75]}")
+            print(f"    Install: /plugin install {plugin['name']}@{self.data.get('name', 'claude-agents-skills')}")
+            print()
 
-    def show_info(self, item_id: str):
-        """Show detailed information about an item."""
-        items = self._get_all_items()
-        item = next((i for i in items if i['id'] == item_id), None)
+    def show_info(self, name: str):
+        """Show detailed information about a plugin."""
+        plugins = self._get_plugins()
+        plugin = next((p for p in plugins if p['name'] == name), None)
 
-        if not item:
-            print(f"Error: Item '{item_id}' not found", file=sys.stderr)
+        if not plugin:
+            print(f"Error: Plugin '{name}' not found", file=sys.stderr)
             return
 
         print(f"\n{'='*80}")
-        print(f"{item['name']} ({item['type'].upper()})")
+        print(f"{plugin['name']} v{plugin.get('version', '?')}")
         print(f"{'='*80}\n")
 
-        print(f"ID: {item['id']}")
-        print(f"Category: {item['category']}")
+        print(f"Description: {plugin.get('description', 'N/A')}")
+        print(f"Category:    {plugin.get('category', 'N/A')}")
+        print(f"Author:      {plugin.get('author', {}).get('name', 'N/A')}")
+        print(f"Source:      {plugin.get('source', 'N/A')}")
+        print(f"Keywords:    {', '.join(plugin.get('keywords', []))}")
 
-        if item['type'] == 'agent':
-            print(f"Model: {item['model']}")
-            print(f"Color: {item['color']}")
-            print(f"File: {item['file']}")
-        else:
-            print(f"Version: {item['version']}")
-            print(f"Last Updated: {item['last_updated']}")
-            print(f"Directory: {item['directory']}")
-            print(f"Target Users: {item.get('target_users', 'N/A')}")
+        # Check for plugin.json in source dir
+        source = plugin.get('source', '')
+        if source:
+            plugin_json = self.repo_root / source.replace('./', '') / '.claude-plugin' / 'plugin.json'
+            if plugin_json.exists():
+                print(f"\nPlugin manifest: {plugin_json}")
 
-        print(f"\nDescription:\n{item['description']}")
+        marketplace_name = self.data.get('name', 'claude-agents-skills')
+        print(f"\nInstall:")
+        print(f"  /plugin marketplace add mrelph/{marketplace_name}")
+        print(f"  /plugin install {name}@mrelph/{marketplace_name}")
 
-        print(f"\nAllowed Tools:")
-        for tool in item['allowed_tools']:
-            print(f"  - {tool}")
+    def install(self, name: str, target_dir: Optional[str] = None):
+        """Install a plugin to the specified directory."""
+        plugins = self._get_plugins()
+        plugin = next((p for p in plugins if p['name'] == name), None)
 
-        print(f"\nTags: {', '.join(item['tags'])}")
-
-        if item['type'] == 'skill':
-            if 'features' in item:
-                print(f"\nFeatures:")
-                for feature in item['features']:
-                    print(f"  - {feature}")
-
-            if 'scripts' in item:
-                print(f"\nScripts: {', '.join(item['scripts'])}")
-
-            if 'references' in item:
-                print(f"References: {', '.join(item['references'])}")
-
-        print(f"\nInstallation:")
-        print(f"  {item['install_command']}")
-
-    def install(self, item_id: str, target_dir: Optional[str] = None):
-        """Install an agent or skill to the specified directory."""
-        items = self._get_all_items()
-        item = next((i for i in items if i['id'] == item_id), None)
-
-        if not item:
-            print(f"Error: Item '{item_id}' not found", file=sys.stderr)
+        if not plugin:
+            print(f"Error: Plugin '{name}' not found", file=sys.stderr)
             return
 
-        # Determine target directory
+        source = plugin.get('source', '')
+        src_path = self.repo_root / source.replace('./', '')
+
+        if not src_path.exists():
+            print(f"Error: Plugin source not found at {src_path}", file=sys.stderr)
+            return
+
         if not target_dir:
-            if item['type'] == 'agent':
-                target_dir = '.claude/agents/'
-            else:
-                target_dir = '.claude/skills/'
+            target_dir = '.claude/plugins/'
 
-        target_path = Path(target_dir)
-
-        # Create target directory if it doesn't exist
+        target_path = Path(target_dir) / name
         target_path.mkdir(parents=True, exist_ok=True)
 
-        # Copy the file(s)
-        if item['type'] == 'agent':
-            src_file = self.repo_root / item['file']
-            dst_file = target_path / src_file.name
+        print(f"Installing {name} v{plugin.get('version', '?')}...")
+        print(f"  Source: {src_path}")
+        print(f"  Destination: {target_path}")
 
-            print(f"Installing {item['name']}...")
-            print(f"  Source: {src_file}")
-            print(f"  Destination: {dst_file}")
+        if target_path.exists():
+            shutil.rmtree(target_path)
 
-            shutil.copy2(src_file, dst_file)
-            print(f"✓ Successfully installed {item['id']} to {dst_file}")
+        shutil.copytree(src_path, target_path)
+        print(f"Successfully installed {name} to {target_path}")
+
+    def validate(self):
+        """Validate marketplace and plugin JSONs."""
+        errors = []
+
+        # Validate marketplace.json
+        print("Validating marketplace catalog...")
+        required_fields = ['name', 'version', 'plugins']
+        for field in required_fields:
+            if field not in self.data:
+                errors.append(f"marketplace.json: missing required field '{field}'")
+
+        # Validate each plugin entry
+        plugins = self._get_plugins()
+        for plugin in plugins:
+            name = plugin.get('name', '<unknown>')
+            for field in ['name', 'source', 'description', 'version']:
+                if field not in plugin:
+                    errors.append(f"Plugin '{name}': missing field '{field}'")
+
+            # Check plugin.json exists
+            source = plugin.get('source', '')
+            if source:
+                plugin_json = self.repo_root / source.replace('./', '') / '.claude-plugin' / 'plugin.json'
+                if not plugin_json.exists():
+                    errors.append(f"Plugin '{name}': missing {plugin_json}")
+                else:
+                    try:
+                        with open(plugin_json) as f:
+                            pj = json.load(f)
+                        if pj.get('version') != plugin.get('version'):
+                            errors.append(
+                                f"Plugin '{name}': version mismatch - "
+                                f"marketplace says {plugin.get('version')}, "
+                                f"plugin.json says {pj.get('version')}"
+                            )
+                    except json.JSONDecodeError as e:
+                        errors.append(f"Plugin '{name}': invalid plugin.json - {e}")
+
+        if errors:
+            print(f"\nFound {len(errors)} error(s):")
+            for err in errors:
+                print(f"  - {err}")
+            return False
         else:
-            src_dir = self.repo_root / item['directory']
-            dst_dir = target_path / src_dir.name
-
-            print(f"Installing {item['name']}...")
-            print(f"  Source: {src_dir}")
-            print(f"  Destination: {dst_dir}")
-
-            if dst_dir.exists():
-                print(f"Warning: {dst_dir} already exists. Removing old version...")
-                shutil.rmtree(dst_dir)
-
-            shutil.copytree(src_dir, dst_dir)
-            print(f"✓ Successfully installed {item['id']} to {dst_dir}")
-
-    def show_stats(self):
-        """Show marketplace statistics."""
-        stats = self.data['stats']
-
-        print("\n" + "="*80)
-        print(f"Marketplace Statistics")
-        print("="*80 + "\n")
-
-        print(f"Total Agents: {stats['total_agents']}")
-        print(f"Total Skills: {stats['total_skills']}")
-        print(f"Agent Categories: {stats['agent_categories']}")
-        print(f"Skill Categories: {stats['skill_categories']}")
-
-        print("\nAgent Categories:")
-        for category, agents in self.data['categories']['agents'].items():
-            print(f"  - {category}: {len(agents)} agent(s)")
-
-        print("\nSkill Categories:")
-        for category, skills in self.data['categories']['skills'].items():
-            print(f"  - {category}: {len(skills)} skill(s)")
-
-        if 'integrations' in self.data and 'skill_connections' in self.data['integrations']:
-            print(f"\nIntegrations: {len(self.data['integrations']['skill_connections'])} connection(s)")
+            print(f"All {len(plugins)} plugins validated successfully.")
+            return True
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Claude Code Marketplace CLI",
+        description="Claude Code Plugin Marketplace CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
@@ -251,24 +217,24 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='Command to execute')
 
     # List command
-    list_parser = subparsers.add_parser('list', help='List items')
-    list_parser.add_argument('type', nargs='?', choices=['agents', 'skills'], help='Type to filter')
+    list_parser = subparsers.add_parser('list', help='List plugins')
+    list_parser.add_argument('--category', help='Filter by category')
 
     # Search command
-    search_parser = subparsers.add_parser('search', help='Search for items')
+    search_parser = subparsers.add_parser('search', help='Search for plugins')
     search_parser.add_argument('query', help='Search query')
 
     # Info command
-    info_parser = subparsers.add_parser('info', help='Show item details')
-    info_parser.add_argument('id', help='Item ID')
+    info_parser = subparsers.add_parser('info', help='Show plugin details')
+    info_parser.add_argument('name', help='Plugin name')
 
     # Install command
-    install_parser = subparsers.add_parser('install', help='Install an item')
-    install_parser.add_argument('id', help='Item ID to install')
+    install_parser = subparsers.add_parser('install', help='Install a plugin')
+    install_parser.add_argument('name', help='Plugin name to install')
     install_parser.add_argument('--target', help='Target directory (optional)')
 
-    # Stats command
-    subparsers.add_parser('stats', help='Show marketplace statistics')
+    # Validate command
+    subparsers.add_parser('validate', help='Validate marketplace and plugin JSONs')
 
     args = parser.parse_args()
 
@@ -279,15 +245,16 @@ def main():
     cli = MarketplaceCLI()
 
     if args.command == 'list':
-        cli.list_items(args.type)
+        cli.list_plugins(args.category)
     elif args.command == 'search':
         cli.search(args.query)
     elif args.command == 'info':
-        cli.show_info(args.id)
+        cli.show_info(args.name)
     elif args.command == 'install':
-        cli.install(args.id, args.target)
-    elif args.command == 'stats':
-        cli.show_stats()
+        cli.install(args.name, args.target)
+    elif args.command == 'validate':
+        success = cli.validate()
+        sys.exit(0 if success else 1)
 
 
 if __name__ == '__main__':
