@@ -1,11 +1,49 @@
 # Changelog
 
-All notable changes to the Claude Code Agents & Skills Marketplace will be documented in this file.
+All notable changes to the Claude Code Agents & Skills Plugin Marketplace will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0] - 2026-03-05
+
+### Added
+
+- **Plugin marketplace format**: Repository is now a proper Claude Code plugin marketplace installable via `/plugin marketplace add mrelph/claude-agents-skills`
+- **6 installable plugins** under `plugins/` directory, each with a `.claude-plugin/plugin.json` manifest:
+  - `tax-preparation` (v2.0.0) — US tax preparation with RSU calculations merged in
+  - `portfolio-analyzer` (v3.0.0) — Investment portfolio analysis and reporting
+  - `retirement-planner` (v2.0.0) — Retirement readiness and Social Security optimization
+  - `research-consolidator` (v2.0.0) — Multi-source research synthesis with confidence scoring
+  - `kiro-spec-driven-dev` (v2.0.0) — Spec-driven development workflow
+  - `dev-tools` (v1.0.0) — Bundle of 5 development agents
+- **plugin.json manifests** at `.claude-plugin/plugin.json` for all 6 plugins with `name`, `description`, `version`, `author`, `repository`, `license`, and `keywords` fields
+- **dev-tools agent bundle**: New plugin packaging bug-tracker-resolver, database-architect, security-code-scanner, performance-optimizer, and documentation-maintainer as a single installable unit
+- **`${CLAUDE_PLUGIN_ROOT}/` path variable**: All intra-plugin file references in skill definitions now use this variable for correct path resolution after installation
+- **CONTRIBUTING.md plugin guide**: Complete documentation for creating new plugins in the v2.0.0 format
+- **MARKETPLACE.md v2.0.0**: Updated integration guide covering the new plugin format, manifest schema, and programmatic access patterns
+
+### Changed
+
+- **Restructured repository**: Primary content moved from `Skills/` and `Agents/` into `plugins/` with proper plugin manifests
+- **RSU content merged into tax-preparation**: Amazon RSU tax calculations skill content consolidated into the `tax-preparation` plugin (was previously a separate `amazon-rsu-tax-calculations` skill)
+- **marketplace.json schema updated**: Root catalog now uses the official plugin marketplace format (`plugins` array with `source` paths) instead of the legacy `categories.agents` / `categories.skills` nested structure
+- **Plugin versions bumped** to reflect the structural migration and RSU merge:
+  - tax-preparation: v1.4.0 → v2.0.0
+  - portfolio-analyzer: v2.3.0 → v3.0.0
+  - retirement-planner: v1.0.0 → v2.0.0
+  - research-consolidator: v1.0.0 → v2.0.0
+  - kiro-spec-driven-dev: v1.0.0 → v2.0.0
+- **README.md rewritten** for plugin marketplace experience with quick install command, plugin catalog table, and per-plugin install examples
+- **CONTRIBUTING.md rewritten** to document the plugin format, `${CLAUDE_PLUGIN_ROOT}` requirements, and validation steps
+
+### Removed
+
+- **Root `.claude-plugin/` directory**: Replaced by per-plugin `.claude-plugin/` directories under `plugins/`
+- **Legacy `marketplace.json` nested category structure**: Root `marketplace.json` now uses the flat `plugins` array format; the old `categories.agents` / `categories.skills` / `integrations` / `stats` structure is gone
+- **`jr-kraken-18u-navy-lineup` from published plugins**: This personal-use skill is no longer part of the installable plugin catalog (remains in `Skills/` for reference)
 
 ## [1.1.0] - 2025-12-28
 
@@ -97,23 +135,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Marketplace Version (Root)
 
-The marketplace version (currently 1.1.0) tracks major changes to the marketplace infrastructure, tooling, and significant additions/changes across multiple components.
+The marketplace version (currently 2.0.0) tracks major changes to the marketplace infrastructure, plugin format, and significant additions/changes across multiple components.
 
-### Individual Component Versions
+### Individual Plugin Versions
 
-Each agent and skill maintains its own semantic version:
+Each plugin maintains its own semantic version tracked in its `.claude-plugin/plugin.json` manifest:
 
-- **Agents**: Currently all at v1.0.0 (initial stable releases)
-- **Skills**: Individual version histories documented in each SKILL.md file
-  - tax-preparation: v1.3.0 (RSU support, PDF reading, proactive tax discovery)
-  - portfolio-analyzer: v2.3.0 (deep research, project memory, Word/Excel output)
-  - retirement-planner: v1.0.0 (initial release)
-  - research-consolidator: v1.0.0 (initial release)
-  - jr-kraken-18u-navy-lineup: v1.0.0 (initial release)
-  - kiro-spec-driven-development: v1.0.0 (initial release)
+- **tax-preparation**: v2.0.0 (plugin format migration, RSU content merged in)
+- **portfolio-analyzer**: v3.0.0 (plugin format migration, enhanced reporting)
+- **retirement-planner**: v2.0.0 (plugin format migration)
+- **research-consolidator**: v2.0.0 (plugin format migration)
+- **kiro-spec-driven-dev**: v2.0.0 (plugin format migration)
+- **dev-tools**: v1.0.0 (initial release as agent bundle)
 
 ### Link References
 
-[Unreleased]: https://github.com/mrelph/claude-agents-skills/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/mrelph/claude-agents-skills/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/mrelph/claude-agents-skills/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/mrelph/claude-agents-skills/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/mrelph/claude-agents-skills/releases/tag/v1.0.0

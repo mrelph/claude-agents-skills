@@ -1,163 +1,212 @@
-# Contributing to Claude Code Marketplace
+# Contributing to Claude Agents & Skills Plugin Marketplace
 
-Thank you for your interest in contributing! This guide will help you add new agents and skills to the marketplace.
+Thank you for your interest in contributing. This guide covers the v2.0.0 plugin format used by the marketplace. All new contributions must follow this format to be installable via `/plugin install`.
 
-## Quick Start with Staging Workflow
+## Plugin Format Overview
 
-We've created an automated workflow to make adding new agents and skills easy:
+Each plugin lives in its own directory under `plugins/` and follows this structure:
 
-### 1. Set Up Your New Agent or Skill
-
-**For Agents:**
-```bash
-# Copy the template
-cp staging/agent-template.md staging/agents/my-new-agent.md
-
-# Edit the file with your agent's details
-# Fill in the frontmatter and content
+```
+plugins/your-plugin-name/
+├── .claude-plugin/
+│   └── plugin.json          # Required: plugin manifest
+├── skills/                  # Skills provided by this plugin (if any)
+│   └── your-skill-name/
+│       ├── SKILL.md         # Main skill definition
+│       └── README.md        # Human-readable documentation
+├── agents/                  # Agents provided by this plugin (if any)
+│   └── your-agent-name.md   # Agent definition
+├── references/              # Supporting reference documents (optional)
+├── scripts/                 # Python utility scripts (optional)
+├── examples/                # Example data files (optional)
+└── README.md                # Plugin-level documentation
 ```
 
-**For Skills:**
-```bash
-# Copy the template directory
-cp -r staging/skill-template staging/skills/my-new-skill
+A plugin must contain at least one skill or agent. Plugins may contain both.
 
-# Edit SKILL.md, README.md, and add your references/scripts
+## Step 1: Create the Plugin Directory
+
+```bash
+mkdir -p plugins/your-plugin-name/.claude-plugin
+mkdir -p plugins/your-plugin-name/skills/your-plugin-name
+# Add agents directory if needed
+mkdir -p plugins/your-plugin-name/agents
 ```
 
-### 2. Run the Automation
+## Step 2: Add the plugin.json Manifest
 
-**Option A: Use the Marketplace Manager Agent (Recommended)**
+Create `plugins/your-plugin-name/.claude-plugin/plugin.json`:
 
-If you have the marketplace installed in Claude Code:
-```bash
-# Just ask Claude to process the staged items
-"Add the new agents and skills from staging"
+```json
+{
+  "name": "your-plugin-name",
+  "description": "One-sentence description of what this plugin does",
+  "version": "1.0.0",
+  "author": { "name": "your-github-username" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["keyword1", "keyword2", "keyword3"]
+}
 ```
 
-The marketplace-manager agent will:
-- Scan your staging directory
-- Guide you through interactive prompts
-- Create proper directory structures
-- Update marketplace.json files automatically
-- Clean up staging area
+**Required fields:**
 
-**Option B: Use the Python Script**
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Kebab-case plugin identifier, unique in the marketplace |
+| `description` | string | One-sentence description for the plugin catalog |
+| `version` | string | Semantic version (`MAJOR.MINOR.PATCH`) |
+| `author` | object | `{ "name": "github-username" }` |
+| `repository` | string | Repository URL |
+| `license` | string | SPDX license identifier (use `MIT` for this repo) |
+| `keywords` | array | 3–8 tags that help users discover the plugin |
 
-Interactive Mode:
-```bash
-python3 add-to-marketplace.py
+## Step 3: Add Skills
+
+Create a skill definition at `plugins/your-plugin-name/skills/your-skill-name/SKILL.md`:
+
+```yaml
+---
+name: your-skill-name
+description: Brief description of what the skill does
+allowed-tools: Read, Bash, WebSearch, Write
+metadata:
+  version: 1.0.0
+  last-updated: 2026-01-01
+---
+
+# Your Skill Name
+
+[Skill instructions and workflow...]
 ```
 
-Non-Interactive Mode:
-```bash
-# For a specific agent
-python3 add-to-marketplace.py --agent staging/agents/my-new-agent.md --non-interactive
+**Critical requirement — use `${CLAUDE_PLUGIN_ROOT}/` for all file paths.**
 
-# For a specific skill
-python3 add-to-marketplace.py --skill staging/skills/my-new-skill --non-interactive
+Any references to files within the plugin (reference documents, scripts, examples) must use the `${CLAUDE_PLUGIN_ROOT}/` variable so that Claude Code can resolve them regardless of where the plugin is installed:
+
+```markdown
+<!-- Correct -->
+Read the reference at ${CLAUDE_PLUGIN_ROOT}/references/guide.md
+Run the script at ${CLAUDE_PLUGIN_ROOT}/scripts/calculator.py
+
+<!-- Wrong — will break after installation -->
+Read the reference at plugins/your-plugin-name/references/guide.md
+Read the reference at ./references/guide.md
 ```
 
-### 3. Commit and Push
+Include a `README.md` alongside `SKILL.md` with human-readable documentation, usage examples, and a description of the skill's capabilities.
 
-```bash
-git add .
-git commit -m "Add [agent/skill-name] for [purpose]"
-git push
+## Step 4: Add Agents (if applicable)
+
+Create agent definition files under `plugins/your-plugin-name/agents/`:
+
+```markdown
+---
+name: your-agent-name
+description: What this agent specializes in
+model: sonnet
+color: blue
+allowed-tools: Read, Write, Bash, Grep, Glob
+---
+
+# Your Agent Name
+
+[Agent purpose, expertise areas, workflow, and behavioral guidelines...]
 ```
 
-## Detailed Guidelines
+Agent markdown files use the same `${CLAUDE_PLUGIN_ROOT}/` convention if they reference any plugin files.
 
-### Agent Requirements
+## Step 5: Add to marketplace.json
 
-Agents must include:
-- **YAML frontmatter** with:
-  - `name` - kebab-case name
-  - `description` - One-line description
-  - `model` - sonnet, opus, or haiku
-  - `color` - UI color
-  - `category` - development, design, planning, or media
-  - `allowed-tools` - List of tools the agent can use
+Add an entry for your plugin in the root `marketplace.json` under the `plugins` array:
 
-- **Content sections**:
-  - Purpose
-  - Expertise areas
-  - Workflow
-  - Examples
+```json
+{
+  "name": "your-plugin-name",
+  "source": "./plugins/your-plugin-name",
+  "description": "One-sentence description matching plugin.json",
+  "version": "1.0.0",
+  "author": { "name": "your-github-username" },
+  "keywords": ["keyword1", "keyword2", "keyword3"],
+  "category": "development"
+}
+```
 
-### Skill Requirements
+**Valid categories:**
 
-Skills must include:
-- **SKILL.md** with:
-  - YAML frontmatter (name, description, allowed-tools, category, version)
-  - Purpose and capabilities
-  - Workflow description
-  - Usage instructions
-  - Examples
+- `financial` — Tax, investing, retirement, budgeting
+- `research` — Analysis, synthesis, reporting
+- `development` — Software development tools, workflows, agents
+- `design` — UX/UI, visual design, accessibility
+- `planning` — Roadmaps, feature planning, project management
+- `domain-specific` — Specialized use cases
 
-- **README.md** - Human-readable documentation
+## Plugin Naming Conventions
 
-- **Optional but recommended**:
-  - `references/` - Domain knowledge documents
-  - `scripts/` - Python utility scripts
+- Plugin names must be lowercase and kebab-case (e.g., `tax-preparation`, `dev-tools`)
+- Names must be unique within the marketplace
+- Skill and agent names inside the plugin should follow the same convention
+- Keywords should be specific (e.g., `postgresql` not `database`, `irs` not `government`)
 
-### Categories
+## Versioning
 
-**Agent Categories:**
-- `development` - Bug tracking, databases, documentation, performance, security
-- `design` - UX/UI, visual design, accessibility
-- `planning` - Roadmaps, feature planning, project management
-- `media` - Video, audio, image processing
+Use [Semantic Versioning](https://semver.org/):
 
-**Skill Categories:**
-- `financial` - Tax, investing, retirement, budgeting
-- `research` - Analysis, synthesis, reporting
-- `domain-specific` - Specialized use cases (sports, hobbies, etc.)
+- `1.0.0` — Initial release
+- `1.1.0` — New features, backward compatible
+- `1.2.0` — Additional features, backward compatible
+- `2.0.0` — Breaking changes (restructured paths, renamed skills, changed behavior)
 
-### Keywords
+Both the `plugin.json` and the `marketplace.json` entry must have matching version values.
 
-Choose 3-6 relevant keywords that help users discover your agent/skill:
-- Be specific (e.g., "postgresql" not just "database")
-- Include domain terms
-- Think about how users would search
+## Plugin Structure Requirements
 
-### Versioning
+A valid plugin must meet all of the following:
 
-Use semantic versioning:
-- `1.0.0` - Initial release
-- `1.1.0` - New features, backward compatible
-- `2.0.0` - Breaking changes
+- `plugins/your-plugin-name/.claude-plugin/plugin.json` exists and is valid JSON
+- All required fields are present in `plugin.json`
+- At least one skill in `skills/` or at least one agent in `agents/` exists
+- All intra-plugin file references in SKILL.md and agent files use `${CLAUDE_PLUGIN_ROOT}/`
+- An entry exists in the root `marketplace.json`
+- A `README.md` exists at the plugin root level
 
-## Manual Process (Advanced)
+## Testing Your Plugin
 
-If you prefer not to use the automation script:
-
-1. Create directory structure manually
-2. Add files following existing patterns
-3. Manually edit both `.claude-plugin/marketplace.json` and `marketplace.json`
-4. Ensure both files stay in sync
-
-## Testing Locally
-
-Before pushing, test your marketplace:
+Before submitting a pull request, validate the plugin locally:
 
 ```bash
-# Validate the structure
+# Check that plugin.json is valid JSON
+jq empty plugins/your-plugin-name/.claude-plugin/plugin.json && echo "Valid JSON"
+
+# Validate that marketplace.json is valid JSON with your entry
+jq '.plugins[] | select(.name == "your-plugin-name")' marketplace.json
+
+# Verify no hardcoded paths exist in skill definitions
+grep -r "\./Skills\|\.claude/skills\|plugins/your-plugin-name/" \
+  plugins/your-plugin-name/skills/ \
+  && echo "WARNING: Hardcoded paths found — replace with \${CLAUDE_PLUGIN_ROOT}/"
+
+# Install and test locally in Claude Code
 /plugin validate .
-
-# Install locally
 /plugin install .
 ```
 
-## Questions?
+Verify the installed plugin works as expected by running through a representative use case before opening a pull request.
 
-- Check existing agents/skills for examples
-- Review the staging templates
-- Open an issue on GitHub
+## Submitting a Pull Request
+
+1. Fork the repository and create a branch from `main`
+2. Follow all steps above to create your plugin
+3. Run the validation checks
+4. Open a pull request with:
+   - A clear title describing the plugin (e.g., `Add legal-research plugin`)
+   - A description of what the plugin does and who it's for
+   - Confirmation that you tested the plugin locally
 
 ## Code of Conduct
 
-- Be respectful and constructive
+- Be respectful and constructive in all interactions
 - Test your contributions before submitting
 - Follow existing patterns and conventions
-- Provide clear documentation
+- Provide complete documentation — undocumented plugins will not be accepted
+- Do not include personal data, API keys, or sensitive information in any plugin file

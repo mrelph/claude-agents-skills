@@ -1,176 +1,97 @@
-# Claude Code Agents & Skills Marketplace
+# Claude Agents & Skills Plugin Marketplace
 
-A curated collection of specialized agents and skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), extending Claude's capabilities with domain expertise and task automation.
+A curated collection of specialized plugins for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), extending Claude's capabilities with domain expertise and task automation.
 
-## Marketplace Catalog
+## Quick Install
 
-This repository includes a machine-readable `marketplace.json` catalog that enables programmatic discovery and installation of agents and skills.
-
-📖 **[Full Marketplace Integration Guide →](MARKETPLACE.md)**
-
-The catalog includes:
-
-- Complete metadata for all agents and skills
-- Installation commands and directory structures
-- Version tracking and update history
-- Categorization and tagging
-- Integration mappings between skills
-- Usage statistics and compatibility information
-
-### Using the Marketplace Catalog
-
-The `marketplace.json` file can be consumed by:
-
-- **Claude Code integrations** - Automated discovery and installation
-- **CLI tools** - Browse and install agents/skills via command line
-- **Web frontends** - Build marketplace UIs for browsing
-- **CI/CD pipelines** - Automated testing and deployment
-- **Package managers** - Integration with existing tooling
-
-Example: Programmatically list all financial skills:
-
-```bash
-jq '.categories.skills.financial[] | {id, name, version}' marketplace.json
-```
-
-Example: Get installation command for a specific agent:
-
-```bash
-jq '.categories.agents.development[] | select(.id=="database-architect") | .install_command' marketplace.json
-```
-
-### Marketplace CLI Tool
-
-A Python CLI tool is included for easy browsing and installation:
-
-```bash
-# List all items
-./marketplace-cli.py list
-
-# List only agents or skills
-./marketplace-cli.py list agents
-./marketplace-cli.py list skills
-
-# Search for items
-./marketplace-cli.py search security
-./marketplace-cli.py search finance
-
-# Show detailed information
-./marketplace-cli.py info database-architect
-./marketplace-cli.py info tax-preparation
-
-# Install an agent or skill
-./marketplace-cli.py install database-architect
-./marketplace-cli.py install portfolio-analyzer --target /path/to/.claude/skills/
-
-# Show marketplace statistics
-./marketplace-cli.py stats
-```
-
-The CLI tool automatically:
-- Creates target directories if they don't exist
-- Detects whether to install as agent or skill
-- Shows detailed metadata and features
-- Handles installation conflicts
-
-## What's Included
-
-### 🤖 Agents (9)
-
-Specialized task-focused agents that can be spawned for specific development and business tasks:
-
-| Agent | Purpose |
-|-------|---------|
-| [bug-tracker-resolver](Agents/bug-tracker-resolver.md) | Manages bugs, performs root cause analysis, implements fixes |
-| [database-architect](Agents/database-architect.md) | PostgreSQL/Supabase schema design, query optimization, RLS policies |
-| [documentation-maintainer](Agents/documentation-maintainer.md) | Creates and updates project documentation |
-| [marketplace-manager](Agents/marketplace-manager.md) | Automates adding new agents and skills to marketplace |
-| [performance-optimizer](Agents/performance-optimizer.md) | Core Web Vitals, bundle size, runtime efficiency |
-| [roadmap-feature-planner](Agents/roadmap-feature-planner.md) | Strategic feature planning and roadmap tracking |
-| [security-code-scanner](Agents/security-code-scanner.md) | Vulnerability identification, OWASP Top 10 analysis |
-| [ux-ui-design-expert](Agents/ux-ui-design-expert.md) | UX/UI guidance, accessibility, responsive design |
-| [video-integration-specialist](Agents/video-integration-specialist.md) | YouTube/Vimeo integration, streaming optimization |
-
-### 🛠️ Skills (6)
-
-Comprehensive skill modules with supporting scripts and reference documentation:
-
-| Skill | Version | Description |
-|-------|---------|-------------|
-| [kiro-spec-driven-development](Skills/kiro-spec-driven-development/) | v1.0.0 | Spec-driven development: requirements → design → tasks workflow |
-| [research-consolidator](Skills/research-consolidator/) | v1.0.0 | Synthesize research from multiple AI models and sources |
-| [tax-preparation](Skills/tax-preparation/) | v1.3.0 | US tax preparation, deduction analysis, document processing |
-| [portfolio-analyzer](Skills/portfolio-analyzer/) | v2.3.0 | Investment analysis, performance metrics, recommendations |
-| [retirement-planner](Skills/retirement-planner/) | v1.0.0 | Retirement readiness, Social Security optimization, Monte Carlo simulations |
-| [jr-kraken-18u-navy-lineup](Skills/jr-kraken-18u-navy-lineup/) | v1.0.0 | Hockey team lineup generation and game strategy |
-
-## Installation
-
-### Method 1: Plugin Marketplace (Recommended)
-
-Install the entire marketplace in Claude Code to browse and install agents/skills on demand:
+Add this marketplace to Claude Code with a single command:
 
 ```bash
 /plugin marketplace add mrelph/claude-agents-skills
-/plugin install skill-name@claude-agents-skills
 ```
 
-Benefits:
-- Easy updates with `/plugin update`
-- Browse all available skills
-- Automatic dependency management
-
-### Method 2: Direct Download (Individual Skills)
-
-Download pre-packaged ZIP files for individual skills:
-
-**[Browse Available Downloads →](releases/skills/)**
-
-Quick install:
-```bash
-# Download the skill ZIP (example: tax-preparation)
-wget https://github.com/mrelph/claude-agents-skills/raw/main/releases/skills/tax-preparation-v1.3.0.zip
-
-# Extract to Claude Code skills directory
-unzip tax-preparation-v1.3.0.zip -d ~/.claude/skills/
-```
-
-Each skill package includes:
-- Complete skill with all reference materials
-- Python utility scripts
-- Installation instructions
-- CHANGELOG and version history
-
-### Method 3: Manual Clone
-
-Clone the repository and copy skills/agents manually:
+Once added, install any plugin individually:
 
 ```bash
-# Clone the repository
-git clone https://github.com/mrelph/claude-agents-skills.git
-
-# Copy a skill
-cp -r claude-agents-skills/Skills/tax-preparation ~/.claude/skills/
-
-# Copy an agent
-cp -r claude-agents-skills/Agents/database-architect ~/.claude/agents/
+/plugin install tax-preparation@mrelph/claude-agents-skills
+/plugin install portfolio-analyzer@mrelph/claude-agents-skills
+/plugin install dev-tools@mrelph/claude-agents-skills
 ```
 
-### Using Skills and Agents
+## Plugin Catalog
 
-Once installed, skills and agents are automatically available in Claude Code conversations.
+| Plugin | Description | Version | Install |
+|--------|-------------|---------|---------|
+| [tax-preparation](plugins/tax-preparation/) | US tax preparation: deduction analysis, RSU calculations, form processing | v2.0.0 | `/plugin install tax-preparation@mrelph/claude-agents-skills` |
+| [portfolio-analyzer](plugins/portfolio-analyzer/) | Investment portfolio analysis, risk assessment, asset allocation | v3.0.0 | `/plugin install portfolio-analyzer@mrelph/claude-agents-skills` |
+| [retirement-planner](plugins/retirement-planner/) | Retirement readiness, Social Security optimization, withdrawal strategies | v2.0.0 | `/plugin install retirement-planner@mrelph/claude-agents-skills` |
+| [research-consolidator](plugins/research-consolidator/) | Multi-source research synthesis with confidence scoring and gap analysis | v2.0.0 | `/plugin install research-consolidator@mrelph/claude-agents-skills` |
+| [kiro-spec-driven-dev](plugins/kiro-spec-driven-dev/) | Spec-driven development: requirements to design to tasks workflow | v2.0.0 | `/plugin install kiro-spec-driven-dev@mrelph/claude-agents-skills` |
+| [dev-tools](plugins/dev-tools/) | Bundle of 5 development agents: bug tracking, DB architecture, security scanning, performance, documentation | v1.0.0 | `/plugin install dev-tools@mrelph/claude-agents-skills` |
 
-**Slash Command Support** - Skills can be invoked using custom slash commands:
-```
-/tax-prep analyze my W-2 and find deductions
-/portfolio review my current holdings
+## Plugin Details
+
+### tax-preparation (v2.0.0)
+
+US tax preparation and planning for individuals and families. Reads tax documents, identifies deductions, calculates liability, and handles complex situations including RSU income, self-employment, and investment taxation.
+
+```bash
+/plugin install tax-preparation@mrelph/claude-agents-skills
 ```
 
-**Agents** - Spawn specialized agents for specific tasks:
+### portfolio-analyzer (v3.0.0)
+
+Investment portfolio analysis with performance metrics, asset allocation review, risk assessment, and strategic recommendations. Produces professional-grade reports in multiple formats.
+
+```bash
+/plugin install portfolio-analyzer@mrelph/claude-agents-skills
 ```
-Use the database-architect agent to design this schema
-Launch the security-code-scanner to audit this code
+
+### retirement-planner (v2.0.0)
+
+Retirement readiness assessment with Social Security optimization, withdrawal strategy planning, Roth conversion analysis, and Monte Carlo simulations for longevity risk.
+
+```bash
+/plugin install retirement-planner@mrelph/claude-agents-skills
 ```
+
+### research-consolidator (v2.0.0)
+
+Synthesizes research from multiple AI models and sources into comprehensive reports. Features confidence scoring, gap analysis, and structured output formats for actionable insights.
+
+```bash
+/plugin install research-consolidator@mrelph/claude-agents-skills
+```
+
+### kiro-spec-driven-dev (v2.0.0)
+
+Structured spec-driven development workflow using Kiro methodology. Transforms feature ideas into formal requirements documents, design specifications, and implementation task lists.
+
+```bash
+/plugin install kiro-spec-driven-dev@mrelph/claude-agents-skills
+```
+
+### dev-tools (v1.0.0)
+
+A bundled collection of 5 specialized development agents:
+
+- **bug-tracker-resolver** — Bug management, root cause analysis, resolution planning
+- **database-architect** — PostgreSQL/Supabase schema design, query optimization, RLS policies
+- **security-code-scanner** — Vulnerability identification, OWASP Top 10 analysis
+- **performance-optimizer** — Core Web Vitals, bundle size reduction, runtime efficiency
+- **documentation-maintainer** — READMEs, API docs, user guides, documentation consistency
+
+```bash
+/plugin install dev-tools@mrelph/claude-agents-skills
+```
+
+## Plugin Integrations
+
+Several plugins are designed to work together, passing context and data between sessions:
+
+- **portfolio-analyzer** feeds into **retirement-planner** — Portfolio holdings and performance inform retirement projections
+- **portfolio-analyzer** feeds into **tax-preparation** — Tax-loss harvesting, cost basis, and capital gains coordination
+- **retirement-planner** feeds into **tax-preparation** — Roth conversion strategies and withdrawal tax planning
 
 ## Repository Structure
 
@@ -178,248 +99,63 @@ Launch the security-code-scanner to audit this code
 claude-agents-skills/
 ├── README.md                    # This file
 ├── CHANGELOG.md                 # Version history
+├── CONTRIBUTING.md              # Contribution guidelines
 ├── MARKETPLACE.md               # Marketplace integration guide
-├── marketplace.json             # Catalog (root copy)
-├── marketplace-cli.py           # CLI tool for browsing/installing
-├── package-skills.py            # Skill packaging script
-├── add-to-marketplace.py        # Automation for adding items
-├── .claude-plugin/              # Plugin marketplace structure
-│   └── marketplace.json         # Catalog (plugin copy)
-├── releases/                    # Distribution packages
-│   └── skills/                  # Pre-packaged skill ZIPs
-│       ├── README.md            # Download instructions
-│       ├── tax-preparation-v1.3.0.zip
-│       ├── portfolio-analyzer-v2.3.0.zip
-│       └── ...
-├── Agents/                      # Agent definitions
-│   ├── README.md                # Agents overview and usage
-│   ├── CHANGELOG.md             # Agents version history
-│   ├── bug-tracker-resolver/
-│   ├── database-architect/
-│   └── ...
-├── Skills/                      # Skill modules
-│   ├── README.md                # Skills overview and usage
-│   ├── research-consolidator/
-│   │   ├── SKILL.md             # Main skill definition
-│   │   ├── README.md            # Skill documentation
-│   │   ├── CHANGELOG.md         # Version history
-│   │   ├── references/          # Domain knowledge
-│   │   └── scripts/             # Python utilities
+├── marketplace.json             # Machine-readable plugin catalog
+├── plugins/                     # Plugin marketplace plugins (v2.0.0+)
 │   ├── tax-preparation/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json      # Plugin manifest
+│   │   ├── skills/
+│   │   │   └── tax-preparation/ # Skill files with ${CLAUDE_PLUGIN_ROOT} paths
+│   │   ├── references/          # Tax reference documents
+│   │   ├── scripts/             # Python utility scripts
+│   │   ├── examples/            # Sample data files
+│   │   └── README.md
 │   ├── portfolio-analyzer/
 │   ├── retirement-planner/
-│   └── jr-kraken-18u-navy-lineup/
-└── staging/                     # Contribution templates
-    ├── agent-template.md
-    ├── skill-template/
-    ├── agents/
-    └── skills/
+│   ├── research-consolidator/
+│   ├── kiro-spec-driven-dev/
+│   └── dev-tools/
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       └── agents/              # Agent definitions
+├── Skills/                      # Legacy personal skills (not published to marketplace)
+├── Agents/                      # Legacy personal agents (not published to marketplace)
+├── staging/                     # Contribution staging area and templates
+└── releases/                    # Distribution packages (pre-v2.0.0)
 ```
 
-## Skill Anatomy
+## Legacy Content
 
-Each skill follows a consistent structure:
+The `Skills/` and `Agents/` directories contain personal items that remain in the repository for reference but are not part of the published plugin marketplace:
 
-```
-skill-name/
-├── SKILL.md              # Main skill definition (required)
-│                         # Contains: name, description, allowed-tools, workflow
-├── README.md             # Human-readable documentation
-├── references/           # Domain knowledge documents
-│   ├── guide.md          # Reference materials
-│   └── ...
-└── scripts/              # Python utility scripts
-    ├── README.md         # Script documentation
-    ├── calculator.py     # Utility scripts
-    └── ...
-```
+- `Skills/jr-kraken-18u-navy-lineup/` — Hockey lineup generator (personal use)
+- `Agents/` — Individual agent markdown files (superseded by plugins/dev-tools)
 
-### SKILL.md Format
-
-```yaml
----
-name: skill-name
-description: Brief description of what the skill does
-allowed-tools: Read, Bash, WebSearch, Write, AskUserQuestion
-metadata:
-  version: 1.0.0
-  last-updated: 2025-01-01
----
-
-# Skill Name
-
-[Skill instructions and workflows...]
-```
-
-## Agent Anatomy
-
-Each agent is a single markdown file with YAML frontmatter:
-
-```yaml
----
-name: agent-name
-description: What this agent specializes in
-model: sonnet
-color: blue
-allowed-tools: Read, Write, Bash, Grep, Glob, Task
----
-
-# Agent Name
-
-[Agent instructions, expertise areas, and behavior guidelines...]
-```
-
-## Integration Between Skills
-
-Some skills are designed to work together:
-
-- **portfolio-analyzer** → **retirement-planner**: Portfolio data flows into retirement projections
-- **portfolio-analyzer** → **tax-preparation**: Tax-loss harvesting and cost basis coordination
-- **retirement-planner** → **tax-preparation**: Roth conversion and withdrawal tax planning
-
-## Marketplace API
-
-The `marketplace.json` follows a structured format that supports various integration scenarios:
-
-### JSON Schema
-
-```json
-{
-  "name": "Marketplace name",
-  "version": "Semantic version",
-  "categories": {
-    "agents": {
-      "category_name": [/* agent objects */]
-    },
-    "skills": {
-      "category_name": [/* skill objects */]
-    }
-  },
-  "integrations": {
-    "skill_connections": [/* integration mappings */]
-  },
-  "installation": {/* installation instructions */},
-  "stats": {/* usage statistics */}
-}
-```
-
-### Agent Object Schema
-
-```json
-{
-  "id": "unique-identifier",
-  "name": "Display Name",
-  "description": "Brief description",
-  "model": "sonnet|opus|haiku",
-  "color": "UI color",
-  "version": "1.0.0",
-  "file": "path/to/agent.md",
-  "allowed_tools": ["Tool1", "Tool2"],
-  "install_command": "cp command",
-  "tags": ["tag1", "tag2"]
-}
-```
-
-### Skill Object Schema
-
-```json
-{
-  "id": "unique-identifier",
-  "name": "Display Name",
-  "description": "Detailed description",
-  "version": "1.0.0",
-  "last_updated": "YYYY-MM-DD",
-  "directory": "Skills/skill-name",
-  "allowed_tools": ["Tool1", "Tool2"],
-  "install_command": "cp -r command",
-  "target_users": "audience description",
-  "tags": ["tag1", "tag2"],
-  "features": ["Feature 1", "Feature 2"],
-  "scripts": ["script1.py"],
-  "references": ["ref1.md"]
-}
-```
-
-### Query Examples
-
-**Find all agents that use a specific tool:**
-```bash
-jq '[.categories.agents[][] | select(.allowed_tools[] | contains("WebSearch"))]' marketplace.json
-```
-
-**List all skills with their versions:**
-```bash
-jq '[.categories.skills[][] | {name, version}]' marketplace.json
-```
-
-**Get integration dependencies for a skill:**
-```bash
-jq '.integrations.skill_connections[] | select(.from=="portfolio-analyzer")' marketplace.json
-```
-
-**Count items by category:**
-```bash
-jq '.stats' marketplace.json
-```
-
-## What's New
-
-### Version 1.1.0 (2025-12-28)
-
-- **Slash Command Support**: Skills can now be invoked with custom slash commands (e.g., `/tax-prep`, `/portfolio`) for faster access
-- **New Skill: kiro-spec-driven-development**: Structured spec-driven development workflow (requirements → design → tasks)
-- **New Agent: marketplace-manager**: Automates adding new agents and skills to the marketplace
-- **Enhanced Contribution Workflow**: Staging directory with templates and automation
-- **Agent Directory Restructure**: Each agent now in its own directory for plugin compatibility
-- **Comprehensive CHANGELOG**: Full version history and change tracking
-
-See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+These items are not installable via `/plugin install`. If you need them, clone the repository directly and copy the relevant files.
 
 ## Contributing
 
-We've created an automated workflow to make adding new agents and skills easy!
+Contributions of new plugins are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full plugin format requirements and submission process.
 
-### Quick Start
+The short version:
 
-1. **Use the templates** in `staging/`:
-   ```bash
-   # For agents
-   cp staging/agent-template.md staging/agents/my-new-agent.md
+1. Create a directory under `plugins/your-plugin-name/`
+2. Add a `plugin.json` manifest at `.claude-plugin/plugin.json`
+3. Add skills under `skills/` and agents under `agents/` using `${CLAUDE_PLUGIN_ROOT}/` for all file paths
+4. Add your plugin entry to `marketplace.json`
+5. Open a pull request
 
-   # For skills
-   cp -r staging/skill-template staging/skills/my-new-skill
-   ```
+## Marketplace Integration
 
-2. **Fill in your content** and metadata
+For programmatic access, version checking, and advanced integration scenarios, see [MARKETPLACE.md](MARKETPLACE.md).
 
-3. **Run the automation** (choose one):
-   ```bash
-   # Option A: Use the marketplace-manager agent (recommended)
-   # In Claude Code, just ask: "Add the new items from staging"
-
-   # Option B: Use the Python script
-   python3 add-to-marketplace.py
-   ```
-
-   **NEW**: When adding skills, you'll be prompted to define a slash command for easier invocation.
-
-4. **Commit and push** your changes
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
-### Manual Process
-
-To add a new skill or agent manually:
-
-1. Follow the existing structure patterns
-2. Include comprehensive documentation
-3. Add appropriate `.gitignore` entries for data directories
-4. Test with Claude Code before submitting
-5. Update both `marketplace.json` files (root and `.claude-plugin/`)
+The `marketplace.json` file at the root of this repository provides a machine-readable catalog of all published plugins with metadata, keywords, and version information.
 
 ## License
 
-MIT License - Feel free to use and adapt these skills and agents for your own projects.
+MIT License — Feel free to use and adapt these plugins for your own projects.
 
 ## Resources
 

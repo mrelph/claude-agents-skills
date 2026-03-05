@@ -1,237 +1,179 @@
-# Claude Code Marketplace Integration Guide
+# Claude Agents & Skills Plugin Marketplace — Integration Guide
 
-This document describes how to integrate with the Claude Code Marketplace catalog for programmatic discovery and installation of agents and skills.
+This document describes the v2.0.0 plugin marketplace format: how to install plugins, the `marketplace.json` schema, available plugins, and programmatic access patterns.
 
-## Overview
+## Adding the Marketplace
 
-The `marketplace.json` file provides a machine-readable catalog of all available agents and skills in this repository. It enables:
-
-- **Automated discovery** - Find agents and skills programmatically
-- **Version management** - Track versions and updates
-- **Dependency mapping** - Understand skill integrations
-- **Metadata queries** - Filter and search by capabilities
-- **Installation automation** - Programmatic installation
-
-## Plugin Marketplace Setup
-
-To make this repository installable as a Claude Code plugin marketplace, the `marketplace.json` file must be located at `.claude-plugin/marketplace.json`. This allows users to install the entire marketplace with:
+Install this repository as a Claude Code plugin marketplace with one command:
 
 ```bash
-/plugin install https://github.com/yourusername/claude-agents-skills
+/plugin marketplace add mrelph/claude-agents-skills
 ```
 
-### Directory Structure for Plugin Support
+This registers the marketplace so you can browse and install individual plugins:
 
+```bash
+# Install a specific plugin
+/plugin install tax-preparation@mrelph/claude-agents-skills
+
+# List all available plugins from this marketplace
+/plugin list mrelph/claude-agents-skills
+
+# Update all installed plugins from this marketplace
+/plugin update mrelph/claude-agents-skills
 ```
-claude-agents-skills/
-├── .claude-plugin/
-│   └── marketplace.json    # Required for plugin installation
-├── marketplace.json         # Root copy for reference/CLI usage
-├── Agents/
-├── Skills/
-└── ...
-```
 
-**Note:** The `marketplace.json` file exists in two locations:
-- `.claude-plugin/marketplace.json` - Required by Claude Code's plugin system
-- `marketplace.json` (root) - For CLI tools, documentation, and manual queries
+## Available Plugins
 
-Both files should be kept in sync when making updates to the catalog.
+| Plugin | Version | Category | Description |
+|--------|---------|----------|-------------|
+| `tax-preparation` | v2.0.0 | financial | US tax preparation: deduction analysis, RSU calculations, form processing |
+| `portfolio-analyzer` | v3.0.0 | financial | Investment portfolio analysis, risk assessment, asset allocation |
+| `retirement-planner` | v2.0.0 | financial | Retirement readiness, Social Security optimization, withdrawal strategies |
+| `research-consolidator` | v2.0.0 | research | Multi-source research synthesis with confidence scoring and gap analysis |
+| `kiro-spec-driven-dev` | v2.0.0 | development | Spec-driven development: requirements to design to tasks workflow |
+| `dev-tools` | v1.0.0 | development | Bundle: bug tracking, DB architecture, security scanning, performance, documentation |
 
-## Marketplace Structure
+## marketplace.json Schema
+
+The `marketplace.json` at the root of this repository is the machine-readable plugin catalog. It follows the official Claude Code plugin marketplace format.
 
 ### Top-Level Schema
 
 ```json
 {
-  "name": "Marketplace name",
-  "version": "Catalog version (semantic versioning)",
-  "description": "Marketplace description",
-  "repository": "Git repository URL",
-  "last_updated": "YYYY-MM-DD",
-  "categories": { /* categorized items */ },
-  "integrations": { /* skill connections */ },
-  "installation": { /* installation instructions */ },
-  "stats": { /* usage statistics */ },
-  "contributing": { /* contribution guidelines */ },
-  "license": "License type",
-  "resources": { /* external documentation links */ }
+  "name": "string — marketplace identifier",
+  "owner": { "name": "string — github username" },
+  "description": "string — marketplace description",
+  "version": "string — catalog version (semantic versioning)",
+  "repository": "string — git repository URL",
+  "license": "string — SPDX license identifier",
+  "plugins": [ /* array of plugin objects */ ]
 }
 ```
 
-### Categories Object
+### Plugin Object Schema
 
-Items are organized hierarchically:
-
-```
-categories/
-├── agents/
-│   ├── development/     [agent objects]
-│   ├── design/          [agent objects]
-│   ├── planning/        [agent objects]
-│   └── media/           [agent objects]
-└── skills/
-    ├── financial/       [skill objects]
-    ├── research/        [skill objects]
-    └── domain_specific/ [skill objects]
-```
-
-### Agent Object
+Each entry in the `plugins` array describes one installable plugin:
 
 ```json
 {
-  "id": "database-architect",
-  "name": "Database Architect",
-  "description": "PostgreSQL/Supabase expertise...",
-  "model": "sonnet",
-  "color": "cyan",
-  "version": "1.0.0",
-  "file": "Agents/database-architect.md",
-  "allowed_tools": ["Read", "Write", "Bash", ...],
-  "install_command": "cp Agents/database-architect.md .claude/agents/",
-  "tags": ["database", "postgresql", "supabase", ...]
+  "name": "string — kebab-case plugin identifier",
+  "source": "string — relative path to plugin directory (e.g., ./plugins/tax-preparation)",
+  "description": "string — one-sentence plugin description",
+  "version": "string — semantic version matching .claude-plugin/plugin.json",
+  "author": { "name": "string — github username" },
+  "keywords": ["string — discovery tags"],
+  "category": "string — category identifier"
 }
 ```
 
-### Skill Object
+**Valid categories:** `financial`, `research`, `development`, `design`, `planning`, `domain-specific`
+
+### Complete Example
 
 ```json
 {
-  "id": "tax-preparation",
-  "name": "Tax Preparation",
-  "description": "Comprehensive tax preparation...",
-  "version": "1.3.0",
-  "last_updated": "2025-12-09",
-  "directory": "Skills/tax-preparation",
-  "allowed_tools": ["Read", "Bash", "WebSearch", ...],
-  "install_command": "cp -r Skills/tax-preparation .claude/skills/",
-  "target_users": "individuals, families, self-employed",
-  "tags": ["tax", "finance", "irs", ...],
-  "features": ["PDF document reading", ...],
-  "scripts": ["filing_status_analyzer.py", ...],
-  "references": ["tax_brackets_deductions.md", ...]
+  "name": "claude-agents-skills-marketplace",
+  "owner": { "name": "mrelph" },
+  "description": "A curated collection of specialized agents and skills for Claude Code",
+  "version": "2.0.0",
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "plugins": [
+    {
+      "name": "tax-preparation",
+      "source": "./plugins/tax-preparation",
+      "description": "US tax preparation: deduction analysis, RSU calculations, form processing, and tax optimization",
+      "version": "2.0.0",
+      "author": { "name": "mrelph" },
+      "keywords": ["tax", "finance", "deductions", "RSU", "IRS", "W-2", "1099"],
+      "category": "financial"
+    }
+  ]
 }
 ```
 
-## Integration Scenarios
+### Individual Plugin Manifest Schema
 
-### 1. Building a Web Frontend
+Each plugin directory contains a manifest at `.claude-plugin/plugin.json`. This is the authoritative source for that plugin's metadata:
 
-```javascript
-// Fetch and display marketplace data
-fetch('marketplace.json')
-  .then(response => response.json())
-  .then(marketplace => {
-    // Display agents
-    const agents = Object.values(marketplace.categories.agents).flat();
-    agents.forEach(agent => {
-      displayAgentCard(agent);
-    });
-
-    // Display skills
-    const skills = Object.values(marketplace.categories.skills).flat();
-    skills.forEach(skill => {
-      displaySkillCard(skill);
-    });
-  });
+```json
+{
+  "name": "string — plugin identifier (must match marketplace.json entry)",
+  "description": "string — plugin description",
+  "version": "string — semantic version",
+  "author": { "name": "string — github username" },
+  "repository": "string — repository URL",
+  "license": "string — SPDX license identifier",
+  "keywords": ["string — discovery tags"]
+}
 ```
 
-### 2. CLI Installation Tool
+## Plugin Directory Layout
 
-```python
-import json
+The `plugins/` directory follows a consistent structure that Claude Code's plugin system expects:
 
-def install_item(item_id):
-    with open('marketplace.json') as f:
-        marketplace = json.load(f)
-
-    # Search all categories
-    for category_type in ['agents', 'skills']:
-        for category, items in marketplace['categories'][category_type].items():
-            for item in items:
-                if item['id'] == item_id:
-                    # Execute install_command
-                    os.system(item['install_command'])
-                    return
-
-    print(f"Item {item_id} not found")
+```
+plugins/
+└── plugin-name/
+    ├── .claude-plugin/
+    │   └── plugin.json          # Plugin manifest (required)
+    ├── skills/                  # Skills (optional)
+    │   └── skill-name/
+    │       ├── SKILL.md         # Skill definition with ${CLAUDE_PLUGIN_ROOT}/ paths
+    │       └── README.md
+    ├── agents/                  # Agents (optional)
+    │   └── agent-name.md        # Agent definition
+    ├── references/              # Supporting documents (optional)
+    ├── scripts/                 # Utility scripts (optional)
+    ├── examples/                # Example data (optional)
+    └── README.md                # Plugin documentation
 ```
 
-### 3. GitHub Actions Workflow
+The `${CLAUDE_PLUGIN_ROOT}` variable is resolved at install time to the actual plugin installation path. All intra-plugin file references in SKILL.md and agent definitions must use this variable.
 
-```yaml
-name: Test All Skills
-on: [push]
+## Programmatic Access
 
-jobs:
-  test-skills:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+### Querying marketplace.json with jq
 
-      - name: Extract skill directories
-        run: |
-          jq -r '.categories.skills[][] | .directory' marketplace.json > skills.txt
-
-      - name: Test each skill
-        run: |
-          while read dir; do
-            echo "Testing $dir"
-            # Run tests for each skill
-          done < skills.txt
-```
-
-### 4. Version Checker
+**List all plugin names and versions:**
 
 ```bash
-#!/bin/bash
-# Check for skill updates
-
-for skill_id in $(jq -r '.categories.skills[][] | .id' marketplace.json); do
-  current=$(jq -r ".categories.skills[][] | select(.id==\"$skill_id\") | .version" marketplace.json)
-  installed=$(cat .claude/skills/$skill_id/SKILL.md | grep "version:" | cut -d: -f2 | tr -d ' ')
-
-  if [ "$current" != "$installed" ]; then
-    echo "Update available for $skill_id: $installed → $current"
-  fi
-done
+jq -r '.plugins[] | "\(.name)  \(.version)"' marketplace.json
 ```
 
-## Query Patterns
+**Find plugins by category:**
 
-### Using jq (JSON Query)
-
-**List all agent IDs:**
 ```bash
-jq -r '.categories.agents[][] | .id' marketplace.json
+jq '.plugins[] | select(.category == "financial") | {name, version, description}' marketplace.json
 ```
 
-**Find skills by tag:**
+**Find plugins by keyword:**
+
 ```bash
-jq '.categories.skills[][] | select(.tags[] | contains("finance"))' marketplace.json
+jq '.plugins[] | select(.keywords[] | contains("retirement"))' marketplace.json
 ```
 
-**Get installation commands for all skills:**
+**Get the source path for a specific plugin:**
+
 ```bash
-jq -r '.categories.skills[][] | .install_command' marketplace.json
+jq -r '.plugins[] | select(.name == "tax-preparation") | .source' marketplace.json
 ```
 
-**Find agents that use a specific tool:**
+**List all keywords across all plugins (deduplicated):**
+
 ```bash
-jq '.categories.agents[][] | select(.allowed_tools[] == "WebSearch")' marketplace.json
+jq -r '[.plugins[].keywords[]] | unique[]' marketplace.json
 ```
 
-**List skill integrations:**
+**Count plugins by category:**
+
 ```bash
-jq '.integrations.skill_connections[]' marketplace.json
+jq '[.plugins[] | .category] | group_by(.) | map({category: .[0], count: length})' marketplace.json
 ```
 
-**Get all items with version > 2.0:**
-```bash
-jq '.categories.skills[][] | select(.version | split(".")[0] | tonumber > 1)' marketplace.json
-```
-
-### Using Python
+### Querying with Python
 
 ```python
 import json
@@ -239,216 +181,148 @@ import json
 with open('marketplace.json') as f:
     marketplace = json.load(f)
 
-# Get all agents using sonnet model
-sonnet_agents = [
-    agent
-    for category in marketplace['categories']['agents'].values()
-    for agent in category
-    if agent['model'] == 'sonnet'
-]
+# List all plugins
+for plugin in marketplace['plugins']:
+    print(f"{plugin['name']} ({plugin['version']}) — {plugin['description']}")
 
-# Find skills updated in last 30 days
-from datetime import datetime, timedelta
+# Find financial plugins
+financial = [p for p in marketplace['plugins'] if p['category'] == 'financial']
 
-recent_cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-recent_skills = [
-    skill
-    for category in marketplace['categories']['skills'].values()
-    for skill in category
-    if skill.get('last_updated', '') >= recent_cutoff
-]
+# Search by keyword
+def search_plugins(query):
+    q = query.lower()
+    return [
+        p for p in marketplace['plugins']
+        if q in p['name']
+        or q in p['description'].lower()
+        or any(q in kw for kw in p['keywords'])
+    ]
 
-# Get integration graph
-integration_map = {}
-for conn in marketplace['integrations']['skill_connections']:
-    if conn['from'] not in integration_map:
-        integration_map[conn['from']] = []
-    integration_map[conn['from']].append(conn['to'])
+tax_related = search_plugins('tax')
 ```
 
-### Using JavaScript/Node.js
+### Querying with JavaScript/Node.js
 
 ```javascript
 const marketplace = require('./marketplace.json');
 
-// Find all financial skills
-const financialSkills = marketplace.categories.skills.financial;
+// List all plugins
+marketplace.plugins.forEach(plugin => {
+  console.log(`${plugin.name} v${plugin.version}: ${plugin.description}`);
+});
+
+// Find a plugin by name
+function getPlugin(name) {
+  return marketplace.plugins.find(p => p.name === name) || null;
+}
 
 // Search by keyword
-function search(query) {
-  const results = [];
+function searchPlugins(query) {
   const q = query.toLowerCase();
-
-  // Search agents
-  for (const category of Object.values(marketplace.categories.agents)) {
-    for (const agent of category) {
-      const searchText = `${agent.id} ${agent.name} ${agent.description} ${agent.tags.join(' ')}`.toLowerCase();
-      if (searchText.includes(q)) {
-        results.push({ ...agent, type: 'agent' });
-      }
-    }
-  }
-
-  // Search skills
-  for (const category of Object.values(marketplace.categories.skills)) {
-    for (const skill of category) {
-      const searchText = `${skill.id} ${skill.name} ${skill.description} ${skill.tags.join(' ')}`.toLowerCase();
-      if (searchText.includes(q)) {
-        results.push({ ...skill, type: 'skill' });
-      }
-    }
-  }
-
-  return results;
-}
-
-// Get item by ID
-function getItem(id) {
-  // Search all categories
-  for (const categoryType of ['agents', 'skills']) {
-    for (const items of Object.values(marketplace.categories[categoryType])) {
-      const item = items.find(i => i.id === id);
-      if (item) return { ...item, type: categoryType.slice(0, -1) };
-    }
-  }
-  return null;
+  return marketplace.plugins.filter(plugin =>
+    plugin.name.includes(q) ||
+    plugin.description.toLowerCase().includes(q) ||
+    plugin.keywords.some(kw => kw.includes(q))
+  );
 }
 ```
 
-## Marketplace CLI
+### GitHub Actions Integration
 
-The included Python CLI tool provides a reference implementation:
+Enumerate all plugin source paths for CI validation:
+
+```yaml
+name: Validate Plugins
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate marketplace.json
+        run: jq empty marketplace.json && echo "marketplace.json is valid JSON"
+
+      - name: Validate all plugin manifests
+        run: |
+          jq -r '.plugins[].source' marketplace.json | while read source; do
+            manifest="${source}/.claude-plugin/plugin.json"
+            if [ -f "$manifest" ]; then
+              jq empty "$manifest" && echo "Valid: $manifest"
+            else
+              echo "MISSING: $manifest" && exit 1
+            fi
+          done
+
+      - name: Check ${CLAUDE_PLUGIN_ROOT} usage in skills
+        run: |
+          # Warn if any skill uses hardcoded paths instead of ${CLAUDE_PLUGIN_ROOT}
+          if grep -r '\./Skills\|\.claude/skills' plugins/; then
+            echo "ERROR: Hardcoded paths found in plugins/"
+            exit 1
+          fi
+```
+
+## Version Checking
+
+Check whether an installed version of a plugin is current:
 
 ```bash
-# Browse the marketplace
-./marketplace-cli.py list
-./marketplace-cli.py search <keyword>
-./marketplace-cli.py info <item-id>
+#!/bin/bash
+# Compare installed version against marketplace catalog
 
-# Install items
-./marketplace-cli.py install <item-id>
+PLUGIN="tax-preparation"
+CATALOG_VERSION=$(jq -r ".plugins[] | select(.name == \"$PLUGIN\") | .version" marketplace.json)
+INSTALLED_VERSION=$(jq -r '.version' ~/.claude/plugins/$PLUGIN/.claude-plugin/plugin.json 2>/dev/null || echo "not installed")
 
-# View statistics
-./marketplace-cli.py stats
+if [ "$INSTALLED_VERSION" = "not installed" ]; then
+  echo "$PLUGIN is not installed"
+elif [ "$INSTALLED_VERSION" != "$CATALOG_VERSION" ]; then
+  echo "Update available: $PLUGIN $INSTALLED_VERSION → $CATALOG_VERSION"
+else
+  echo "$PLUGIN $INSTALLED_VERSION is current"
+fi
 ```
 
-See the CLI source code at `marketplace-cli.py` for implementation details.
+## Validation Rules
 
-## Contributing to the Marketplace
+A valid `marketplace.json` must satisfy:
 
-When adding new agents or skills:
+- Valid JSON syntax
+- Required top-level fields: `name`, `owner`, `description`, `version`, `repository`, `license`, `plugins`
+- Each plugin entry must have: `name`, `source`, `description`, `version`, `author`, `keywords`, `category`
+- `name` values must be unique across all plugin entries
+- `version` fields must follow semantic versioning (`MAJOR.MINOR.PATCH`)
+- `source` paths must point to directories that exist and contain `.claude-plugin/plugin.json`
+- The `version` in each plugin entry must match the `version` in the corresponding `.claude-plugin/plugin.json`
 
-### 1. Add the Agent/Skill Files
-
-Follow the existing structure in `Agents/` or `Skills/` directories.
-
-### 2. Update marketplace.json
-
-Add an entry to the appropriate category:
-
-```json
-{
-  "id": "my-new-skill",
-  "name": "My New Skill",
-  "description": "What it does",
-  "version": "1.0.0",
-  "last_updated": "2025-12-28",
-  "directory": "Skills/my-new-skill",
-  "allowed_tools": ["Read", "Write"],
-  "install_command": "cp -r Skills/my-new-skill .claude/skills/",
-  "target_users": "developers",
-  "tags": ["category", "keyword"],
-  "features": ["Feature 1", "Feature 2"]
-}
-```
-
-### 3. Update Statistics
-
-Increment the counts in the `stats` object:
-
-```json
-"stats": {
-  "total_agents": 8,
-  "total_skills": 6,  // increment
-  "agent_categories": 4,
-  "skill_categories": 3
-}
-```
-
-### 4. Add Integration Mappings (if applicable)
-
-If your skill integrates with others:
-
-```json
-"integrations": {
-  "skill_connections": [
-    {
-      "from": "my-new-skill",
-      "to": "existing-skill",
-      "description": "How they integrate"
-    }
-  ]
-}
-```
-
-### 5. Validate JSON
+Validate locally:
 
 ```bash
-# Validate JSON syntax
-jq empty marketplace.json && echo "Valid JSON" || echo "Invalid JSON"
+# Check JSON syntax
+jq empty marketplace.json && echo "Valid JSON"
 
-# Test with CLI
-./marketplace-cli.py info my-new-skill
+# Verify version consistency between marketplace.json and plugin.json manifests
+jq -r '.plugins[] | "\(.name) \(.version) \(.source)"' marketplace.json | \
+  while read name catalog_ver source; do
+    plugin_ver=$(jq -r '.version' "${source}/.claude-plugin/plugin.json" 2>/dev/null)
+    if [ "$catalog_ver" != "$plugin_ver" ]; then
+      echo "VERSION MISMATCH: $name — catalog=$catalog_ver, plugin.json=$plugin_ver"
+    else
+      echo "OK: $name $catalog_ver"
+    fi
+  done
 ```
 
-## Validation Schema
+## Contributing a Plugin
 
-The marketplace.json should conform to this structure:
-
-- **Required fields**: name, version, categories, stats
-- **Agent required fields**: id, name, description, model, file, allowed_tools, install_command, tags
-- **Skill required fields**: id, name, description, version, directory, allowed_tools, install_command, tags
-- **Version format**: Semantic versioning (MAJOR.MINOR.PATCH)
-- **Date format**: YYYY-MM-DD
-- **IDs**: Kebab-case, lowercase, unique across all items
-
-## API Endpoints (Future)
-
-The marketplace catalog is designed to support future API endpoints:
-
-```
-GET  /api/v1/items              # List all items
-GET  /api/v1/items/:id          # Get item details
-GET  /api/v1/agents             # List all agents
-GET  /api/v1/skills             # List all skills
-GET  /api/v1/search?q=keyword   # Search items
-GET  /api/v1/categories         # List categories
-GET  /api/v1/integrations       # Get integration graph
-GET  /api/v1/stats              # Get statistics
-```
-
-## Best Practices
-
-1. **Keep metadata accurate** - Ensure descriptions match actual functionality
-2. **Version properly** - Use semantic versioning for all updates
-3. **Tag thoroughly** - Include relevant tags for discoverability
-4. **Document integrations** - Map skill dependencies clearly
-5. **Test install commands** - Verify installation works before committing
-6. **Update last_updated** - Increment on every change
-7. **Validate JSON** - Always check syntax before committing
+To add a new plugin to this marketplace, see [CONTRIBUTING.md](CONTRIBUTING.md) for the complete step-by-step process, including directory structure, manifest format, `${CLAUDE_PLUGIN_ROOT}` path requirements, and testing instructions.
 
 ## Resources
 
-- [JSON Schema](https://json-schema.org/) - For validation
-- [jq Manual](https://stedolan.github.io/jq/manual/) - For queries
-- [Semantic Versioning](https://semver.org/) - For version management
 - [Claude Code Documentation](https://docs.anthropic.com/en/docs/claude-code)
-
-## Support
-
-For questions or issues with the marketplace:
-
-1. Check this documentation
-2. Review the `marketplace-cli.py` implementation
-3. Open an issue on the repository
-4. Submit a pull request with improvements
+- [Claude Code Skills Guide](https://docs.anthropic.com/en/docs/claude-code/skills)
+- [Semantic Versioning](https://semver.org/)
+- [jq Manual](https://stedolan.github.io/jq/manual/)
+- [JSON Schema](https://json-schema.org/)
