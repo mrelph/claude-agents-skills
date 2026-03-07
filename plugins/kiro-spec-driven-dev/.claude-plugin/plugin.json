@@ -1,9 +1,0 @@
-{
-  "name": "kiro-spec-driven-dev",
-  "description": "Structured spec-driven development: Requirements to Design to Tasks workflow",
-  "version": "2.0.0",
-  "author": { "name": "mrelph" },
-  "repository": "https://github.com/mrelph/claude-agents-skills",
-  "license": "MIT",
-  "keywords": ["development", "methodology", "specs", "planning", "kiro"]
-}
