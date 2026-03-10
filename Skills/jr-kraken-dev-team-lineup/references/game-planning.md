@@ -1,8 +1,8 @@
-# Game Planning & Opponent Strategy - 18U C Navy Team
+# Game Planning & Opponent Strategy - Dev Team
 
 ## Overview
 
-This document provides a systematic approach to preparing for games, scouting opponents, building lineups, and making in-game adjustments.
+This document provides a systematic approach to preparing for games, scouting opponents, building lineups, and making in-game adjustments for Coach Mark's Jr. Kraken Development Team.
 
 ---
 
@@ -10,7 +10,7 @@ This document provides a systematic approach to preparing for games, scouting op
 
 ### 24-48 Hours Before Game
 
-**1. Confirm Roster Availability** ⭐ CRITICAL AT 18U
+**1. Confirm Roster Availability**
 - [ ] **Check TeamSnap RSVPs** (if TeamSnap MCP available) -- pull RSVP statuses for the game event to get real-time availability (Yes/No/Maybe/No Response)
 - [ ] If TeamSnap unavailable, check for player absences manually (school, family, injuries)
 - [ ] Categorize players: Available / Out / Uncertain
@@ -31,10 +31,10 @@ This document provides a systematic approach to preparing for games, scouting op
 - [ ] Communicate decision to both goalies
 
 **4. Build Initial Lineup**
-- [ ] Create line combinations based on available players
-- [ ] Assign defensive pairs
+- [ ] Create line combinations based on available players and rankings
+- [ ] Assign defensive pairs by ranking and purpose
 - [ ] Designate special teams units
-- [ ] Identify roles for each player
+- [ ] Define roles for each line and pair
 
 **5. Communication**
 - [ ] Email lineup to team (use project email lists)
@@ -71,7 +71,7 @@ This document provides a systematic approach to preparing for games, scouting op
 - **Speed demons**: Do they have breakaway threats?
 
 #### Defense
-- **How many D?**: 6? 7? 8? (We have 9 - usually an advantage)
+- **How many D?**: 6? 7? 8? (compare to our D-capable count)
 - **Top pair**: Who are their shutdown defenders?
 - **Weak link**: Can we target a specific D-man?
 - **Puck movers**: Do they have skilled D who jump up?
@@ -114,11 +114,11 @@ Uncertain (Maybe/No Response): _______________
 
 ### Step 2: Build Top Forward Line
 
-**Standard (Full Roster)**: Select the three highest-rated forwards from `roster.md`.
+**Standard**: Select the three highest-ranked forwards from `roster.md`.
 
-**Alternative (If Elite Players Absent)**: Promote the next-best rated forwards (1.50 tier) into the top line.
+**Alternative (If Top-Ranked Players Absent)**: Promote the next-best ranked forwards into the top line.
 
-**Key Principle**: Put your best three forwards together
+**Key Principle**: Put your highest-ranked forwards together with a clear offensive mission
 
 ### Step 3: Build Defensive Pairs
 
@@ -128,64 +128,64 @@ Refer to `roster.md` for current D-capable players and their ratings.
 
 **Pair 2 (Two-Way)**: Next-best D-man + an F/D player not needed on forward lines.
 
-**Pair 3 (Sheltered)**: Development defenseman (if any) + a strong-rated partner. **CRITICAL**: Development D-men ALWAYS with a strong partner (1.75 or better).
+**Pair 3 (Depth)**: Remaining D-capable players, paired by complementary strengths.
 
-**Flexibility Note**: With 9 D-capable players, you have OPTIONS. Use them!
+**Flexibility Note**: With multiple D-capable players, you have OPTIONS. Use them!
 
 ### Step 4: Build Second Forward Line
 
-**Standard**: Select the next three best forwards (1.50-1.75 tier) not on Line 1.
+**Standard**: Select the next three best-ranked forwards not on Line 1.
 
-**Adjust based on top line**: If a 1.50-tier player was pulled to Line 1, promote the best 2.00-tier forward. If an F/D player is needed on defense, promote the next forward up.
+**Adjust based on top line**: If a player was pulled to Line 1, promote the best available forward. If an F/D player is needed on defense, promote the next forward up.
 
 **Key Principle**: Two-way responsibility, can play in all situations
 
 ### Step 5: Build Third Forward Line
 
-**Standard**: Fill with remaining 2.00-tier forwards not assigned to Lines 1-2 or defense.
+**Standard**: Fill with remaining contributors not assigned to Lines 1-2 or defense.
 
-**Energy/grind line**: High work rate, physical, simple play.
+**Energy/compete line**: High work rate, physical, simple but effective play.
 
 **Adjust based on availability**:
 - Missing one? Pull an F/D versatile player from defense depth.
 - Missing two? Consider collapsing to three-line system.
 
-### Step 6: Build Fourth Forward Line (Development)
+### Step 6: Build Fourth Forward Line
 
-**Standard**: Place development forwards (2.50+ tier) between two 2.00-tier linemates for support.
+**Standard**: Remaining forwards deployed with a specific purpose.
 
 **Key Principles for Line 4**:
-- Development forwards MUST have strong linemates (2.00+ rated)
+- Every player on Line 4 has a defined role
 - Shorter shifts (45-60 seconds)
-- Offensive zone starts when possible
-- Limited use in critical situations
+- Clear, simple assignments that play to each player's strengths
+- Deploy in situations that match their capabilities
 
 **Three-Line System Alternative**:
 - Don't use Line 4 in close/playoff games
-- Development forwards get spot duty (5 minutes) with Line 3 players
+- Line 4 players get spot duty (5 minutes) with Line 3 players
 
 ### Step 7: Assign Special Teams
 
 Refer to `roster.md` for special teams personnel and current ratings.
 
-**Power Play 1**: Top four skilled forwards (1.00-1.50 tier) + best offensive D-man.
+**Power Play 1**: Top four skilled forwards (highest-ranked) + best offensive D-man.
 
-**Power Play 2**: Next-best forwards (1.50-1.75 tier) + a strong D-man.
+**Power Play 2**: Next-best forwards + a strong D-man.
 
-**Penalty Kill 1**: Best defensive-minded forwards (1.50 tier, two-way players) + top shutdown D-pair.
+**Penalty Kill 1**: Best defensive-minded forwards (top two-way players) + top shutdown D-pair.
 
-**Penalty Kill 2**: Reliable grind-line forwards + depth D-men (rotate).
+**Penalty Kill 2**: Reliable contributors + depth D-men (rotate).
 
 ### Step 8: Identify Situational Players
 
 **Late Game, Protecting Lead**:
-- Forwards: Top two lines only (elite and skilled tiers)
+- Forwards: Top two lines only (highest-ranked players)
 - Defense: Top two pairs (best shutdown and two-way)
-- **DO NOT USE**: Development players (2.50+ tier)
+- Deploy by rankings -- top-ranked players close it out
 
 **Late Game, Need Goal**:
 - Forwards: Top line (all hands on deck)
-- Defense: Best offensive D-man paired with a shutdown partner; consider moving an elite F/D player to D
+- Defense: Best offensive D-man paired with shutdown partner; consider moving an F/D player to D
 - Extra Attacker: Next-best skilled forward from Line 2
 
 **Overtime (3v3)**:
@@ -204,17 +204,17 @@ Refer to `roster.md` for special teams personnel and current ratings.
 **Our Game Plan**:
 
 **Tactical Focus**:
-1. Slow the pace - don't get into track meet
-2. Defensive structure - protect our own end first
-3. Physical play - disrupt their rhythm
-4. Strong gap control - limit odd-man rushes
-5. Keep it low-scoring - win 2-1, not 5-4
+1. Slow the pace -- don't get into track meet
+2. Defensive structure -- protect our own end first
+3. Physical play -- disrupt their rhythm
+4. Strong gap control -- limit odd-man rushes
+5. Keep it controlled -- win 3-2, not 5-4
 
 **Keys**:
-- Don't try to match their skill - play OUR game
+- Don't try to match their skill -- execute OUR systems
 - Stay disciplined (they'll try to draw penalties)
 - Grind them down with depth
-- Heavy backcheck - five players back defensively
+- Heavy backcheck -- five players back defensively
 
 ---
 
@@ -225,17 +225,17 @@ Refer to `roster.md` for special teams personnel and current ratings.
 **Our Game Plan**:
 
 **Tactical Focus**:
-1. Match their physicality - but stay disciplined
-2. THIS IS OUR GAME - good matchup for us!
-3. Outlast them - our depth emerges
-4. Simple, direct play - win battles
+1. Match their physicality -- but stay disciplined
+2. This is a good matchup for us
+3. Outlast them -- our depth emerges
+4. Simple, direct play -- win battles
 5. Strong defensive structure
 
 **Keys**:
 - Don't get dragged into penalty parade
 - Finish checks, but legally and smartly
-- This plays into our grinding style - embrace it
-- Wear them down with fresh legs (our 9 D advantage)
+- This plays into our compete-level style -- embrace it
+- Wear them down with fresh legs
 
 ---
 
@@ -246,16 +246,16 @@ Refer to `roster.md` for special teams personnel and current ratings.
 **Our Game Plan**:
 
 **Tactical Focus**:
-1. Attack, attack, attack
+1. Attack relentlessly
 2. Build confidence for all players
-3. Get development players extra ice time
+3. Get all lines producing
 4. Work on offensive systems
 5. Prepare for tougher opponents ahead
 
 **Keys**:
-- Don't take opponent lightly (respect)
+- Don't take opponent lightly (respect the game)
 - Focus on execution of systems
-- Development opportunities for 2.50+ tier players
+- Use it to sharpen advanced plays
 - Get everyone involved in scoring
 - Build good habits
 
@@ -282,10 +282,10 @@ Refer to `roster.md` for special teams personnel and current ratings.
 **Period 3 - Execute**:
 - Use our depth advantage (they should be tiring)
 - Trust the adjustments made
-- Grind it out
+- Compete hard to the finish
 - Third period is OURS
 
-**Default Strategy**: Play OUR game - defensive structure, four-line depth, grinding style
+**Default Strategy**: Play OUR game -- advanced systems, four-line depth, compete every shift
 
 ---
 
@@ -302,9 +302,8 @@ Refer to `roster.md` for special teams personnel and current ratings.
 
 **When to Adjust Pairs**:
 - Defense pair getting beat repeatedly
-- Development D-man is overwhelmed (needs stronger partner)
-- Need more offense from D (move an elite F/D player to D)
-- Need defensive stability (move a strong F/D player to D)
+- Need more offense from D (move an F/D player to D)
+- Need defensive stability (move a strong F/D player back)
 
 **When to Adjust Special Teams**:
 - PP going 0-for-3+ (not working, try PP2 or different formation)
@@ -317,20 +316,19 @@ Refer to `roster.md` for special teams personnel and current ratings.
 
 **Problem**: Lines 2-3-4 not producing
 
-**Solution**: Mix and match 2.00-tier players
+**Solution**: Mix and match similarly-ranked players
 - Players at the same rating tier are interchangeable -- try different combinations
-- Keep development players (2.50+) with strong linemates
-- Keep Line 2 (skilled tier) intact if they're working
+- Keep Line 2 (two-way tier) intact if they're working
 
 **Approach**: Swap wingers between Lines 3 and 4, or move an F/D player from defense to spark a forward line.
 
-#### 2. Move an Elite F/D Player to Defense
+#### 2. Move an F/D Player to Defense
 
 **Problem**: Defense is struggling OR need more offense from back end
 
-**Solution**: Move an elite F/D player (1.00 tier) from forward to defense.
+**Solution**: Move an elite F/D player from forward to defense.
 
-**Approach**: Slot them into Pair 1 alongside the top dedicated D-man. Promote the next-best forward to fill the gap on Line 1.
+**Approach**: Slot them into Pair 1 alongside the top dedicated D-man. Promote the next-best forward to fill the gap.
 
 **Impact**: Strengthens defense, adjusts forward lineup
 
@@ -343,29 +341,19 @@ Refer to `roster.md` for special teams personnel and current ratings.
 **Approach**:
 ```
 Before (Four Lines):
-Line 1: Elite tier (35% ice time)
-Line 2: Skilled tier (30%)
-Line 3: Grind tier (20%)
-Line 4: Development tier (15%)
+Line 1: Top-ranked (35% ice time)
+Line 2: Two-way tier (30%)
+Line 3: Energy tier (20%)
+Line 4: Role tier (15%)
 
 After (Three Lines):
-Line 1: Elite tier (45% ice time)
-Line 2: Skilled tier (40%)
-Line 3: Grind tier (15%)
+Line 1: Top-ranked (45% ice time)
+Line 2: Two-way tier (40%)
+Line 3: Energy tier (15%)
 Spot Duty: Remaining players (2-8 min each)
 ```
 
-#### 4. Development D-Man Protection Adjustment
-
-**Problem**: Development defenseman (3.00 tier) is getting overwhelmed
-
-**Solution**: Shorten shifts and upgrade their partner.
-
-**Approach**: Move the top dedicated D-man down to pair with the development player (45-sec shifts). Adjust the other pairs upward to compensate.
-
-**OR**: Reduce development D-man's ice time significantly, use other D more.
-
-#### 5. Special Teams Personnel Change
+#### 4. Special Teams Personnel Change
 
 **Problem**: Power play not scoring, penalty kill struggling
 
@@ -397,11 +385,11 @@ If PK1 is struggling:
 - Acknowledge effort and highlight positives
 - Note 1-2 things to improve
 - Look ahead to next game
-- Remind them of team identity
+- Reinforce team identity
 
 **Example Messages**:
-- Win: "Great job grinding them down. Our depth showed in the third. Keep working on that forecheck."
-- Loss: "Tough one, but we competed. We need to clean up the defensive zone coverage. We'll watch video and get better."
+- Win: "Great execution tonight. Our systems worked and our depth showed. Keep pushing in practice."
+- Loss: "Tough one, but we competed. We need to clean up the defensive zone coverage. We'll review and get better."
 
 ### 24 Hours Post-Game (Coach Analysis)
 
@@ -423,10 +411,11 @@ If PK1 is struggling:
 - Special teams modifications?
 - Tactical approach changes?
 
-**Player Development Notes**:
-- Development player progress (improving? struggling? needs more support?)
-- Development D-man skating/positioning (getting better? needs more practice?)
-- Other player-specific observations
+**Ranking Considerations**:
+- Did any player outperform their current ranking?
+- Did any player underperform?
+- Should rankings be updated before next game?
+- Did role players execute their assignments?
 
 ---
 
@@ -441,36 +430,34 @@ If PK1 is struggling:
 
 ### Tournament Game Strategy
 
-**Pool Play Games (Development Focus)**:
+**Pool Play Games (Full Deployment)**:
 
-**Approach**: Four-line system, balanced ice time, everyone contributes
+**Approach**: Four-line system, all lines with purpose, full roster deployment
 
 **Lineup**:
-- Roll all four lines evenly
-- Give development forwards increased ice time (12-15 min)
-- Development D-men get safe minutes (8-12 min)
+- Roll all four lines with defined missions
+- All players get meaningful action
 - Both goalies get starts
 
 **Goals**:
-- Get everyone involved
-- Build confidence
+- Get everyone involved and sharp
+- Build confidence and momentum
 - Assess what's working
 - Prepare for playoffs
 
 **Playoff Games (Competitive Focus)**:
 
-**Approach**: Three-line system (or compressed four-line), best players more ice time
+**Approach**: Three-line system (or compressed four-line), top-ranked players increase ice time
 
 **Lineup**:
 - Top line 40-45% ice time
-- Development forwards limited minutes (5-8 min), very sheltered
-- Development D-men limited minutes (6-10 min) with strong partner
+- Role players contribute in defined situations
 - Hot goalie gets preference
 
 **Goals**:
 - Win the game
 - Best players in critical situations
-- Still give everyone a chance to contribute
+- Every player still contributes
 - Trust the depth that got us here
 
 ### Back-to-Back Games
@@ -496,7 +483,7 @@ If PK1 is struggling:
 
 ### Pre-Game Email to Team
 
-**Subject**: Game Day Lineup - Navy vs [Opponent] - [Date]
+**Subject**: Game Day Lineup - Dev Team vs [Opponent] - [Date]
 
 **Body**:
 ```
@@ -524,14 +511,14 @@ Pair 3: [LD]-[RD]
 Game Focus:
 [1-2 specific tactical focuses for this game]
 
-Let's go Navy! See you at the rink.
+Compete every shift. Let's go Dev Team!
 
 Coach Mark
 ```
 
 ### Post-Game Communication
 
-**Subject**: Navy Game Recap - [Result] vs [Opponent]
+**Subject**: Dev Team Game Recap - [Result] vs [Opponent]
 
 **Body**:
 ```
@@ -542,7 +529,7 @@ Great effort today. [Brief summary of game, highlight positives]
 Next Game:
 - [Details of next game]
 
-Keep working hard!
+Keep competing!
 
 Coach Mark
 ```
@@ -554,7 +541,7 @@ Coach Mark
 ### Should I Adjust Lines During Game?
 
 ```
-Is a line getting dominated repeatedly? 
+Is a line getting dominated repeatedly?
   → YES: Adjust immediately
   → NO: Continue monitoring
 
@@ -575,7 +562,7 @@ Do I have a positional shortage (injury/absence)?
   → NO: Continue
 
 Is one position group struggling significantly?
-  → YES: Consider moving an elite F/D player to strengthen
+  → YES: Consider moving an F/D player to strengthen
   → NO: Keep current setup
 
 Do I need a specific matchup (more offense/defense)?
@@ -585,20 +572,20 @@ Do I need a specific matchup (more offense/defense)?
 
 ---
 
-## Remember: Trust Your Depth
+## Remember: Trust Your System
 
 **We have advantages**:
-- 9 D-capable players (vs most teams' 6)
-- 12 forward-capable players
-- 6 F/D versatile players
-- Four-line depth
-- Balanced talent distribution
+- Multiple D-capable players (see `roster.md` for current count)
+- Forward depth for four-line deployment
+- F/D versatile players for flexibility
+- Four-line depth with purpose
+- Ranking-driven deployment
 
 **When in doubt**:
 - Stick to four-line system
-- Trust our identity ("Balanced Depth")
-- Stay defensive-first
-- Grind them down
+- Trust our identity ("Competitive Excellence")
+- Deploy by rankings and purpose
+- Compete hard every shift
 - Third period is OURS
 
 **Be flexible**:
@@ -607,4 +594,4 @@ Do I need a specific matchup (more offense/defense)?
 - Communicate clearly
 - Trust the players
 
-This is Navy hockey. This is how we WIN.
+This is Dev Team hockey. This is how we WIN.

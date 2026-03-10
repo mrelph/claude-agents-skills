@@ -314,35 +314,9 @@
 - Team defense over individual heroics
 
 **We DON'T win by**:
-- Out-skilling opponents (Paul has more elite talent)
+- Out-skilling opponents with more elite talent
 - Individual brilliance (we're a team)
 - High-flying offense (we're defensive first)
-
----
-
-## COMPARISON TO PAUL'S WHITE TEAM
-
-### Our Advantages:
-- **9 D-capable players vs their 6** (massive)
-- Four-line depth vs their top-heavy roster
-- Grinding, physical style
-- Better penalty kill depth
-- More consistent player distribution
-- Can handle absences better
-
-### Their Advantages:
-- Four 1.25 elite players (vs our 2 at 1.00)
-- More explosive offensive talent
-- Better power play weapons
-- Higher skill ceiling
-- Speed-based attack
-
-### Head-to-Head Strategy:
-- Use our four lines to wear down their limited defense
-- Heavy forecheck - force turnovers
-- Strong penalty kill - neutralize their PP
-- Control third period - our depth emerges
-- Physical play - make them work for everything
 
 ---
 

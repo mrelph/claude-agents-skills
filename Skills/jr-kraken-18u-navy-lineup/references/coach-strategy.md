@@ -43,20 +43,19 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ### 1. Depth Over Stars
 
-**Our Roster**:
-- 2 elite players (1.00): Marsh, Relph
-- 5 strong players (1.00-1.50): Freeman, Klakring, Silliker, McCredy, Young
-- 8 solid contributors (1.75-2.00): The backbone
-- 2 development players (2.50-3.00): Cram, Thompson
+**Our Roster** (see `roster.md` for current names and ratings):
+- Elite players (1.00-1.50): Top-tier talent across the lineup
+- Solid contributors (1.75-2.00): The backbone of the team
+- Development players (2.50-3.00): Players who need sheltering
 
-**Philosophy**: 
-- Don't rely on Marsh and Relph to do everything
+**Philosophy**:
+- Don't rely on elite players to do everything
 - Trust the middle tier (1.75-2.00 players)
 - Everyone has a role, everyone contributes
 - Win through collective effort
 
-**Contrast with Paul's Team**:
-- Paul has 4 elite (1.25) players, 6 strong - star-heavy
+**Contrast with Star-Heavy Teams**:
+- Some rivals have top-loaded, star-heavy rosters
 - We have more balanced distribution
 - We outlast them, not outskill them
 
@@ -95,8 +94,8 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 - Finish checks (legal, smart physicality)
 - Control pace (slow it down when winning, speed up when losing)
 
-**Against Paul's Team**:
-- Their 6 D-men will tire - ours won't (we have 9)
+**Against Star-Heavy Rivals**:
+- Their limited D will tire - ours won't (we have 9)
 - Their elite forwards will fade - ours are fresher (four-line depth)
 - Third period is when we strike
 
@@ -105,14 +104,14 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 **Ice Time Philosophy**:
 - Everyone plays every game
 - Everyone gets meaningful minutes
-- Development players (Cram, Thompson) get appropriate opportunities
+- Development players (2.50+) get appropriate opportunities
 - No one sits and watches (unless disciplinary)
 
-**Four-Line Approach**:
-- **Line 1** (Elite): Marsh-Relph-Freeman → 35-40% ice time
-- **Line 2** (Skilled): Klakring-Silliker-McCredy → 30-35% ice time
-- **Line 3** (Grind): Bagga-Herrick-Jaeger → 20-25% ice time
-- **Line 4** (Depth): Tegart-Cram-Berry → 10-15% ice time
+**Four-Line Approach** (see `roster.md` for current line assignments):
+- **Line 1** (Elite): Top three forwards → 35-40% ice time
+- **Line 2** (Skilled): Next best forwards → 30-35% ice time
+- **Line 3** (Grind): Reliable contributors → 20-25% ice time
+- **Line 4** (Depth): Development + support → 10-15% ice time
 
 **Why This Works**:
 - Players stay engaged (everyone matters)
@@ -126,11 +125,11 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ### 1. Defensive Depth (⭐⭐⭐ Biggest Advantage)
 
-**9 D-Capable Players**:
-- Marsh (1.00), Relph (1.00), Freeman (1.50) - elite defensive options
-- Young (1.75), Berry (2.00), Butler (2.00) - solid defenders
-- Silliker (1.50), Tegart (2.00) - can help on D when needed
-- Thompson (3.00) - development, but gives us 9th option
+**9 D-Capable Players** (see `roster.md` for current names):
+- Elite F/D versatile players who can lock down on defense
+- Dedicated strong defenders (1.75-2.00)
+- Additional F/D players who can help on D when needed
+- Development D-man who gives us a 9th option
 
 **Strategic Impact**:
 - Fresh legs on defense all game
@@ -149,7 +148,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 **12 Forward-Capable Players**:
 - Can roll four lines comfortably
-- No "weak" line (except when sheltering Cram)
+- No "weak" line (except when sheltering development players)
 - Consistent energy throughout game
 
 **Strategic Impact**:
@@ -165,9 +164,9 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ### 3. Penalty Kill Excellence
 
-**PK Depth**:
-- Multiple capable PK forwards: Silliker, Tegart, Freeman, McCredy
-- Strong PK defenders: Young, Butler, Berry
+**PK Depth** (see `roster.md` for current personnel):
+- Multiple capable PK forwards from the 1.50-1.75 tier
+- Strong PK defenders from the dedicated D corps
 - Can run 2-3 PK units without drop-off
 
 **Strategic Impact**:
@@ -182,7 +181,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ### 4. Versatility & Flexibility
 
-**6 F/D Players**: Marsh, Relph, Freeman, Silliker, Berry, Tegart
+**F/D Players** (see `roster.md` for current list):
 
 **Strategic Impact**:
 - Cover any position need instantly
@@ -202,9 +201,9 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 ### 1. Less Elite Offensive Talent
 
 **Reality**:
-- We have 2 elite players (1.00): Marsh, Relph
-- Paul has 4 elite players (1.25): Absalonson, Owens, Stroud, Tijerina
-- Plus Paul has 2 more at (1.50): Somm, Younker-Agarwal
+- We have fewer elite-rated players than some rivals
+- Some rivals have more concentrated elite offensive talent
+- Their top-6 forward group is deeper in skill
 
 **Impact**:
 - Can't rely on pure skill to beat good teams
@@ -219,25 +218,25 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ### 2. Development Players Require Sheltering
 
-**Ender Cram (2.50 F)**:
-- Needs strong linemates
+**Development Forwards (2.50)**:
+- Need strong linemates for support
 - Limited ice time in critical situations
 - Must shelter from tough matchups
 
-**Timothy Thompson (3.00 D)**:
+**Development Defensemen (3.00)**:
 - Significant skating deficiencies
-- Needs experienced partner always
+- Need experienced partner always
 - Very limited critical situation minutes
 
 **Impact**:
-- Can't trust fourth line in all situations (if Cram is there)
-- Third D-pair limited against strong opponents (Thompson)
+- Can't trust bottom line in all situations with development forwards
+- Bottom D-pair limited against strong opponents with development defensemen
 - Requires thoughtful deployment and protection
 
-**How to Manage**:
-- Cram: Third/fourth line, offensive zone starts, strong linemates
-- Thompson: Third pair only, always with Young/Butler/Berry partner
-- Both: Give opportunities in appropriate situations, track progress
+**How to Manage** (see `roster.md` for current development players and sheltering guidelines):
+- Development forwards: Bottom lines, offensive zone starts, strong linemates
+- Development defensemen: Third pair only, always with a strong-rated partner
+- All development players: Give opportunities in appropriate situations, track progress
 - Don't overexpose - protect while developing
 
 ### 3. Not Built for Track Meets
@@ -262,18 +261,18 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 ## Game Strategy Templates
 
-### vs Paul's White Team (Elite Skill)
+### vs Elite Skill / Star-Heavy Teams
 
-**Their Strengths**: 
-- 4 elite forwards (1.25 rating)
+**Their Typical Strengths**:
+- Multiple elite forwards
 - Speed-based offense
 - Explosive power play
 - High skill ceiling
 
-**Their Weaknesses**:
-- Only 6 D-capable players (we have 9)
+**Their Typical Weaknesses**:
+- Limited D depth (often only 6 D-capable players vs our 9)
 - Top-heavy roster (rely on top 6)
-- Two 3.00+ development players
+- Development players at the bottom
 - Less grinding depth
 
 **Our Strategy**:
@@ -282,7 +281,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 3. **Strong penalty kill** - neutralize their PP advantage
 4. **Physical play** - make them work, finish checks
 5. **Control third period** - our depth emerges, take over
-6. **Target their D** - they have 6, we have 9 - exploit this
+6. **Target their D** - if they have 6 and we have 9, exploit this
 7. **Keep it low-scoring** - win 2-1, not 5-4
 
 **Key Matchups**:
@@ -315,7 +314,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 - Attack, attack, attack
 - Showcase our offensive depth
 - Get all four lines involved
-- Build confidence for Cram and Thompson
+- Build confidence for development players
 - Develop offensive skills
 
 ---
@@ -326,9 +325,9 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 **Reality**: We don't have elite offensive skill concentration
 
-**Approach**:
-- **PP1**: Marsh, Relph, Freeman, Klakring, Young - umbrella, skilled players
-- **PP2**: Silliker, McCredy, Berry, Herrick, Bagga - shoot-first mentality
+**Approach** (see `roster.md` for current personnel):
+- **PP1**: Top-rated skill players (1.00-1.50 tier) - umbrella formation
+- **PP2**: Next-best forwards + a strong D-man - shoot-first mentality
 - **Philosophy**: Simple, get pucks on net, look for rebounds
 - **Don't**: Overcomplicate, try to be too fancy
 
@@ -338,9 +337,9 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 **Reality**: Defensive depth is our biggest advantage
 
-**Approach**:
-- **PK1**: Silliker/Tegart, Freeman/McCredy (F), Young/Butler (D)
-- **PK2**: Herrick/Jaeger/Bagga (F), Berry/Tegart (D)
+**Approach** (see `roster.md` for current personnel):
+- **PK1**: Best defensive-minded forwards (1.50 tier) + top D-pair
+- **PK2**: Reliable grind-line forwards + depth D-men
 - **Philosophy**: AGGRESSIVE box+1, pressure puck, cause turnovers
 - **Advantage**: Can rotate PK units, nobody tires
 
@@ -390,14 +389,14 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 ### If Lines Aren't Working
 
 **Quick Fixes**:
-- Swap Marsh and Relph between forward/defense
-- Move Freeman up or back in lineup
-- Shuffle middle six (2.00 rated players)
+- Swap elite F/D players between forward and defense
+- Move a 1.50-rated F/D player up or back in the lineup
+- Shuffle middle-six forwards (2.00-rated players are interchangeable)
 - Use F/D versatility to solve problems
 
 **Don't**:
 - Panic and change everything
-- Overexpose Cram or Thompson trying to spark offense
+- Overexpose development players trying to spark offense
 - Abandon four-line system
 
 ---
@@ -422,7 +421,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 **To Assistant Coaches**:
 - "Roll lines frequently, keep everyone fresh"
 - "Trust the depth, use it"
-- "Shelter Cram and Thompson, but give them chances"
+- "Shelter development players, but give them chances"
 - "Defensive structure is non-negotiable"
 
 ---
@@ -434,24 +433,25 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 1. **Competitive in League** - Win 50%+ of games
 2. **Strong Third Periods** - Outscored opponents in 3rd periods
 3. **Penalty Kill Excellence** - 85%+ PK success rate
-4. **Everyone Develops** - All players improve, including Cram and Thompson
+4. **Everyone Develops** - All players improve, especially development tier
 5. **Team Culture** - Everyone engaged, positive, working together
 
 ### Individual Goals
 
-**Elite Players (Marsh, Relph)**:
+**Elite Players (1.00-1.50 tier)**:
 - Leadership on and off ice
 - Dominant in critical situations
 - Mentor younger players
 
-**Strong Players (Freeman through Young)**:
+**Strong Players (1.75-2.00 tier)**:
 - Consistent, reliable play
 - Special teams contributors
 - Game management awareness
 
-**Development Players (Cram, Thompson)**:
-- Cram: 2.50 → 2.00 (third-line contributor)
-- Thompson: 3.00 → 2.50 (skating improvement focus)
+**Development Players (2.50+ tier)**:
+- Target moving each player up ~0.50 in rating by season end
+- Focus on specific skill gaps (skating, positioning, etc.)
+- See `roster.md` for individual development goals
 
 ### Coaching Success Metrics
 
@@ -468,7 +468,7 @@ The Navy team's identity is built on depth, defense, and determination. We grind
 
 **We are Coach Mark's Navy Team.**
 
-We don't have the most elite skill. We don't have four 1.25-rated stars like Paul's team. But we have something better: **DEPTH**.
+We don't have the most elite skill. We may not have the most stars. But we have something better: **DEPTH**.
 
 We have 9 defensive-capable players. We can roll four forward lines. We have six F/D versatile players. We have balance, structure, and determination.
 

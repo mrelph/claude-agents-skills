@@ -237,26 +237,26 @@ class NavyLineupGenerator:
         self.add_note("Thompson: Very limited minutes, strong partner always")
         self.add_note("Double-shift Line 1 when needed")
     
-    def generate_vs_paul_lineup(self):
-        """Generate lineup specifically for playing Paul's White team"""
+    def generate_vs_elite_rival_lineup(self):
+        """Generate lineup for playing an elite skill / star-heavy rival"""
         self.add_line(1, "Marsh", "Relph", "Freeman", "Elite - Match Their Top")
         self.add_line(2, "Klakring", "Silliker", "McCredy", "Skilled - Key Line")
         self.add_line(3, "Bagga", "Herrick", "Jaeger", "Grind - Wear Them Down")
         self.add_line(4, "Berry", "Cram", "Tegart", "Depth - Fresh Legs")
-        
+
         self.add_defense_pair(1, "Young", "Berry", "Shutdown Their Elite")
         self.add_defense_pair(2, "Butler", "Tegart", "Attack Their Tired D")
         self.add_defense_pair(3, "Thompson", "Silliker", "Sheltered")
-        
+
         self.set_goalies("Haffey", "Schuchart")
-        
+
         self.set_power_play(1, ["Marsh", "Relph", "Freeman", "Klakring", "Young"])
         self.set_penalty_kill(1, ["Silliker", "Tegart", "Young", "Butler"])
         self.set_penalty_kill(2, ["Herrick", "Jaeger", "Berry", "Freeman"])
-        
-        self.add_note("⭐ HEAVY FORECHECK - Attack their 6 tired D-men")
-        self.add_note("⭐ ROLL FOUR LINES - Our 9 D vs their 6 is HUGE advantage")
-        self.add_note("⭐ STRONG PENALTY KILL - They have dangerous PP, MUST KILL")
+
+        self.add_note("⭐ HEAVY FORECHECK - Attack their tired D-men")
+        self.add_note("⭐ ROLL FOUR LINES - Exploit our D depth advantage")
+        self.add_note("⭐ STRONG PENALTY KILL - Neutralize their PP, MUST KILL")
         self.add_note("Stay disciplined - don't give them PP opportunities")
         self.add_note("Third period is OURS - depth emerges, take control")
         self.add_note("Physical but smart - make them feel us all game")
@@ -291,15 +291,15 @@ def main():
     
     print("\n\n")
     
-    # Example 3: vs Paul's Team
-    print("EXAMPLE 3: LINEUP VS PAUL'S WHITE TEAM")
+    # Example 3: vs Elite Rival
+    print("EXAMPLE 3: LINEUP VS ELITE SKILL RIVAL")
     print()
     lineup3 = NavyLineupGenerator()
-    lineup3.generate_vs_paul_lineup()
+    lineup3.generate_vs_elite_rival_lineup()
     print(lineup3.generate_lineup_sheet(
-        opponent="Paul's White Team",
+        opponent="Elite Rival",
         date="October 28, 2025",
-        game_type="League Game - Navy vs White"
+        game_type="League Game"
     ))
 
 

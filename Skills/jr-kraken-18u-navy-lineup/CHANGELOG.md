@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-03-09
+
+### Changed
+
+- **Dynamic roster**: Player names and ratings are no longer hardcoded in strategy/planning files
+  - `references/roster.md` is now the single source of truth for all player names and ratings
+  - `references/game-planning.md` references players by tier/rating (e.g., "elite tier", "1.50-rated F/D player") instead of by name
+  - `references/coach-strategy.md` (renamed from `mark-strategy.md`) uses tier-based language throughout
+  - `README.md` and `SKILL.md` reference `roster.md` instead of listing names inline
+- Renamed `references/mark-strategy.md` to `references/coach-strategy.md`
+- Generalized opponent strategy sections — removed all references to specific rival teams; replaced with generic templates (vs elite skill, vs physical, vs speed, vs weak, vs unknown)
+- Generalized `examples/sample_lineup_request.md` to use generic opponent and role references
+- Renamed `generate_vs_paul_lineup()` to `generate_vs_elite_rival_lineup()` in lineup generator
+
+### Added
+
+- **TeamSnap MCP integration** for real-time RSVP checking
+  - Uses `mcp__teamsnap__*` tools when available to pull game RSVPs
+  - Maps RSVP statuses (Yes/No/Maybe/No Response) to roster for lineup building
+  - Graceful fallback to manual availability check when TeamSnap MCP is not configured
+  - Added `mcp__teamsnap__*` to allowed-tools
+- **Roster update script** (`scripts/update_roster.py`)
+  - Reads Excel (.xlsx), CSV, or inline JSON with updated player ratings/positions
+  - Auto-generates `references/roster.md` with tier groupings, positional depth analysis, and deployment notes
+  - Updates the internal roster dict in `scripts/lineup_generator.py` to stay in sync
+  - Flexible column name matching (Name/Player, Rating/Power Ranking/Score, etc.)
+  - Supports `--dry-run` for previewing changes without writing files
+  - Validates ratings and warns on unusual values
+- **Strategy file update capability**
+  - Skill can now edit `coach-strategy.md` and `game-planning.md` when asked
+  - Documented common update scenarios (add opponent, update PK/PP, post-game learnings, evolving identity)
+  - Rules enforce name-free edits, targeted changes, and user confirmation before writing
+
 ## [1.0.0] - 2025-12-09
 
 ### Added
