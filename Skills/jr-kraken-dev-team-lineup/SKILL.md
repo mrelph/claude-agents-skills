@@ -13,7 +13,7 @@ Build competitive lineups and game strategies for Coach Mark's Jr. Kraken Develo
 For any lineup or strategy request:
 
 1. **Check RSVPs** -- if TeamSnap MCP is available (`mcp__teamsnap__*` tools), pull RSVPs first. See `references/teamsnap.md` for the full integration workflow. If unavailable, ask Coach Mark for availability.
-2. **Read the roster** -- review `references/roster.md` for the full roster, ratings (1.00-3.00 scale), and positional capabilities. Cross-reference with RSVPs.
+2. **Read the roster** -- review `references/roster.md` for the full roster, ratings (1-3 or 1-5 scale, auto-detected), and positional capabilities. Cross-reference with RSVPs.
 3. **Align with team identity** -- review `references/coach-strategy.md` for the "Competitive Excellence" philosophy.
 4. **Assess context** -- game importance, opponent style, player availability, tournament vs regular season.
 5. **Select a formation** -- review `references/formations.md` for 3-line vs 4-line approaches and defense pairing philosophies.

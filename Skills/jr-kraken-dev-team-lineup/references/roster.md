@@ -16,12 +16,14 @@
 > See `SKILL.md` for expected file format and column details.
 
 ## Player Rating Scale
-- **1.00**: Elite - Top performer
-- **1.50**: Strong Skilled - Consistent high-level contributor
-- **1.75**: Strong Two-Way - Reliable player
-- **2.00**: Solid Contributor - Consistent middle tier
-- **2.50**: Role Player - Situational contributor with defined assignments
-- **3.00**: Role Player - Specific role, targeted deployment
+
+Both 1-3 and 1-5 scales are supported (lower is better). The scale is auto-detected when uploading a roster file.
+
+**1-3 Scale:**
+- **1.00**: Elite | **1.50**: Strong Skilled | **1.75**: Strong Two-Way | **2.00**: Solid Contributor | **2.50-3.00**: Role Player
+
+**1-5 Scale:**
+- **1.00-1.50**: Elite | **1.75-2.50**: Strong Skilled | **2.75-3.00**: Strong Two-Way | **3.25-3.50**: Solid Contributor | **3.75-5.00**: Role Player
 
 ---
 

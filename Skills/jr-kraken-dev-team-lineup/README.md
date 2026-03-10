@@ -29,7 +29,7 @@ python3 scripts/update_roster.py roster.csv        # From CSV
 python3 scripts/update_roster.py --dry-run roster.xlsx  # Preview only
 ```
 
-**Required columns**: Name, Rating (1.00-3.00 scale). Optional: Position, Notes.
+**Required columns**: Name, Rating (1-3 or 1-5 scale, auto-detected). Optional: Position, Notes.
 
 ## Core Resources
 
@@ -37,7 +37,7 @@ python3 scripts/update_roster.py --dry-run roster.xlsx  # Preview only
 Team roster with ratings, positions, and depth analysis. Populated by `update_roster.py`. Read this FIRST when building any lineup.
 
 **Key Info**:
-- Player ratings (1.00 = elite, 3.00 = role player)
+- Player ratings (1-3 or 1-5 scale, lower = better, auto-detected)
 - Position flexibility (F, D, F/D)
 - Tier-based deployment guidelines
 - Versatile F/D players

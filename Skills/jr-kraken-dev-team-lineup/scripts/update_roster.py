@@ -5,10 +5,12 @@ Jr Kraken Development Team - Roster & Power Rankings Updater
 Reads an Excel (.xlsx) or CSV file containing updated player ratings/positions
 and regenerates references/roster.md and the roster dict in lineup_generator.py.
 
+Supports both 1-3 and 1-5 rating scales (auto-detected from data).
+
 Expected columns (case-insensitive, flexible matching):
   - Name (or Player, Player Name)
   - Position (or Pos) — F, D, F/D, G
-  - Rating (or Power Ranking, Rank, Score) — 1.00-3.00 scale
+  - Rating (or Power Ranking, Rank, Score) — 1-3 or 1-5 scale
   - Notes (optional)
   - Can Also Play (optional, for goalies)
 
@@ -16,6 +18,7 @@ Usage:
   python3 update_roster.py <path_to_file.xlsx>
   python3 update_roster.py <path_to_file.csv>
   python3 update_roster.py --json '{"players": [...]}'
+  python3 update_roster.py --scale 5 <path_to_file.xlsx>   # Force 1-5 scale
 """
 
 import argparse
@@ -38,6 +41,70 @@ POS_COLS = {"position", "pos", "pos."}
 RATING_COLS = {"rating", "power ranking", "power_ranking", "rank", "score", "powerranking"}
 NOTES_COLS = {"notes", "note", "comments", "comment"}
 ALT_POS_COLS = {"can also play", "can_also_play", "alt position", "alt_position", "alternate"}
+
+# --- Rating scale definitions ---
+# Each scale defines tier boundaries and labels.
+# Lower rating = better player on both scales.
+
+SCALES = {
+    3: {
+        "name": "1-3",
+        "max": 3.00,
+        "elite_top_max": 1.00,
+        "elite_strong_max": 1.50,
+        "strong_twoway_max": 1.75,
+        "strong_middle_max": 2.00,
+        "role_situational_max": 2.50,
+        # role_specific = everything above role_situational_max
+        "labels": [
+            ("1.00", "Elite - Top performer"),
+            ("1.50", "Strong Skilled - Consistent high-level contributor"),
+            ("1.75", "Strong Two-Way - Reliable player"),
+            ("2.00", "Solid Contributor - Consistent middle tier"),
+            ("2.50", "Role Player - Situational contributor with defined assignments"),
+            ("3.00", "Role Player - Specific role, targeted deployment"),
+        ],
+        "elite_range": "1.00-1.50",
+        "strong_range": "1.75-2.00",
+        "role_range": "2.50+",
+        "elite_depth_max": 1.50,
+        "strong_depth_max": 2.00,
+        "good_avg_threshold": 2.00,
+        "warn_low": 0.50,
+        "warn_high": 5.00,
+    },
+    5: {
+        "name": "1-5",
+        "max": 5.00,
+        "elite_top_max": 1.50,
+        "elite_strong_max": 2.50,
+        "strong_twoway_max": 3.00,
+        "strong_middle_max": 3.50,
+        "role_situational_max": 4.25,
+        "labels": [
+            ("1.00-1.50", "Elite - Top performer"),
+            ("1.75-2.50", "Strong Skilled - Consistent high-level contributor"),
+            ("2.75-3.00", "Strong Two-Way - Reliable player"),
+            ("3.25-3.50", "Solid Contributor - Consistent middle tier"),
+            ("3.75-4.25", "Role Player - Situational contributor with defined assignments"),
+            ("4.50-5.00", "Role Player - Specific role, targeted deployment"),
+        ],
+        "elite_range": "1.00-2.50",
+        "strong_range": "2.75-3.50",
+        "role_range": "3.75+",
+        "elite_depth_max": 2.50,
+        "strong_depth_max": 3.50,
+        "good_avg_threshold": 3.33,
+        "warn_low": 0.50,
+        "warn_high": 7.00,
+    },
+}
+
+
+def detect_scale(players: List[Dict]) -> int:
+    """Auto-detect rating scale from player data. Returns 3 or 5."""
+    max_rating = max(p["rating"] for p in players) if players else 1.0
+    return 5 if max_rating > 3.0 else 3
 
 
 def find_column(headers: List[str], aliases: set) -> Optional[int]:
@@ -146,17 +213,18 @@ def read_json_string(json_str: str) -> List[Dict]:
     return players
 
 
-def categorize_players(players: List[Dict]) -> Dict:
-    """Categorize players into tiers and positions."""
+def categorize_players(players: List[Dict], scale: int) -> Dict:
+    """Categorize players into tiers and positions using scale-appropriate boundaries."""
+    s = SCALES[scale]
     goalies = [p for p in players if p["position"].upper() == "G"]
     skaters = [p for p in players if p["position"].upper() != "G"]
 
-    elite_top = [p for p in skaters if p["rating"] <= 1.00]
-    elite_strong = [p for p in skaters if 1.00 < p["rating"] <= 1.50]
-    strong_twoway = [p for p in skaters if 1.50 < p["rating"] <= 1.75]
-    strong_middle = [p for p in skaters if 1.75 < p["rating"] <= 2.00]
-    role_situational = [p for p in skaters if 2.00 < p["rating"] <= 2.50]
-    role_specific = [p for p in skaters if p["rating"] > 2.50]
+    elite_top = [p for p in skaters if p["rating"] <= s["elite_top_max"]]
+    elite_strong = [p for p in skaters if s["elite_top_max"] < p["rating"] <= s["elite_strong_max"]]
+    strong_twoway = [p for p in skaters if s["elite_strong_max"] < p["rating"] <= s["strong_twoway_max"]]
+    strong_middle = [p for p in skaters if s["strong_twoway_max"] < p["rating"] <= s["strong_middle_max"]]
+    role_situational = [p for p in skaters if s["strong_middle_max"] < p["rating"] <= s["role_situational_max"]]
+    role_specific = [p for p in skaters if p["rating"] > s["role_situational_max"]]
 
     fd_versatile = [p for p in skaters if p["position"].upper() == "F/D"]
     forwards = [p for p in skaters if "F" in p["position"].upper()]
@@ -177,12 +245,14 @@ def categorize_players(players: List[Dict]) -> Dict:
         "forwards": forwards,
         "defense": defense,
         "avg_rating": avg_rating,
+        "scale": scale,
     }
 
 
-def generate_roster_md(players: List[Dict]) -> str:
+def generate_roster_md(players: List[Dict], scale: int) -> str:
     """Generate the full roster.md content from player data."""
-    cats = categorize_players(players)
+    s = SCALES[scale]
+    cats = categorize_players(players, scale)
     goalies = cats["goalies"]
     skaters = cats["skaters"]
     fd = cats["fd_versatile"]
@@ -202,22 +272,19 @@ def generate_roster_md(players: List[Dict]) -> str:
     lines.append("## Team Overview")
     lines.append(f"- **Head Coach**: Mark")
     lines.append(f'- **Team Identity**: "Competitive Excellence"')
+    lines.append(f"- **Rating Scale**: {s['name']} (lower is better)")
     lines.append(f"- **Total Players**: {total} ({skater_count} skaters + {goalie_count} goalies)")
     lines.append(f"- **Forwards**: {dedicated_f} dedicated + {fd_count} F/D versatile = **{fwd_count} capable forwards**")
     lines.append(f"- **Defense**: {dedicated_d} dedicated + {fd_count} F/D versatile = **{def_count} capable defensemen**" + (" -- DEPTH ADVANTAGE" if def_count >= 8 else ""))
     lines.append(f"- **Goalies**: {goalie_count} ({', '.join(g['name'] for g in goalies)})")
-    lines.append(f"- **Average Rating**: {cats['avg_rating']:.3f}" + (" (strong balance)" if cats['avg_rating'] < 2.0 else ""))
+    lines.append(f"- **Average Rating**: {cats['avg_rating']:.3f}" + (" (strong balance)" if cats['avg_rating'] < s['good_avg_threshold'] else ""))
     lines.append("")
-    lines.append("> **Last updated**: This roster was auto-generated by `scripts/update_roster.py`.")
+    lines.append(f"> **Last updated**: This roster was auto-generated by `scripts/update_roster.py` using the **{s['name']}** rating scale.")
     lines.append("> To refresh, run: `python3 scripts/update_roster.py <roster_file.xlsx>`")
     lines.append("")
     lines.append("## Player Rating Scale")
-    lines.append("- **1.00**: Elite - Top performer")
-    lines.append("- **1.50**: Strong Skilled - Consistent high-level contributor")
-    lines.append("- **1.75**: Strong Two-Way - Reliable player")
-    lines.append("- **2.00**: Solid Contributor - Consistent middle tier")
-    lines.append("- **2.50**: Role Player - Situational contributor with defined assignments")
-    lines.append("- **3.00**: Role Player - Specific role, targeted deployment")
+    for val, desc in s["labels"]:
+        lines.append(f"- **{val}**: {desc}")
     lines.append("")
     lines.append("---")
 
@@ -256,17 +323,17 @@ def generate_roster_md(players: List[Dict]) -> str:
     elite_all = cats["elite_top"] + cats["elite_strong"]
     if elite_all:
         lines.append("")
-        lines.append(f"## ELITE PLAYERS (1.00-1.50) - {len(elite_all)} Players")
+        lines.append(f"## ELITE PLAYERS ({s['elite_range']}) - {len(elite_all)} Players")
         if cats["elite_top"]:
             lines.append("")
-            lines.append(f"### Top Tier (1.00) - {len(cats['elite_top'])} Players")
+            lines.append(f"### Top Tier (≤{s['elite_top_max']:.2f}) - {len(cats['elite_top'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["elite_top"]))
             lines.append("")
             lines.append("**Deployment**: Core of top line and all special teams, most ice time in critical situations")
         if cats["elite_strong"]:
             lines.append("")
-            lines.append(f"### Strong Skilled (1.50) - {len(cats['elite_strong'])} Players")
+            lines.append(f"### Strong Skilled (≤{s['elite_strong_max']:.2f}) - {len(cats['elite_strong'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["elite_strong"]))
             lines.append("")
@@ -278,15 +345,15 @@ def generate_roster_md(players: List[Dict]) -> str:
     strong_all = cats["strong_twoway"] + cats["strong_middle"]
     if strong_all:
         lines.append("")
-        lines.append(f"## STRONG PLAYERS (1.75-2.00) - {len(strong_all)} Players")
+        lines.append(f"## STRONG PLAYERS ({s['strong_range']}) - {len(strong_all)} Players")
         if cats["strong_twoway"]:
             lines.append("")
-            lines.append(f"### Two-Way Contributors (1.75) - {len(cats['strong_twoway'])} Players")
+            lines.append(f"### Two-Way Contributors (≤{s['strong_twoway_max']:.2f}) - {len(cats['strong_twoway'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["strong_twoway"]))
         if cats["strong_middle"]:
             lines.append("")
-            lines.append(f"### Solid Contributors (2.00) - {len(cats['strong_middle'])} Players")
+            lines.append(f"### Solid Contributors (≤{s['strong_middle_max']:.2f}) - {len(cats['strong_middle'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["strong_middle"]))
         lines.append("")
@@ -298,10 +365,10 @@ def generate_roster_md(players: List[Dict]) -> str:
     role_all = cats["role_situational"] + cats["role_specific"]
     if role_all:
         lines.append("")
-        lines.append(f"## ROLE PLAYERS (2.50+) - {len(role_all)} Players")
+        lines.append(f"## ROLE PLAYERS ({s['role_range']}) - {len(role_all)} Players")
         if cats["role_situational"]:
             lines.append("")
-            lines.append("### Situational Contributors (2.50)")
+            lines.append(f"### Situational Contributors (≤{s['role_situational_max']:.2f})")
             lines.append("")
             lines.extend(_player_table(cats["role_situational"]))
             for p in cats["role_situational"]:
@@ -312,7 +379,7 @@ def generate_roster_md(players: List[Dict]) -> str:
                 lines.append("- Contribute within their role when called upon")
         if cats["role_specific"]:
             lines.append("")
-            lines.append("### Targeted Role (3.00)")
+            lines.append(f"### Targeted Role (>{s['role_situational_max']:.2f})")
             lines.append("")
             lines.extend(_player_table(cats["role_specific"]))
             for p in cats["role_specific"]:
@@ -330,6 +397,9 @@ def generate_roster_md(players: List[Dict]) -> str:
         lines.append("---")
 
     # Positional depth
+    elite_max = s["elite_depth_max"]
+    strong_max = s["strong_depth_max"]
+
     lines.append("")
     lines.append("## POSITIONAL DEPTH ANALYSIS")
     lines.append("")
@@ -337,15 +407,15 @@ def generate_roster_md(players: List[Dict]) -> str:
     lines.append("")
     lines.append("| Tier | Players |")
     lines.append("|------|---------|")
-    elite_fwd = [p for p in cats["forwards"] if p["rating"] <= 1.50]
-    strong_fwd = [p for p in cats["forwards"] if 1.50 < p["rating"] <= 2.00]
-    role_fwd = [p for p in cats["forwards"] if p["rating"] > 2.00]
+    elite_fwd = [p for p in cats["forwards"] if p["rating"] <= elite_max]
+    strong_fwd = [p for p in cats["forwards"] if elite_max < p["rating"] <= strong_max]
+    role_fwd = [p for p in cats["forwards"] if p["rating"] > strong_max]
     if elite_fwd:
-        lines.append(f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_fwd)} |")
+        lines.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_fwd)} |")
     if strong_fwd:
-        lines.append(f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_fwd)} |")
+        lines.append(f"| **Strong ({s['strong_range']})** | {', '.join(p['name'].split()[-1] for p in strong_fwd)} |")
     if role_fwd:
-        lines.append(f"| **Role (2.50+)** | {', '.join(p['name'].split()[-1] for p in role_fwd)} |")
+        lines.append(f"| **Role ({s['role_range']})** | {', '.join(p['name'].split()[-1] for p in role_fwd)} |")
     lines.append("")
     lines.append(f"**Four-Line Capability**: {'YES - Core strength' if fwd_count >= 12 else 'Possible with adjustments' if fwd_count >= 9 else 'Limited'}")
 
@@ -354,15 +424,15 @@ def generate_roster_md(players: List[Dict]) -> str:
     lines.append("")
     lines.append("| Tier | Players |")
     lines.append("|------|---------|")
-    elite_def = [p for p in cats["defense"] if p["rating"] <= 1.50]
-    strong_def = [p for p in cats["defense"] if 1.50 < p["rating"] <= 2.00]
-    role_def = [p for p in cats["defense"] if p["rating"] > 2.00]
+    elite_def = [p for p in cats["defense"] if p["rating"] <= elite_max]
+    strong_def = [p for p in cats["defense"] if elite_max < p["rating"] <= strong_max]
+    role_def = [p for p in cats["defense"] if p["rating"] > strong_max]
     if elite_def:
-        lines.append(f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_def)} |")
+        lines.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_def)} |")
     if strong_def:
-        lines.append(f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_def)} |")
+        lines.append(f"| **Strong ({s['strong_range']})** | {', '.join(p['name'].split()[-1] for p in strong_def)} |")
     if role_def:
-        lines.append(f"| **Role (2.50+)** | {', '.join(p['name'].split()[-1] for p in role_def)} |")
+        lines.append(f"| **Role ({s['role_range']})** | {', '.join(p['name'].split()[-1] for p in role_def)} |")
 
     lines.append("")
     lines.append(f"### Versatile F/D Players ({fd_count})" + (" -- CRITICAL ASSET" if fd_count >= 4 else ""))
@@ -395,9 +465,9 @@ def generate_roster_md(players: List[Dict]) -> str:
     return "\n".join(lines)
 
 
-def generate_lineup_generator_roster(players: List[Dict]) -> str:
+def generate_lineup_generator_roster(players: List[Dict], scale: int) -> str:
     """Generate the roster dict block for lineup_generator.py."""
-    cats = categorize_players(players)
+    cats = categorize_players(players, scale)
 
     lines = []
     lines.append("        self.roster = {")
@@ -431,7 +501,7 @@ def generate_lineup_generator_roster(players: List[Dict]) -> str:
     return "\n".join(lines)
 
 
-def update_lineup_generator(players: List[Dict]):
+def update_lineup_generator(players: List[Dict], scale: int):
     """Update the roster dict inside lineup_generator.py."""
     if not LINEUP_GEN.exists():
         print(f"WARNING: {LINEUP_GEN} not found, skipping lineup generator update.")
@@ -441,7 +511,7 @@ def update_lineup_generator(players: List[Dict]):
 
     # Find and replace the self.roster block
     pattern = r"(\s+self\.roster\s*=\s*\{).*?(\n\s+\})"
-    new_block = generate_lineup_generator_roster(players)
+    new_block = generate_lineup_generator_roster(players, scale)
 
     match = re.search(pattern, content, re.DOTALL)
     if match:
@@ -466,6 +536,12 @@ def main():
         help='JSON string with player data: \'{"players": [{"name": "...", "position": "F", "rating": 1.50}, ...]}\'',
     )
     parser.add_argument(
+        "--scale",
+        type=int,
+        choices=[3, 5],
+        help="Force rating scale (3 or 5). If omitted, auto-detected from data.",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Print generated roster.md without writing files",
@@ -474,11 +550,16 @@ def main():
 
     if not args.file and not args.json:
         parser.print_help()
-        print("\nExample CSV format:")
+        print("\nExample CSV format (1-3 scale):")
         print("  Name,Position,Rating,Notes")
         print("  Player One,F/D,1.00,\"Elite at both positions\"")
         print("  Player Two,F/D,1.00,\"Elite talent, leadership\"")
         print("  Goalie One,G,2.00,\"Reliable starter\"")
+        print("\nExample CSV format (1-5 scale):")
+        print("  Name,Position,Rating,Notes")
+        print("  Player One,F/D,1.50,\"Elite at both positions\"")
+        print("  Player Two,F/D,2.00,\"Strong skilled forward\"")
+        print("  Player Three,D,4.00,\"Role player, situational\"")
         sys.exit(1)
 
     # Read players
@@ -503,27 +584,32 @@ def main():
         print("ERROR: No players found in input.")
         sys.exit(1)
 
+    # Detect or use forced scale
+    scale = args.scale if args.scale else detect_scale(players)
+    s = SCALES[scale]
+    print(f"Rating scale: {s['name']} ({'forced' if args.scale else 'auto-detected'})")
+
     for p in players:
-        if not (0.50 <= p["rating"] <= 5.00):
-            print(f"WARNING: {p['name']} has unusual rating {p['rating']:.2f} (expected 1.00-3.00)")
+        if not (s["warn_low"] <= p["rating"] <= s["warn_high"]):
+            print(f"WARNING: {p['name']} has unusual rating {p['rating']:.2f} (expected {s['name']} scale)")
 
     # Categorize and report
-    cats = categorize_players(players)
+    cats = categorize_players(players, scale)
     goalies = cats["goalies"]
     skaters = cats["skaters"]
     print(f"\nRoster summary:")
     print(f"  Goalies: {len(goalies)}")
     print(f"  Skaters: {len(skaters)}")
-    print(f"  Elite (1.00-1.50): {len(cats['elite_top']) + len(cats['elite_strong'])}")
-    print(f"  Strong (1.75-2.00): {len(cats['strong_twoway']) + len(cats['strong_middle'])}")
-    print(f"  Role (2.50+): {len(cats['role_situational']) + len(cats['role_specific'])}")
+    print(f"  Elite ({s['elite_range']}): {len(cats['elite_top']) + len(cats['elite_strong'])}")
+    print(f"  Strong ({s['strong_range']}): {len(cats['strong_twoway']) + len(cats['strong_middle'])}")
+    print(f"  Role ({s['role_range']}): {len(cats['role_situational']) + len(cats['role_specific'])}")
     print(f"  F/D Versatile: {len(cats['fd_versatile'])}")
     print(f"  Forward-capable: {len(cats['forwards'])}")
     print(f"  Defense-capable: {len(cats['defense'])}")
     print(f"  Average rating: {cats['avg_rating']:.3f}")
 
     # Generate roster.md
-    roster_content = generate_roster_md(players)
+    roster_content = generate_roster_md(players, scale)
 
     if args.dry_run:
         print("\n--- DRY RUN: Generated roster.md ---\n")
@@ -535,7 +621,7 @@ def main():
     ROSTER_MD.write_text(roster_content)
     print(f"  Updated: {ROSTER_MD}")
 
-    update_lineup_generator(players)
+    update_lineup_generator(players, scale)
 
     print(f"\nDone! Power rankings updated successfully.")
     print(f"Review the changes in:")
