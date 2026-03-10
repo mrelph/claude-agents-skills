@@ -3,9 +3,11 @@ name: retirement-planner
 description: This skill should be used when the user asks "am I ready to retire", "when can I retire", "Social Security claiming strategy", "Roth conversion analysis", "withdrawal strategy", "how much do I need to retire", "Monte Carlo simulation", "retirement income plan", or mentions 401(k), IRA, RMD, pension, Medicare planning, or retirement savings targets. Also triggered by questions about retirement spending, sequence of returns risk, or survivor benefits.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 1.0.0
-  last-updated: 2025-10-31
+  version: 1.1.0
+  last-updated: 2026-03-07
   target-users: pre-retirees and families
+  tax-year: 2025
+  annual-review: Update ${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md each January with new IRS limits, IRMAA thresholds, and SSA figures.
 ---
 
 # Retirement Planner
@@ -30,11 +32,7 @@ Comprehensive pre-retirement planning tool for individuals and couples to assess
 - Emergency fund and liquid assets
 
 **Integration with portfolio-analyzer**:
-```bash
-# Import portfolio data from portfolio-analyzer
-cp ../portfolio-analyzer/holdings.json data/current_portfolio.json
-cp ../portfolio-analyzer/history/metrics_latest.json data/portfolio_metrics.json
-```
+When the user has portfolio data from the portfolio-analyzer skill, ask them to provide the holdings JSON or use the Skill tool to invoke portfolio-analyzer first. The retirement planner consumes portfolio values, allocation, and risk data for projections.
 
 **Ask user to clarify** (use AskUserQuestion):
 - Target retirement age(s) and desired lifestyle
@@ -64,8 +62,9 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/retirement_calculator.py --current-income <
 - Higher if extensive travel, healthcare concerns, supporting family
 
 **Healthcare costs** (critical for pre-Medicare years):
-- Age 55-65: ACA marketplace, COBRA, spousal coverage (~$15-25k/year)
-- Age 65+: Medicare Parts A/B/D, Medigap, out-of-pocket (~$6-12k/year per person)
+- See `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current cost estimates by age band
+- Age 55-65: ACA marketplace, COBRA, spousal coverage
+- Age 65+: Medicare Parts A/B/D, Medigap, out-of-pocket
 - Long-term care insurance or self-insure reserves
 
 ### 3. Project Retirement Income Sources
@@ -92,12 +91,12 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/ss_optimizer.py --user-age <age> --spouse-a
 
 **Portfolio withdrawal strategy**:
 - **Integration point**: Pull portfolio allocation from portfolio-analyzer
-- Calculate sustainable withdrawal rate (3-4% safe, 4-5% moderate, 5-6% aggressive)
+- Calculate sustainable withdrawal rate (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current rate guidance by risk profile)
 - Sequence of returns risk: First decade critical for portfolio longevity
 - Dynamic withdrawal strategies: Adjust based on market performance
 
 **Required Minimum Distributions (RMDs)**:
-- Starts age 73 (as of 2023), age 75 (starting 2033)
+- See `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current RMD starting ages by birth year
 - RMD calculator based on IRS Uniform Lifetime Table
 - Tax planning: May push into higher brackets
 
@@ -111,9 +110,9 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/tax_strategy.py --scenario roth-conversion 
 ```
 
 **Key strategies**:
-- **Pre-retirement conversions**: Fill lower brackets (12%, 22%) before RMDs/SS start
+- **Pre-retirement conversions**: Fill lower brackets before RMDs/SS start (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current bracket thresholds)
 - **Early retirement conversions**: Age 62-70 window before SS, ideal for conversions
-- **Medicare IRMAA considerations**: Keep MAGI below thresholds ($103k single, $206k married)
+- **Medicare IRMAA considerations**: Keep MAGI below IRMAA thresholds (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current thresholds by filing status)
 - **State tax planning**: Consider residency changes, no-income-tax states
 
 **Withdrawal sequence optimization**:
@@ -183,9 +182,9 @@ Calculate key metrics:
 **If gaps exist, prioritize actions**:
 
 1. **Immediate (this year)**:
-   - Max out 401(k)/403(b) contributions ($23k/year, $30.5k if 50+)
-   - Catch-up contributions to IRA ($7.5k if 50+)
-   - HSA max contributions ($8,300 family, triple tax advantage)
+   - Max out 401(k)/403(b) contributions (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current limits and catch-up amounts)
+   - Catch-up contributions to IRA (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current IRA catch-up limits)
+   - HSA max contributions (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current HSA limits; triple tax advantage)
    - Debt payoff: High-interest debt, target mortgage payoff by retirement
 
 2. **Near-term (1-3 years)**:
@@ -249,7 +248,7 @@ Calculate key metrics:
 
 ## Output Generation
 
-**Retirement plan report** (Word document via word skill):
+**Retirement plan report** (Word document via python-docx):
 - Executive summary: Retirement readiness assessment, success probability, key recommendations
 - Current state: Financial inventory, income sources, projected needs
 - Monte Carlo results: Probability of success, scenario comparisons, sensitivity analysis
@@ -266,10 +265,10 @@ Calculate key metrics:
 
 ## Integration with Portfolio Analyzer
 
-**Automatic data sync**:
+**Data integration**:
+When portfolio data is available, use the Skill tool to invoke the portfolio-analyzer skill first, or ask the user to provide their holdings data directly. The `sync_portfolio_data.py` script can process holdings JSON from any source:
 ```bash
-# Run portfolio-analyzer first, then import results
-python ${CLAUDE_PLUGIN_ROOT}/scripts/sync_portfolio_data.py --source ../portfolio-analyzer/holdings.json
+python ${CLAUDE_PLUGIN_ROOT}/scripts/sync_portfolio_data.py --source <path-to-holdings.json>
 ```
 
 **Shared data points**:
@@ -293,7 +292,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/sync_portfolio_data.py --source ../portfoli
 - Investment returns: 6-8% depending on allocation (coordinate with portfolio-analyzer)
 - Social Security COLA: 2-2.5% annually
 - Tax rates: Current law unless change anticipated
-- Healthcare costs: $300k-400k per couple age 65+ (Fidelity estimate)
+- Healthcare costs: See `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current lifetime healthcare cost estimates (Fidelity estimate)
 
 **Risks to plan**:
 - Longevity risk: Outliving savings (plan to 95+)
@@ -304,6 +303,8 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/sync_portfolio_data.py --source ../portfoli
 - Market risk: Extended bear markets or volatility
 
 ## Reference Documents (Load as needed)
+
+**`${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md`** - **LOAD FIRST** - All annually-changing financial figures: contribution limits, RMD ages, IRMAA thresholds, tax brackets, healthcare cost estimates, withdrawal rate guidance. Updated each tax year.
 
 **`${CLAUDE_PLUGIN_ROOT}/references/retirement_rules.md`** - IRS contribution limits, RMD tables, IRMAA thresholds, tax brackets
 

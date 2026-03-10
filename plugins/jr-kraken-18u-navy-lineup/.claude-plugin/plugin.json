@@ -1,0 +1,9 @@
+{
+  "name": "jr-kraken-18u-navy-lineup",
+  "description": "Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management",
+  "version": "1.0.0",
+  "author": { "name": "mrelph" },
+  "repository": "https://github.com/mrelph/claude-agents-skills",
+  "license": "MIT",
+  "keywords": ["hockey", "lineup", "strategy", "coaching", "sports"]
+}

@@ -1,11 +1,13 @@
 ---
 name: tax-preparation
-description: This skill should be used when the user asks to "prepare my taxes", "find deductions", "calculate my tax liability", "what tax credits do I qualify for", "estimated tax payments", "optimize my tax return", "review my W-2", "itemize or standard deduction", "self-employment taxes", or provides tax documents like W-2s, 1099s, K-1s, or 1098s. Also triggered by mentions of tax brackets, filing status, AMT, capital gains tax, or tax planning strategies.
+description: This skill should be used when the user asks to "prepare my taxes", "find deductions", "calculate my tax liability", "what tax credits do I qualify for", "estimated tax payments", "optimize my tax return", "review my W-2", "itemize or standard deduction", "self-employment taxes", "RSU taxes", "Amazon stock compensation", "cost basis for RSUs", "Form 8949 adjustment", "vesting income calculation", "1099-B cost basis is wrong", "RSU double taxation", or provides tax documents like W-2s, 1099s, K-1s, 1098s, RSU vesting confirmations, or brokerage statements. Also triggered by mentions of tax brackets, filing status, AMT, capital gains tax, tax planning strategies, fair market value at vesting, capital gains on RSU sales, or broker-reported basis errors.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 1.4.0
-  last-updated: 2025-01-22
+  version: 1.5.0
+  last-updated: 2026-03-07
   target-users: individuals, families, self-employed
+  tax-year: 2024
+  annual-review: Update tax brackets, deduction limits, credit amounts, and SE thresholds each January. Check IRS.gov Rev. Proc. for inflation adjustments.
 ---
 
 # Tax Preparation Skill
@@ -91,7 +93,9 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/deduction_analyzer.py --income <agi> --item
 
 **Standard Deduction (2024)**: Single $14,600 | MFJ $29,200 | HoH $21,900 | Additional for 65+/blind: $1,550 (married) or $1,950 (single/HoH).
 
-**Itemized categories**: Medical (>7.5% AGI threshold), SALT ($10,000 cap covering property + income or sales tax), mortgage interest ($750k acquisition debt limit), and charitable contributions (60% AGI cash, 30% appreciated property). Consider bunching strategies for taxpayers near the threshold -- prepay property taxes, double up charitable donations in alternating years, time elective medical procedures. See `${CLAUDE_PLUGIN_ROOT}/references/tax_planning.md` for the full decision framework.
+**Itemized categories**: Medical (>7.5% AGI threshold), SALT ($10,000 cap covering property + income or sales tax), mortgage interest ($750k acquisition debt limit), and charitable contributions (60% AGI cash, 30% appreciated property).
+
+**Why bunching matters**: Many taxpayers fall just below or above the standard deduction threshold. Bunching concentrates deductible expenses into alternating years -- doubling charitable donations one year, skipping the next -- so itemized deductions exceed the standard deduction in "on" years while taking the standard deduction in "off" years. This creates more total tax savings than spreading expenses evenly. Prepaying property taxes, timing elective medical procedures, and using donor-advised funds for charitable bunching are common tactics. See `${CLAUDE_PLUGIN_ROOT}/references/tax_planning.md` for the full decision framework.
 
 ### Phase 5: Calculate Credits
 
@@ -109,7 +113,9 @@ See `${CLAUDE_PLUGIN_ROOT}/references/credits_guide.md` for detailed eligibility
 
 Calculate SE tax: 15.3% on 92.35% of net income (12.4% Social Security up to $168,600 wage base, 2.9% Medicare unlimited, plus 0.9% Additional Medicare over $200k/$250k MFJ). Deduct half of SE tax above-the-line.
 
-Evaluate business deductions: home office (simplified at $5/sq ft up to 300 sq ft, or actual expenses), vehicle (67 cents/mile 2024 or actual expenses), equipment (Section 179 expensing), professional services, supplies, advertising, and insurance. Determine estimated payment requirements using the safe harbor: pay 100% of prior year tax (110% if AGI >$150k) or 90% of current year tax.
+Evaluate business deductions: home office (simplified at $5/sq ft up to 300 sq ft, or actual expenses), vehicle (67 cents/mile 2024 or actual expenses), equipment (Section 179 expensing), professional services, supplies, advertising, and insurance.
+
+**Why estimated payments matter**: Self-employed taxpayers have no employer withholding, so the IRS expects quarterly payments. Missing them triggers underpayment penalties regardless of final tax liability. The safe harbor avoids penalties: pay 100% of prior year tax (110% if AGI >$150k) or 90% of current year tax, whichever is easier to calculate. Prior-year safe harbor is simpler because the number is known.
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/estimated_tax_calculator.py --projected-income <amount> --withholding <amount>
@@ -121,12 +127,12 @@ See `${CLAUDE_PLUGIN_ROOT}/references/self_employment_guide.md` for full guidanc
 
 Apply appropriate capital gains rates: 0% up to $47,025 single/$94,050 MFJ, 15% up to $518,900/$583,750, 20% above those thresholds. Check for NIIT exposure (3.8% on investment income when MAGI exceeds $200k/$250k MFJ).
 
-Optimization strategies:
-- **Tax-loss harvesting**: Offset gains with losses (watch 61-day wash sale window)
-- **Gain/loss timing**: Realize losses in high-income years, gains in low-income years
-- **Long-term vs short-term**: Hold 12+ months for preferential rates
-- **Asset location**: Place tax-inefficient assets in tax-advantaged accounts
-- **Capital loss carryforward**: Track unused losses ($3,000 annual limit against ordinary income)
+**Optimization strategies** -- these work because the tax code treats different types of income differently, and timing control lets you shift income between years or categories:
+- **Tax-loss harvesting**: Offset gains with losses (watch 61-day wash sale window). Losses are worth more in high-income years because they offset income taxed at higher marginal rates.
+- **Gain/loss timing**: Realize losses in high-income years (maximum tax benefit) and defer gains to low-income years (lower rates). Year-end is the key planning window.
+- **Long-term vs short-term**: Holding 12+ months converts ordinary rates (up to 37%) to preferential rates (0/15/20%) -- often the single largest tax optimization available.
+- **Asset location**: Tax-inefficient assets (bonds, REITs) belong in tax-advantaged accounts; tax-efficient assets (index funds, growth stocks) in taxable accounts. This doesn't change total return but reduces the tax drag.
+- **Capital loss carryforward**: Track unused losses ($3,000 annual limit against ordinary income). Excess carries forward indefinitely -- a valuable future asset worth preserving.
 
 For RSU holders, always verify cost basis against vesting records and correct 1099-B errors on Form 8949 using code "B". See `${CLAUDE_PLUGIN_ROOT}/references/investment_taxes.md` for comprehensive guidance including wash sales, cost basis methods, and stock compensation treatment.
 
@@ -136,7 +142,9 @@ Determine state filing requirements (resident, part-year, nonresident). Identify
 
 ### Phase 9: Proactive Tax Reduction Discovery
 
-Actively search for savings the user may not know about. Load `${CLAUDE_PLUGIN_ROOT}/references/deduction_finder.md` and run through the hunting checklist, probing questions, and overlooked deduction tables. For RSU holders, run the RSU-specific discovery questions and holder checklist. Cross-reference with `${CLAUDE_PLUGIN_ROOT}/references/overlooked_deductions.md` for situation-specific deductions.
+This phase is where the skill provides the most value beyond basic tax preparation. Most taxpayers leave money on the table -- not because deductions don't exist, but because they don't know to ask. The deduction finder works by probing life circumstances (homeowner? student? caregiver? remote worker?) that correlate with commonly missed deductions.
+
+Load `${CLAUDE_PLUGIN_ROOT}/references/deduction_finder.md` and run through the hunting checklist, probing questions, and overlooked deduction tables. For RSU holders, run the RSU-specific discovery questions and holder checklist. Cross-reference with `${CLAUDE_PLUGIN_ROOT}/references/overlooked_deductions.md` for situation-specific deductions.
 
 ### Phase 10: Generate Output and Plan Ahead
 
@@ -270,4 +278,4 @@ Use the Task agent for comprehensive research on:
 
 This skill provides tax preparation assistance but does not replace professional tax advice. Recommend consulting a CPA or Enrolled Agent for complex business structures, international tax situations, IRS audits or disputes, estate and trust taxation, and significant tax controversy.
 
-Tax laws are complex and change frequently. Verify all information against current IRS publications and state tax authority guidance. This skill uses 2024 tax year figures; adjust for the applicable tax year.
+Tax laws are complex and change frequently. Verify all information against current IRS publications and state tax authority guidance. This skill's inline figures use the tax year specified in the metadata `tax-year` field. If the user is filing for a different year, check `${CLAUDE_PLUGIN_ROOT}/references/tax_brackets_deductions.md` for the applicable figures and use WebSearch for the latest IRS inflation adjustments.

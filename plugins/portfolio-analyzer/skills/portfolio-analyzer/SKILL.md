@@ -98,7 +98,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/calculate_portfolio_metrics.py holdings.jso
 
 ### 7. Generate Output Documents
 
-**Word reports**: Use word skill (`Skill command: "word"`) for monthly reviews, comprehensive reports, or formal presentations. Creates formatted .docx with executive summary, performance tables, and recommendations.
+**Word reports**: Use python-docx to generate .docx files for monthly reviews, comprehensive reports, or formal presentations. Install with `pip install python-docx` if needed. Create formatted documents with executive summary, performance tables, and recommendations.
 
 **Excel spreadsheets**: Use pandas to create multi-sheet workbooks (Holdings, Metrics, Performance) for detailed data, tracking, or what-if analysis.
 

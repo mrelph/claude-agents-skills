@@ -33,16 +33,11 @@ Generates retirement plan + recommendations
 
 ### Setup Integration
 
-1. **Ensure portfolio-analyzer is up to date**:
-   ```bash
-   cd ../portfolio-analyzer
-   # Run latest analysis to generate current holdings and metrics
-   ```
+1. **Ensure portfolio-analyzer is up to date**: Use the Skill tool to invoke portfolio-analyzer first, or ask the user to provide their holdings JSON.
 
 2. **Import portfolio data into retirement-planner**:
    ```bash
-   cd ../retirement-planner
-   python scripts/sync_portfolio_data.py --source ../portfolio-analyzer/holdings.json
+   python scripts/sync_portfolio_data.py --source <path-to-holdings.json>
    ```
 
 3. **Run retirement planning**:
@@ -133,6 +128,7 @@ retirement-planner/
 │   ├── monte_carlo.py             # Monte Carlo simulation engine
 │   └── sync_portfolio_data.py     # Import from portfolio-analyzer
 ├── references/
+│   ├── annual_limits.md            # Annually-updated financial figures (LOAD FIRST)
 │   ├── retirement_rules.md        # IRS limits, RMDs, IRMAA, tax brackets
 │   ├── tax_strategies.md          # Detailed tax optimization strategies
 │   └── ss_optimization.md         # Social Security claiming strategies
@@ -197,8 +193,7 @@ Imports portfolio data from portfolio-analyzer.
 
 **Usage**:
 ```bash
-python scripts/sync_portfolio_data.py \
-  --source ../portfolio-analyzer/holdings.json
+python scripts/sync_portfolio_data.py --source <path-to-holdings.json>
 ```
 
 ## Key Concepts
@@ -214,7 +209,7 @@ Optimal timing: Between retirement and Social Security (age 62-70), fill lower t
 Rule of thumb: Higher earner delays to 70 (maximizes survivor benefit), lower earner may claim earlier.
 
 ### IRMAA
-Medicare surcharges based on income from 2 years prior. Plan conversions to stay below thresholds ($103k single / $206k married for first tier).
+Medicare surcharges based on income from 2 years prior. Plan conversions to stay below thresholds (see `references/annual_limits.md` for current figures).
 
 ### Sequence of Returns Risk
 Market returns in first decade of retirement critical. Poor early returns can permanently impair portfolio.

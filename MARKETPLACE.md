@@ -31,7 +31,7 @@ This registers the marketplace so you can browse and install individual plugins:
 | `portfolio-analyzer` | v3.0.0 | financial | Investment portfolio analysis, risk assessment, asset allocation |
 | `retirement-planner` | v2.0.0 | financial | Retirement readiness, Social Security optimization, withdrawal strategies |
 | `research-consolidator` | v2.0.0 | research | Multi-source research synthesis with confidence scoring and gap analysis |
-| `kiro-spec-driven-dev` | v2.0.0 | development | Spec-driven development: requirements to design to tasks workflow |
+| `jr-kraken-18u-navy-lineup` | v1.0.0 | domain-specific | Jr. Kraken 18U Navy hockey lineup building, game strategy, player management |
 | `dev-tools` | v1.0.0 | development | Bundle: bug tracking, DB architecture, security scanning, performance, documentation |
 
 ## marketplace.json Schema

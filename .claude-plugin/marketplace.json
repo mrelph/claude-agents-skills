@@ -45,13 +45,13 @@
       "category": "research"
     },
     {
-      "name": "kiro-spec-driven-dev",
-      "source": "./plugins/kiro-spec-driven-dev",
-      "description": "Structured spec-driven development: Requirements to Design to Tasks workflow",
-      "version": "2.0.0",
+      "name": "jr-kraken-18u-navy-lineup",
+      "source": "./plugins/jr-kraken-18u-navy-lineup",
+      "description": "Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management",
+      "version": "1.0.0",
       "author": { "name": "mrelph" },
-      "keywords": ["development", "methodology", "specs", "planning", "kiro"],
-      "category": "development"
+      "keywords": ["hockey", "lineup", "strategy", "coaching", "sports"],
+      "category": "domain-specific"
     },
     {
       "name": "dev-tools",

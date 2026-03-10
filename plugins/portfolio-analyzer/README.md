@@ -149,7 +149,7 @@ The skill tracks:
 
 ### Output Generation
 
-- **Word reports:** Professional documents via word skill for monthly reviews
+- **Word reports:** Professional .docx documents via python-docx for monthly reviews
 - **Excel spreadsheets:** Multi-sheet workbooks for detailed data analysis
 - **Naming convention:** `portfolio_analysis_YYYY-MM-DD.docx` / `portfolio_data_YYYY-MM-DD.xlsx`
 
@@ -157,11 +157,7 @@ The skill tracks:
 
 ### With Retirement Planner
 
-Portfolio data can be consumed by the retirement-planner skill:
-
-```bash
-cp holdings.json ../retirement-planner/data/current_portfolio.json
-```
+Portfolio data can be consumed by the retirement-planner skill. Use the Skill tool to invoke retirement-planner after completing portfolio analysis, or provide the holdings JSON directly to the retirement planning workflow.
 
 ### With Tax Preparation
 
@@ -178,7 +174,7 @@ Coordinate with tax-preparation skill for:
 - `WebFetch` - Detailed financial information
 - `Grep`, `Glob` - Search files and documents
 - `Task` - Deep research via specialized agents
-- `Skill` - Integration with word, tax-preparation, retirement-planner
+- `Skill` - Integration with tax-preparation, retirement-planner
 - `Write` - Save analysis results and reports
 - `AskUserQuestion` - Clarify risk tolerance, time horizon, targets
 
@@ -211,7 +207,7 @@ This skill provides analytical frameworks but doesn't replace professional finan
 - Track user preferences (risk tolerance, time horizon, goals)
 
 ### v2.1.0 (2025-10-30)
-- Added Word document generation using word skill
+- Added Word document generation using python-docx
 - Added Excel spreadsheet creation for detailed data analysis
 - Added Skill and Write tools to allowed-tools
 

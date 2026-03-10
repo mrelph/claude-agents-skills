@@ -1,477 +1,148 @@
 ---
 name: research-consolidator
-description: This skill should be used when the user asks to "consolidate research", "synthesize findings from multiple sources", "compare research from Claude and GPT", "merge research outputs", "combine AI research results", "create a research report from these sources", or has research from multiple AI models, web searches, or documents to combine into a unified analysis. Also triggered by mentions of cross-referencing findings, confidence scoring, or source attribution.
+description: This skill should be used when the user asks to "consolidate research", "synthesize findings from multiple sources", "compare research from Claude and GPT", "merge research outputs", "combine AI research results", "create a research report from these sources", "summarize what I found", "cross-reference these results", or has research from multiple AI models, web searches, or documents to combine into a unified analysis. Also triggered by mentions of cross-referencing findings, confidence scoring, source attribution, or when the user says they researched something in multiple tools and wants it pulled together.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 1.0.0
-  last-updated: 2025-12-09
+  version: 2.0.0
+  last-updated: 2026-03-07
   target-users: researchers, analysts, decision-makers
 ---
 
-# Research Consolidator Skill
+# Research Consolidator
 
-Consolidate diverse research outputs--from AI models, web searches, and document analyses--into clear, comprehensive, and actionable reports.
+Consolidate diverse research outputs -- from AI models, web searches, and document analyses -- into clear, comprehensive, and actionable reports.
 
-Core principles:
-- **Objectivity**: Present findings without bias toward any single source
-- **Transparency**: Always attribute findings to their sources
-- **Critical Analysis**: Identify conflicts, gaps, and varying confidence levels
-- **Clarity**: Make complex research accessible and actionable
+The core value of consolidation is trust through triangulation. A single source may be wrong, biased, or incomplete. When multiple independent sources converge on the same finding, confidence increases. When they diverge, that divergence itself is valuable information. This skill makes that process systematic rather than ad hoc.
 
-## Core Consolidation Framework
+## Workflow
 
-### 1. Intake & Source Registration
+### 1. Gather Sources
 
-**Supported Input Types:**
-- AI Model Outputs (Claude, GPT-4, Gemini, Perplexity, etc.)
-- Web research summaries and search results
-- Document analyses (PDFs, reports, papers)
-- Data extracts and spreadsheets
-- Expert interviews or notes
-- Previous research compilations
-
-**For each source, capture:**
-```json
-{
-  "source_id": "SRC-001",
-  "source_type": "ai_model|web_research|document|data|expert|other",
-  "source_name": "Claude Deep Research",
-  "model_version": "claude-3-opus (if applicable)",
-  "date_generated": "2025-12-09",
-  "query_or_topic": "Original research question",
-  "file_path": "/path/to/source.md (if applicable)",
-  "credibility_weight": 1.0,
-  "notes": "Any context about this source"
-}
-```
-
-**Ask user to provide:**
-- All research outputs to consolidate (file paths or paste content)
+Ask the user to provide:
+- All research outputs to consolidate (file paths or pasted content)
 - The original research question or topic
-- Any priority weighting for sources
-- Specific focus areas or questions to answer
-- Intended audience for final report
+- Any priority weighting for sources (optional)
+- Intended audience for the final report (optional)
 
-### 2. Content Extraction & Parsing
+**Supported inputs:** AI model outputs (Claude, GPT, Gemini, Perplexity), web research summaries, PDFs/reports/papers, data extracts, expert notes, and previous research compilations.
 
-**Read and parse each source:**
-
+For file-based sources, use the source parser to extract structured elements:
 ```bash
-# For each source file provided
 python ${CLAUDE_PLUGIN_ROOT}/scripts/source_parser.py --input <source_file> --output parsed/
 ```
 
-**Extract structured elements:**
+For pasted content, extract claims, evidence, conclusions, recommendations, and uncertainties directly. See `${CLAUDE_PLUGIN_ROOT}/references/api_reference.md` for the JSON data structures if working with scripts.
 
-| Element | Description | Record As |
-|---------|-------------|-----------|
-| Key Claims | Main assertions or findings | `claims[]` |
-| Evidence | Supporting data, quotes, citations | `evidence[]` |
-| Conclusions | Summary judgments | `conclusions[]` |
-| Recommendations | Suggested actions | `recommendations[]` |
-| Uncertainties | Caveats, limitations noted | `uncertainties[]` |
-| Sources Cited | References within the research | `citations[]` |
+### 2. Analyze Across Sources
 
-**Parsing Template:**
-```json
-{
-  "source_id": "SRC-001",
-  "extracted": {
-    "claims": [
-      {
-        "claim_id": "CLM-001",
-        "text": "The market is expected to grow 15% annually",
-        "category": "market_analysis",
-        "confidence_stated": "high",
-        "evidence_refs": ["EVD-001", "EVD-002"]
-      }
-    ],
-    "evidence": [
-      {
-        "evidence_id": "EVD-001",
-        "text": "Industry reports show consistent 12-18% growth over 5 years",
-        "type": "data|quote|study|example",
-        "original_source": "McKinsey Report 2024"
-      }
-    ],
-    "conclusions": [],
-    "recommendations": [],
-    "uncertainties": []
-  }
-}
-```
+This is where the real value emerges. Read each source carefully, then:
 
-### 3. Cross-Source Analysis
+**Find agreement.** When multiple sources independently reach the same conclusion, that's a strong signal. Map which sources agree on which claims -- a claim supported by 3+ independent sources is far more trustworthy than one from a single source, regardless of how authoritative that source seems.
 
-**After parsing all sources, perform systematic analysis:**
+**Surface conflicts.** Disagreements between sources are not problems to hide -- they're insights. Flag direct contradictions, numerical discrepancies (>20% difference), and opposing recommendations. Document what each side says and why they might differ (different methodology, different data, different time period).
 
-#### 3.1 Claim Alignment Matrix
+**Assess confidence.** Not all sources are equal. Primary research outweighs opinion pieces. Recent data outweighs stale data. Multiple AI models agreeing outweighs a single model. See `${CLAUDE_PLUGIN_ROOT}/references/synthesis_methodology.md` for the detailed source hierarchy, credibility weights, and confidence scoring formula.
 
-Map similar claims across sources:
+**Identify gaps.** What questions did none of the sources address? What was covered by only one source? Where is the data outdated? Gaps are as important as findings because they tell the user where additional research is needed.
 
-| Claim Theme | Source 1 | Source 2 | Source 3 | Agreement |
-|-------------|----------|----------|----------|-----------|
-| Market Growth | 15% annual | 12-18% range | 14% projected | HIGH |
-| Key Risk | Regulation | Competition | Regulation | PARTIAL |
-| Timeline | 2-3 years | 18 months | 2025-2027 | MODERATE |
-
+Use the analysis scripts when working with many sources:
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/claim_alignment.py --sources parsed/*.json --output alignment_matrix.json
-```
-
-#### 3.2 Conflict Identification
-
-**Flag conflicts when:**
-- Direct contradictions (Source A says X, Source B says not-X)
-- Numerical discrepancies beyond reasonable variance (>20% difference)
-- Opposing recommendations
-- Mutually exclusive conclusions
-
-**Conflict Record:**
-```json
-{
-  "conflict_id": "CNF-001",
-  "type": "contradiction|discrepancy|opposing_view",
-  "severity": "high|medium|low",
-  "claims_involved": ["CLM-001", "CLM-015"],
-  "sources_involved": ["SRC-001", "SRC-003"],
-  "description": "Source 1 predicts 15% growth, Source 3 predicts 5% decline",
-  "resolution_approach": "Further investigation needed|Use conservative estimate|Defer to primary source",
-  "resolved_position": "Split the difference at 10% growth given uncertainty"
-}
-```
-
-#### 3.3 Confidence Scoring
-
-**Calculate confidence for each consolidated finding:**
-
-| Factor | Weight | Scoring |
-|--------|--------|---------|
-| Source Agreement | 40% | 3+ sources agree = High, 2 = Medium, 1 = Low |
-| Evidence Quality | 30% | Primary data = High, Secondary = Medium, Opinion = Low |
-| Source Credibility | 20% | Based on source_type and credibility_weight |
-| Recency | 10% | <6 months = High, 6-12 = Medium, >12 = Low |
-
-**Confidence Levels:**
-- **HIGH** (0.8-1.0): Multiple sources agree with quality evidence
-- **MEDIUM** (0.5-0.79): Some agreement or single strong source
-- **LOW** (0.3-0.49): Limited agreement or weak evidence
-- **UNCERTAIN** (<0.3): Conflicting sources or insufficient data
-
-#### 3.4 Gap Identification
-
-**Identify research gaps:**
-
-| Gap Type | Description | Action |
-|----------|-------------|--------|
-| Topic Gap | Subject not covered by any source | Flag for additional research |
-| Source Gap | Topic covered by only one source | Note limited validation |
-| Depth Gap | Topic mentioned but not explored | Consider follow-up |
-| Temporal Gap | Data may be outdated | Verify currency |
-| Perspective Gap | Missing stakeholder viewpoint | Acknowledge limitation |
-
-```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/gap_analyzer.py --sources parsed/*.json --topic-outline topics.json --output gaps.json
 ```
 
-### 4. Synthesis & Consolidation
+### 3. Synthesize Findings
 
-**Synthesize findings into consolidated positions:**
+Merge the cross-source analysis into consolidated positions:
 
-#### 4.1 Consolidation Rules
+- **High agreement:** Merge into a single statement with combined evidence. This is your strongest material.
+- **Partial agreement:** Present the consensus view, note variations. Explain the range rather than picking a single number.
+- **Conflicts:** Present both sides with attribution. Use your judgment on resolution -- defer to more authoritative sources, use conservative estimates for numbers, or flag for user decision on critical questions.
+- **Unique findings:** Include if the source is credible, but note the single-source status so the user understands the limitation.
 
-1. **High Agreement Claims**: Merge into single statement with combined evidence
-2. **Partial Agreement**: Present consensus view, note variations
-3. **Conflicts**: Present both sides, recommend resolution, or flag for user decision
-4. **Unique Findings**: Include if from credible source, note single-source status
+The goal is a coherent narrative, not a data dump. Connect findings to each other and to the user's original question.
 
-#### 4.2 Consolidated Finding Template
+### 4. Resolve Conflicts
 
-```json
-{
-  "finding_id": "FND-001",
-  "category": "market_analysis|risk|opportunity|recommendation|other",
-  "consolidated_statement": "The market is projected to grow 12-15% annually over the next 3 years",
-  "confidence": "HIGH",
-  "confidence_score": 0.85,
-  "supporting_sources": ["SRC-001", "SRC-002", "SRC-004"],
-  "evidence_summary": "Three independent analyses using different methodologies arrived at similar conclusions",
-  "conflicts_noted": [],
-  "caveats": ["Assumes no major regulatory changes", "Based on current market conditions"],
-  "original_claims": ["CLM-001", "CLM-008", "CLM-022"]
-}
-```
+When sources disagree, context determines the right approach:
 
-#### 4.3 Handling Conflicts
+| Situation | Resolution |
+|-----------|------------|
+| One source clearly more expert | Defer to authority, note dissent |
+| Data-dependent disagreement | Use most recent data |
+| Quantitative disagreement | Present range or conservative estimate |
+| Legitimate differing perspectives | Present both views as valid |
+| Critical decision at stake | Flag for user decision |
 
-**Resolution Strategies:**
+For each conflict, document: what the disagreement is, which sources disagree, why they might differ, how you resolved it, and what impact it has on overall conclusions. See `${CLAUDE_PLUGIN_ROOT}/references/synthesis_methodology.md` for the full conflict resolution decision tree.
 
-| Strategy | When to Use | Example |
-|----------|-------------|---------|
-| **Defer to Primary** | One source has clear expertise | Academic study vs blog post |
-| **Recency Wins** | Data-dependent findings | Use most recent market data |
-| **Conservative Estimate** | Quantitative conflicts | Use lower/safer projection |
-| **Present Both** | Legitimate differing views | Note both perspectives |
-| **Flag for User** | Critical decision needed | Ask user to decide |
+### 5. Generate Report
 
-### 5. Report Generation
+Choose the output format based on the user's needs:
 
-**Generate final consolidated report:**
+- **Executive Report** (default): Key findings, conflicts, gaps, and recommendations. Best for decision-makers.
+- **Comparison Matrix**: Side-by-side view of what each source said on each topic. Best for detailed analysis.
+- **Findings Summary**: Bullet-point key findings with confidence levels. Best for quick consumption.
+- **Data Export**: JSON of all structured data for further processing.
+
+See `${CLAUDE_PLUGIN_ROOT}/references/report_templates.md` for complete templates for each format.
 
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/report_generator.py \
   --findings consolidated_findings.json \
   --conflicts conflicts.json \
   --gaps gaps.json \
-  --template templates/executive_report.md \
   --output final_report.md
 ```
 
-#### 5.1 Report Structure
+### 6. Validate
 
-```markdown
-# [Research Topic] - Consolidated Research Report
+Before delivering, verify:
+- All sources are properly attributed (no orphaned claims)
+- Conflicts are identified and addressed
+- Confidence assessments are justified
+- Gaps are acknowledged
+- Executive summary accurately reflects the detailed findings
+- Recommendations are actionable and supported by evidence
 
-## Executive Summary
-- 3-5 key findings
-- Overall confidence assessment
-- Critical conflicts or gaps noted
-- Top recommendations
-
-## Methodology
-- Sources analyzed (count and types)
-- Consolidation approach
-- Confidence scoring explanation
-
-## Key Findings
-
-### Finding 1: [Title]
-**Confidence: HIGH/MEDIUM/LOW**
-
-[Consolidated statement]
-
-**Supporting Evidence:**
-- Source 1 (Claude): [summary]
-- Source 2 (GPT-4): [summary]
-- Source 3 (Web Research): [summary]
-
-**Caveats:** [Any limitations]
-
-### Finding 2: [Title]
-...
-
-## Areas of Conflict
-
-### Conflict 1: [Topic]
-**Sources Disagree On:** [Description]
-
-| Position A | Position B |
-|------------|------------|
-| [View] | [View] |
-| Sources: X, Y | Sources: Z |
-
-**Resolution/Recommendation:** [How addressed]
-
-## Research Gaps
-
-| Gap | Impact | Recommendation |
-|-----|--------|----------------|
-| [Topic not covered] | [Significance] | [Suggested action] |
-
-## Detailed Analysis
-[Full detailed findings by category]
-
-## Source Attribution
-
-| Source ID | Type | Name | Key Contributions |
-|-----------|------|------|-------------------|
-| SRC-001 | AI Model | Claude Deep Research | Market analysis, risk assessment |
-| SRC-002 | Document | Industry Report 2024 | Historical data, projections |
-
-## Appendices
-- A: Full Source Details
-- B: Claim Alignment Matrix
-- C: Confidence Scoring Details
-- D: Raw Extracted Data
-```
-
-### 6. Quality Assurance
-
-**Before finalizing, verify:**
-
-- [ ] All sources properly attributed
-- [ ] No orphaned claims (claims without source)
-- [ ] Conflicts identified and addressed
-- [ ] Confidence scores justified
-- [ ] Gaps acknowledged
-- [ ] Executive summary accurately reflects details
-- [ ] Recommendations actionable and supported
-
-**Run validation:**
 ```bash
 python ${CLAUDE_PLUGIN_ROOT}/scripts/report_validator.py --report final_report.md --sources sources.json
 ```
 
----
+## Working with Different Source Types
 
-## Source Type Handling
+Each source type has characteristic strengths and weaknesses that affect how to weight it:
 
-### AI Model Outputs
+**AI model outputs** tend to be well-structured but may hallucinate facts. Cross-reference factual claims across models -- when multiple models agree on specifics, confidence increases significantly. Always note the model and version.
 
-**Characteristics:**
-- May lack citations to primary sources
-- Can have "hallucinated" facts
-- Generally well-structured
-- May reflect training data biases
+**Web research** varies widely in credibility. Prefer primary sources over commentary. Check publication dates. Be alert to commercial bias in industry content.
 
-**Handling:**
-- Cross-reference factual claims across models
-- Higher confidence when multiple models agree
-- Flag specific facts for verification
-- Note model and version for context
+**Documents and papers** often contain primary research and detailed methodology, but may be dated. Weight based on publication type and recency.
 
-### Web Research
-
-**Characteristics:**
-- May include primary sources
-- Varying credibility (news vs blog vs academic)
-- More current information
-- May have commercial bias
-
-**Handling:**
-- Evaluate source credibility
-- Prefer primary sources
-- Check publication dates
-- Note potential biases
-
-### Document Analysis
-
-**Characteristics:**
-- Often contains primary research
-- May be dated
-- Usually peer-reviewed or professionally produced
-- Detailed methodology typically available
-
-**Handling:**
-- Weight based on publication type
-- Check publication date
-- Note methodology quality
-- Extract specific data points
-
----
-
-## Conflict Resolution Framework
-
-### Decision Tree
-
-```
-Is there a factual conflict?
-├── Yes
-│   ├── Is one source clearly more authoritative?
-│   │   ├── Yes → Defer to authoritative source, note dissent
-│   │   └── No → Is this a quantitative claim?
-│   │       ├── Yes → Use conservative estimate or range
-│   │       └── No → Present both views with attribution
-│   └── Is this a critical finding?
-│       ├── Yes → Flag for user decision
-│       └── No → Note conflict, use best judgment
-└── No (interpretive difference)
-    └── Present as different perspectives, both may be valid
-```
-
-### Conflict Documentation
-
-For each conflict, document:
-1. **What**: Exact nature of disagreement
-2. **Who**: Which sources disagree
-3. **Why**: Possible reasons for conflict (methodology, data, interpretation)
-4. **Resolution**: How you resolved it or why you didn't
-5. **Impact**: How this affects overall conclusions
-
----
-
-## Confidence Scoring Details
-
-### Source Credibility Weights
-
-| Source Type | Base Weight | Adjustments |
-|-------------|-------------|-------------|
-| Peer-reviewed research | 1.0 | +0.1 if recent, -0.2 if >3 years old |
-| Industry reports | 0.9 | +0.1 if primary data |
-| AI model (multiple agree) | 0.8 | +0.1 per additional agreeing model |
-| AI model (single) | 0.6 | -0.1 if unverifiable facts |
-| News articles | 0.7 | -0.2 if opinion piece |
-| Blog/informal | 0.4 | +0.2 if expert author |
-| User-provided notes | 0.5 | Varies by context |
-
-### Agreement Scoring
-
-| Sources Agreeing | Agreement Score |
-|------------------|-----------------|
-| 4+ sources | 1.0 |
-| 3 sources | 0.85 |
-| 2 sources | 0.7 |
-| 1 source | 0.5 |
-| 0 sources (conflict) | 0.3 |
-
-### Final Confidence Calculation
-
-```
-confidence = (agreement_score × 0.4) +
-             (evidence_quality × 0.3) +
-             (avg_source_credibility × 0.2) +
-             (recency_score × 0.1)
-```
-
----
-
-## Output Formats
-
-### Executive Report (Default)
-Full report with executive summary, detailed findings, conflicts, and appendices.
-
-### Comparison Matrix
-Side-by-side view of what each source said on each topic.
-
-### Findings Summary
-Bullet-point summary of key findings with confidence levels.
-
-### Data Export
-JSON export of all structured data for further processing.
-
----
+For detailed source evaluation criteria, load `${CLAUDE_PLUGIN_ROOT}/references/synthesis_methodology.md`.
 
 ## When to Ask User Questions
 
-**Ask for clarification when:**
+Ask for clarification when:
 - Critical conflicts require domain expertise to resolve
 - Research scope is ambiguous
-- Confidence is low on key findings
+- Confidence is low on key findings and inclusion/exclusion matters
 - Significant gaps need prioritization
-- Output format preferences unclear
+- Output format preferences are unclear
 
-**Use AskUserQuestion for:**
-- "Sources conflict on [X]. Which perspective should I prioritize?"
-- "Should I include [topic] despite limited coverage?"
-- "This finding has low confidence. Include or exclude?"
-- "What level of detail do you need for [section]?"
-
----
+Example prompts: "Sources conflict on [X] -- which perspective should I prioritize?", "This finding has low confidence. Include or flag it?", "What level of detail do you need?"
 
 ## Limitations
 
-- Cannot independently verify factual claims
-- Confidence scores are estimates, not guarantees
-- May not catch subtle biases in source material
-- Consolidation reflects available sources only
-- Human review recommended for critical decisions
+- Cannot independently verify factual claims -- consolidation improves confidence but doesn't guarantee truth
+- Confidence scores are estimates based on source agreement and quality, not guarantees
+- May not catch subtle biases embedded in source material
+- Consolidation quality reflects the quality and coverage of the sources provided
 
----
+## Reference Documents (Load as needed)
 
-## Reference Documents
-
-- `${CLAUDE_PLUGIN_ROOT}/references/synthesis_methodology.md` -- Detailed synthesis methodology, source hierarchy, claim extraction framework, confidence scoring system, and quality assurance checklist
-- `${CLAUDE_PLUGIN_ROOT}/references/report_templates.md` -- Standard report templates (executive, comparison matrix, findings summary, JSON data export) with customization guidance
-- `${CLAUDE_PLUGIN_ROOT}/references/api_reference.md` -- Technical reference for data structures, script APIs, JSON schemas, pipeline integration, and error handling
-- `${CLAUDE_PLUGIN_ROOT}/references/user_guide.md` -- Complete user guide with source preparation, basic/advanced consolidation workflows, use cases, troubleshooting, and FAQ
-- `${CLAUDE_PLUGIN_ROOT}/references/workflow_guide.md` -- Step-by-step visual workflows for standard consolidation, AI model comparison, conflict resolution, gap analysis, and executive reporting
+- **`${CLAUDE_PLUGIN_ROOT}/references/synthesis_methodology.md`** -- Source hierarchy, credibility weights, confidence scoring formula, CRAAP test, claim extraction framework, quality assurance checklist. Load when you need detailed scoring guidance.
+- **`${CLAUDE_PLUGIN_ROOT}/references/report_templates.md`** -- Complete report templates (executive, comparison matrix, findings summary, data export) with customization guidance. Load when generating formal reports.
+- **`${CLAUDE_PLUGIN_ROOT}/references/api_reference.md`** -- JSON schemas for all data structures, script APIs, pipeline integration. Load when working with scripts programmatically.
+- **`${CLAUDE_PLUGIN_ROOT}/references/user_guide.md`** -- End-to-end user guide with workflows, use cases, troubleshooting, and FAQ.
+- **`${CLAUDE_PLUGIN_ROOT}/references/workflow_guide.md`** -- Visual step-by-step workflows for common consolidation scenarios.

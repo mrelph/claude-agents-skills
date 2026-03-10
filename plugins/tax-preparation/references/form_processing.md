@@ -257,7 +257,8 @@ RSU holdings should be tracked in the portfolio-analyzer for comprehensive portf
 
 **Export RSU holdings for portfolio tracking**:
 ```bash
-python scripts/rsu_calculator.py lots --vesting-file vestings.csv --output-format json > ../portfolio-analyzer/data/rsu_holdings.json
+python scripts/rsu_calculator.py lots --vesting-file vestings.csv --output-format json > rsu_holdings.json
+# Provide rsu_holdings.json to the portfolio-analyzer skill for concentration risk assessment
 ```
 
 **RSU data format for portfolio-analyzer**:
