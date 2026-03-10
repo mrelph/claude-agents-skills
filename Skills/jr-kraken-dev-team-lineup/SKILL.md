@@ -95,18 +95,23 @@ Pre-built templates: `generate_standard_four_line_lineup()`, `generate_competiti
 
 ## Output Workflow
 
-### Phase 1: Build in Text (Decision-Making)
+**IMPORTANT: Stay in text until Coach Mark locks the lineup.** Do NOT generate Kraken-branded Word documents (bench card, lineup poster, strategy summary) until the coach explicitly confirms the lineup is final. Use phrases like "locked", "finalized", "good to go", "that's it", or "print it" as the signal to move to branded documents.
 
-Work through the lineup in plain text first:
+### Working Phase (Text Only)
+
+All lineup building happens in plain text or via `scripts/lineup_generator.py` output. This keeps iteration fast:
+
 1. Confirm player availability (TeamSnap RSVPs or manual)
 2. Select formation (3-line vs 4-line)
 3. Draft forward lines, defense pairs, goalies, special teams
-4. Note deployment plan based on rankings and game context
-5. Present to Coach Mark for review. Iterate until finalized.
+4. Present to Coach Mark in text -- discuss, adjust, swap players, re-draft
+5. Repeat until Coach Mark says the lineup is locked
 
-### Phase 2: Generate Kraken-Branded Documents
+During this phase, use plain text tables, `lineup_generator.py` formatted output, or simple markdown. No Word documents, no branded assets, no formatted bench cards. Keep it fast and easy to change.
 
-Once finalized, produce Word documents using the **Word skill** and **Kraken branding skill**. See `references/output-formats.md` for the three standard documents (Bench Card, Lineup Poster, Coach Strategy Summary) and other format options.
+### Locked Phase (Branded Documents)
+
+Only after Coach Mark confirms the lineup is locked, produce Kraken-branded Word documents using the **Word skill** and **Kraken branding skill**. See `references/output-formats.md` for the three standard documents (Bench Card, Lineup Poster, Coach Strategy Summary) and other format options.
 
 ## Key Principles
 

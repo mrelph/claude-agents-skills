@@ -1,6 +1,8 @@
 # Output Formats - Kraken-Branded Documents
 
-Once a lineup is finalized, produce three Word documents using the **Word skill** and **Kraken branding skill** in Claude Desktop. All three documents should use Jr. Kraken branding (colors, fonts, logos) via the Kraken branding skill.
+**Only generate these documents after Coach Mark explicitly locks the lineup.** Until then, all work stays in plain text or `lineup_generator.py` output. Trigger phrases: "locked", "finalized", "good to go", "that's it", "print it".
+
+Once locked, produce three Word documents using the **Word skill** and **Kraken branding skill** in Claude Desktop. All three documents should use Jr. Kraken branding (colors, fonts, logos) via the Kraken branding skill.
 
 ## Document 1: Bench Card
 
