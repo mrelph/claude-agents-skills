@@ -19,8 +19,12 @@ If total itemized deductions are near the standard deduction threshold, consider
 - Use donor-advised fund for charitable bunching
 
 ### Multi-Year Projections
+<!-- NOTE: scripts/tax_projector.py does not exist. Use the following existing scripts for tax projection: -->
+<!-- - scripts/estimated_tax_calculator.py (for projected income and quarterly payment calculations) -->
+<!-- - scripts/tax_calculator.py (for federal tax liability calculations across scenarios) -->
 ```bash
-python scripts/tax_projector.py --current-year-data <file.json> --scenarios <params>
+python scripts/estimated_tax_calculator.py --projected-income <amount> --withholding <amount>
+python scripts/tax_calculator.py --gross-income <amount> --filing-status <status> --adjustments <amount>
 ```
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: jr-kraken-18u-navy-lineup
-description: This skill should be used when the user asks to "build a lineup", "create game day lines", "plan strategy for the game", "optimize line combinations", "set up special teams", "plan for player absences", "update our strategy", "change our game plan", "add a new opponent", "update the playbook", or mentions the Jr. Kraken 18U Navy team, Coach Mark, hockey lineup, forward lines, defense pairings, or game strategy.
+description: This skill should be used when the user asks to "build a lineup", "create game day lines", "plan strategy for the game", "optimize line combinations", "set up special teams", "plan for player absences", "update our strategy", "change our game plan", "add a new opponent", "update the playbook", "check who's available", "update player ratings", "upload a new roster", "plan for a tournament", "generate a bench card", or mentions the Jr. Kraken 18U Navy team, Coach Mark, hockey lineup, forward lines, defense pairings, or game strategy.
 allowed-tools: Read, Bash, Write, Glob, Grep, AskUserQuestion, mcp__teamsnap__*
 ---
 
@@ -150,141 +150,11 @@ Assess which position is affected. Use F/D versatile players to fill gaps -- 9 D
 
 ## Updating Power Rankings
 
-Player ratings are **not hardcoded** -- they can be refreshed at any time by uploading a new Excel or CSV file. This updates both `${CLAUDE_PLUGIN_ROOT}/references/roster.md` and the roster in `${CLAUDE_PLUGIN_ROOT}/scripts/lineup_generator.py`.
-
-### How to Update
-
-When a user provides a new roster file (Excel, CSV) or asks to update player ratings:
-
-1. **Save the uploaded file** to a working location.
-2. **Run the update script**:
-
-```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/update_roster.py <path_to_roster.xlsx>
-# or
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/update_roster.py <path_to_roster.csv>
-```
-
-3. **Review the output** -- the script reports what it found and updated.
-4. **Read the refreshed `${CLAUDE_PLUGIN_ROOT}/references/roster.md`** to confirm the new ratings are correct before building any lineups.
-
-### Expected File Format
-
-The Excel or CSV file needs at minimum two columns (case-insensitive, flexible matching):
-
-| Column | Aliases | Required | Example |
-|--------|---------|----------|---------|
-| Name | Name, Player, Player Name | Yes | Massey Relph |
-| Rating | Rating, Power Ranking, Rank, Score | Yes | 1.00 |
-| Position | Position, Pos | No (defaults to F) | F/D |
-| Notes | Notes, Comments | No | Elite at both positions |
-| Can Also Play | Can Also Play, Alt Position | No (goalies) | Forward (emergency) |
-
-Use `G` for goalies in the Position column. Use `F/D` for versatile players.
-
-### Example CSV
-
-```csv
-Name,Position,Rating,Notes
-Massey Relph,F/D,1.00,"Coach's son, elite at both positions"
-Shaya Marsh,F/D,1.00,"Elite talent, leadership"
-Thad Freeman,F/D,1.50,"Versatile two-way player"
-Cas Haffey,G,2.00,"Reliable starter"
-```
-
-### JSON Alternative
-
-For inline updates without a file:
-
-```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/update_roster.py --json '{"players": [
-  {"name": "Massey Relph", "position": "F/D", "rating": 1.00, "notes": "Elite"},
-  {"name": "Shaya Marsh", "position": "F/D", "rating": 1.25, "notes": "Rating adjusted"}
-]}'
-```
-
-### Dry Run
-
-Preview changes without writing files:
-
-```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/update_roster.py --dry-run <path_to_roster.xlsx>
-```
-
-### What Gets Updated
-
-- **`${CLAUDE_PLUGIN_ROOT}/references/roster.md`** -- fully regenerated with new ratings, tiers, positional depth analysis, and deployment notes
-- **`${CLAUDE_PLUGIN_ROOT}/scripts/lineup_generator.py`** -- the internal roster dict is updated to match
-
-### After Updating
-
-After refreshing the roster, re-read `${CLAUDE_PLUGIN_ROOT}/references/roster.md` before building any lineups. The tier groupings (Elite, Strong, Development) and lineup templates may shift based on the new ratings. Pay attention to:
-- Players who moved between tiers (e.g., 2.50 player improved to 2.00)
-- Changes in who needs sheltering
-- Shifts in F/D versatile player count
-- Updated average team rating
+Player ratings are **not hardcoded** -- they can be refreshed at any time by uploading a new Excel or CSV file. Run `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/update_roster.py <path_to_file>` to update both `${CLAUDE_PLUGIN_ROOT}/references/roster.md` and `${CLAUDE_PLUGIN_ROOT}/scripts/lineup_generator.py`. JSON inline updates and dry-run previews are also supported. See `${CLAUDE_PLUGIN_ROOT}/references/roster-management.md` for file format specs, examples, and post-update checklist.
 
 ## Updating Strategy & Game Planning Files
 
-The `${CLAUDE_PLUGIN_ROOT}/references/game-planning.md` and `${CLAUDE_PLUGIN_ROOT}/references/coach-strategy.md` files are **living documents** that can be updated when Coach Mark's approach evolves. When the user asks to update strategy, change the game plan, add opponent scouting, or modify the team's approach, edit these files directly.
-
-### What Can Be Updated
-
-**`${CLAUDE_PLUGIN_ROOT}/references/coach-strategy.md`** — the team's identity and philosophy:
-- Core philosophy and "Balanced Depth" principles
-- Strengths and weaknesses assessment
-- Opponent strategy templates (vs elite skill, vs physical, vs speed, vs weak teams)
-- Special teams philosophy (PP/PK approach)
-- In-game adjustment guidelines
-- Communication messaging (to players, parents, assistant coaches)
-- Season goals and success metrics
-
-**`${CLAUDE_PLUGIN_ROOT}/references/game-planning.md`** — tactical execution:
-- Pre-game preparation checklist
-- Opponent scouting framework
-- Step-by-step lineup construction process
-- Game strategy templates for different opponent types
-- In-game adjustment triggers and fixes
-- Post-game analysis framework
-- Tournament strategy
-- Communication templates
-
-### How to Update
-
-1. **Read the current file first** — always read the full file before making changes to understand the existing structure and avoid breaking the format.
-2. **Make targeted edits** — modify specific sections rather than rewriting the whole file. Preserve the markdown structure, headers, and formatting conventions.
-3. **Keep it name-free** — these files reference players by tier/rating (e.g., "elite tier", "1.50-rated F/D player", "development D-man") rather than by name. Player names belong in `${CLAUDE_PLUGIN_ROOT}/references/roster.md` only. This ensures strategy files stay valid when the roster changes.
-4. **Confirm with the user** — before writing changes, summarize what will be updated and get approval.
-
-### Common Update Scenarios
-
-**"Add a new opponent strategy"**:
-- Add a new `### vs [Opponent Type]` section in `coach-strategy.md` under Game Strategy Templates
-- Add a corresponding game plan template in `game-planning.md` if detailed tactical planning is needed
-- Structure it like existing templates: Their Strengths, Their Weaknesses, Our Strategy, Keys
-
-**"Update our PK/PP approach"**:
-- Edit the Special Teams Philosophy section in `coach-strategy.md`
-- Update Step 7 (Assign Special Teams) in `game-planning.md` if the personnel selection criteria change
-
-**"Change our in-game adjustment approach"**:
-- Edit the In-Game Adjustments section in `coach-strategy.md` (high-level philosophy)
-- Edit the corresponding section in `game-planning.md` (tactical details and triggers)
-
-**"We learned something from last game"**:
-- Incorporate insights into the relevant strategy template or adjustment section
-- If it's a recurring pattern, add it to the game-planning.md adjustment triggers
-
-**"Our identity is evolving"**:
-- Update the Core Philosophy and Team Identity sections in `coach-strategy.md`
-- Review all downstream sections (strengths, weaknesses, opponent strategies) for consistency with the new identity
-
-### Rules for Edits
-
-- **Never hardcode player names** in these files — use tier/rating references only
-- **Preserve the overall structure** — don't remove headers or reorganize sections without asking
-- **Keep it actionable** — strategy files should contain concrete guidance, not vague aspirations
-- **Cross-reference roster.md** — when strategy depends on specific roster capabilities (e.g., "9 D-capable players"), add a note like "(see `roster.md` for current count)" so it stays accurate after roster updates
+The `${CLAUDE_PLUGIN_ROOT}/references/game-planning.md` and `${CLAUDE_PLUGIN_ROOT}/references/coach-strategy.md` files are living documents. When Coach Mark's approach evolves, edit them directly. Keep edits name-free (use tier/rating references only) and confirm changes with the user before writing. See `${CLAUDE_PLUGIN_ROOT}/references/file-management.md` for update procedures, common scenarios, and editing rules.
 
 ## Using the Lineup Generator Script
 
@@ -381,93 +251,11 @@ Present the text lineup to Coach Mark for review and adjustments. Use the `${CLA
 
 ### Phase 2: Generate Word Documents (Kraken-Branded)
 
-Once the lineup is finalized, produce three Word documents using the **Word skill** and **Kraken branding skill** in Claude Desktop. All three documents should use Jr. Kraken branding (colors, fonts, logos) via the Kraken branding skill.
-
-#### Document 1: Bench Card
-
-A compact, laminate-ready reference card for the coach to hold on the bench during the game.
-
-**Contents**:
-- Game header: Opponent, date, time, location
-- Forward lines: Line 1-4 with LW / C / RW and line role (Elite, Skilled, Grind, Development)
-- Defense pairs: Pair 1-3 with LD / RD and pair role (Shutdown, Two-Way, Sheltered)
-- Goalies: Starter and backup
-- Power play units: PP1 and PP2 with player names and formation (umbrella/overload)
-- Penalty kill units: PK1 and PK2 with player names and system (box+1/passive)
-- Situational notes: Late game (protecting lead / need goal), overtime shifts
-- Sheltering reminders: Development player deployment limits (shift length, zone starts, minutes cap)
-
-**Format**: Single page, landscape orientation, dense layout with clear sections. Designed to be printed, laminated, and used on the bench. Large enough font to read at a glance.
-
-#### Document 2: Lineup Poster
-
-A locker room display for the team to see before the game.
-
-**Contents**:
-- Game header: "NAVY vs [OPPONENT]" with date and location
-- Forward lines: Line 1-4 with player names in a clear visual layout
-- Defense pairs: Pair 1-3 with player names
-- Goalies: Starter (highlighted) and backup
-- Special teams: PP and PK units
-- Game focus: 2-3 tactical bullet points for this game (e.g., "Heavy forecheck", "Roll four lines", "Third period is OURS")
-- Team identity reminder: "Balanced Depth" tagline or motivational message
-
-**Format**: Single page, portrait orientation, clean and bold. Designed to be printed large (11x17 or taped to the locker room wall). Player names should be prominent. Kraken branding throughout.
-
-#### Document 3: Coach Strategy Summary
-
-A game plan overview for Coach Mark and assistant coaches.
-
-**Contents**:
-- Game header: Opponent, date, time, location, game type (league/tournament/playoff)
-- Opponent scouting: Their style, strengths, weaknesses, key threats (if known)
-- Strategic objectives: 2-3 tactical priorities for this game
-- Full lineup: Forward lines, defense pairs, goalies with ratings and roles
-- Special teams: PP and PK units with formations
-- Deployment plan: Ice time targets per line/pair, zone start preferences
-- Sheltering plan: Specific deployment limits for development players
-- Adjustment triggers: What to watch for and how to respond (line shuffles, F/D moves, 3-line collapse)
-- Period-by-period approach: P1 (establish), P2 (maintain), P3 (take control)
-- Communication notes: Pre-game message to team, key coaching points
-
-**Format**: 1-2 pages, portrait orientation, detailed but scannable. Sections with headers, bullet points, and tables. Designed for the coach to review before the game and reference during intermissions. Kraken branding on header/footer.
-
-### When to Generate Which Documents
-
-| Scenario | Text | Bench Card | Lineup Poster | Strategy Summary |
-|----------|------|------------|---------------|------------------|
-| Quick lineup check | Yes | No | No | No |
-| Standard league game | Yes | Yes | Yes | Optional |
-| Rivalry / tough opponent | Yes | Yes | Yes | Yes |
-| Tournament game | Yes | Yes | Yes | Yes |
-| Playoff game | Yes | Yes | Yes | Yes |
-| In-game adjustment | Yes | No | No | No |
-
-### Other Output Formats
-
-For non-standard requests, the skill can also produce:
-- **Email templates** -- formatted lineup emails with game details, lineup, and tactical focus
-- **Spreadsheets** -- season tracking, player combinations, ice time analysis (use Excel/spreadsheet skill)
-- **Presentation slides** -- team meetings or parent presentations (use PowerPoint/slides skill)
+Once the lineup is locked, produce three Kraken-branded Word documents using the Word skill and Kraken branding skill. See `references/output-templates.md` for Bench Card, Lineup Poster, and Coach Strategy Summary specifications.
 
 ## Sheltering Guidelines
 
-Development players (2.50+ tier) require special deployment considerations in every lineup. See `${CLAUDE_PLUGIN_ROOT}/references/roster.md` for current development players, their ratings, and detailed sheltering plans.
-
-**Development Forwards (2.50 tier)**:
-- Deploy on the third or fourth line only
-- Pair with 1.50-1.75+ rated linemates for support
-- Prefer offensive zone starts when possible
-- Limit penalty kill duty
-- Give development chances but protect from tough matchups
-- Target ice time: 8-12 minutes (regular), 5-8 minutes (competitive/playoff)
-
-**Development Defensemen (3.00 tier)**:
-- Deploy on the third defense pair only
-- **Always** pair with a strong, experienced partner (1.75 or better)
-- Limit ice time in critical situations
-- Assign simple, structured defensive tasks
-- Target ice time: 6-10 minutes (regular), 3-6 minutes (competitive/playoff)
+See `${CLAUDE_PLUGIN_ROOT}/references/roster.md` for development player sheltering guidelines, ice time targets, and deployment restrictions.
 
 ## Tips for Success
 

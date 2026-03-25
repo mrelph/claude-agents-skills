@@ -1,9 +1,9 @@
 ---
 name: portfolio-analyzer
-description: This skill should be used when the user asks to "analyze my portfolio", "review my investments", "check my asset allocation", "how is my portfolio performing", "what should I rebalance", "compare to benchmarks", or provides brokerage statements, holdings CSVs, portfolio PDFs, or screenshots. Also triggered by mentions of portfolio risk, concentration, diversification, sector allocation, or investment performance metrics.
+description: This skill should be used when the user asks to "analyze my portfolio", "review my investments", "check my asset allocation", "how is my portfolio performing", "what should I rebalance", "compare to benchmarks", "do you have concerns with my portfolio", "is my allocation appropriate for retirement", or provides brokerage statements, holdings CSVs, portfolio PDFs, or screenshots. Also triggered by mentions of portfolio risk, concentration, diversification, sector allocation, or investment performance metrics.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 2.3.0
+  version: 3.0.0
   last-updated: 2025-10-30
 ---
 
@@ -20,9 +20,11 @@ Extract holdings from PDFs, CSVs, or screenshots into standardized JSON format.
 **Scripts**:
 - `python ${CLAUDE_PLUGIN_ROOT}/scripts/extract_pdf_portfolio.py <file.pdf> > holdings.json` - Extract from PDF statements
 - `python ${CLAUDE_PLUGIN_ROOT}/scripts/parse_csv_portfolio.py <file.csv> > holdings.json` - Parse CSV files
-- Use Tesseract OCR for screenshots, then process extracted text
+- For screenshots, use the Read tool to view the image directly and extract holdings data into the target JSON format manually.
 
 **Validation**: Check scripts exist with `ls ${CLAUDE_PLUGIN_ROOT}/scripts/*.py`. If missing, create them or work manually.
+
+See `${CLAUDE_PLUGIN_ROOT}/examples/sample_holdings.json` for the expected holdings data format.
 
 **Target JSON fields**: symbol, description, quantity, price, value, cost_basis, gain_loss
 
@@ -100,7 +102,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/calculate_portfolio_metrics.py holdings.jso
 
 **Word reports**: Use python-docx to generate .docx files for monthly reviews, comprehensive reports, or formal presentations. Install with `pip install python-docx` if needed. Create formatted documents with executive summary, performance tables, and recommendations.
 
-**Excel spreadsheets**: Use pandas to create multi-sheet workbooks (Holdings, Metrics, Performance) for detailed data, tracking, or what-if analysis.
+**Excel spreadsheets**: For Excel output, use pandas in a Bash script to create multi-sheet workbooks, or generate CSV files as an alternative. Sheets typically include Holdings, Metrics, and Performance for detailed data, tracking, or what-if analysis.
 
 **Naming**: `portfolio_analysis_YYYY-MM-DD.docx` / `portfolio_data_YYYY-MM-DD.xlsx`
 

@@ -433,10 +433,11 @@ User: I need more detail on [specific section]. Please expand with:
 
 ### Q: How does confidence scoring work?
 
-Confidence is calculated using four factors:
-- **Source Agreement (40%)**: How many sources agree on the finding
-- **Evidence Quality (30%)**: Is it backed by data, studies, or just opinion
+Confidence is calculated using five factors:
+- **Source Agreement (35%)**: How many sources agree on the finding
+- **Evidence Quality (25%)**: Is it backed by data, studies, or just opinion
 - **Source Authority (20%)**: How credible is the source (academic > blog)
+- **Verification Status (10%)**: Whether the finding is independently verifiable
 - **Recency (10%)**: How current is the information
 
 ### Q: Can I trust findings where AI models agree?
@@ -516,4 +517,4 @@ User: I have a previous consolidation on [topic]. Here's a new source
 
 ---
 
-*User Guide for Research Consolidator Skill v1.0.0*
+*User Guide for Research Consolidator Skill v2.0.0*

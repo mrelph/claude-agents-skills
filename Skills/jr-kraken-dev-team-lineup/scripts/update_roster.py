@@ -50,6 +50,7 @@ SCALES = {
     3: {
         "name": "1-3",
         "max": 3.00,
+        "split_top_tier": False,  # elite_top + elite_strong shown together as "ELITE"
         "elite_top_max": 1.00,
         "elite_strong_max": 1.50,
         "strong_twoway_max": 1.75,
@@ -64,7 +65,12 @@ SCALES = {
             ("2.50", "Role Player - Situational contributor with defined assignments"),
             ("3.00", "Role Player - Specific role, targeted deployment"),
         ],
+        # Display names for tier sections in roster.md
+        "top_tier_name": "ELITE",          # combined elite_top + elite_strong
+        "top_tier_sub1": "Top Tier",        # elite_top sub-heading
+        "top_tier_sub2": "Strong Skilled",  # elite_strong sub-heading
         "elite_range": "1.00-1.50",
+        "best_range": None,                 # not used on 1-3 scale
         "strong_range": "1.75-2.00",
         "role_range": "2.50+",
         "elite_depth_max": 1.50,
@@ -72,24 +78,31 @@ SCALES = {
         "good_avg_threshold": 2.00,
         "warn_low": 0.50,
         "warn_high": 5.00,
+        "summary_elite_label": "Elite",
     },
     5: {
         "name": "1-5",
         "max": 5.00,
+        "split_top_tier": True,  # elite_top = "BEST", elite_strong = "ELITE" (separate sections)
         "elite_top_max": 1.50,
         "elite_strong_max": 2.50,
         "strong_twoway_max": 3.00,
         "strong_middle_max": 3.50,
         "role_situational_max": 4.25,
         "labels": [
-            ("1.00-1.50", "Elite - Top performer"),
-            ("1.75-2.50", "Strong Skilled - Consistent high-level contributor"),
+            ("1.00-1.50", "Best - Top performer, team driver"),
+            ("1.75-2.50", "Elite - Consistent high-level contributor"),
             ("2.75-3.00", "Strong Two-Way - Reliable player"),
             ("3.25-3.50", "Solid Contributor - Consistent middle tier"),
             ("3.75-4.25", "Role Player - Situational contributor with defined assignments"),
             ("4.50-5.00", "Role Player - Specific role, targeted deployment"),
         ],
-        "elite_range": "1.00-2.50",
+        # Display names for tier sections in roster.md
+        "top_tier_name": None,              # not used -- split into best + elite
+        "best_name": "BEST",               # elite_top section heading
+        "elite_name": "ELITE",             # elite_strong section heading
+        "best_range": "1.00-1.50",
+        "elite_range": "1.75-2.50",
         "strong_range": "2.75-3.50",
         "role_range": "3.75+",
         "elite_depth_max": 2.50,
@@ -97,6 +110,7 @@ SCALES = {
         "good_avg_threshold": 3.33,
         "warn_low": 0.50,
         "warn_high": 7.00,
+        "summary_elite_label": "Best+Elite",
     },
 }
 
@@ -320,26 +334,48 @@ def generate_roster_md(players: List[Dict], scale: int) -> str:
                 tbl.append(f"| **{p['name']}** | {p['rating']:.2f} | {p['notes']} |")
         return tbl
 
-    elite_all = cats["elite_top"] + cats["elite_strong"]
-    if elite_all:
-        lines.append("")
-        lines.append(f"## ELITE PLAYERS ({s['elite_range']}) - {len(elite_all)} Players")
+    if s["split_top_tier"]:
+        # 1-5 scale: separate BEST and ELITE sections
         if cats["elite_top"]:
             lines.append("")
-            lines.append(f"### Top Tier (≤{s['elite_top_max']:.2f}) - {len(cats['elite_top'])} Players")
+            lines.append(f"## {s['best_name']} PLAYERS ({s['best_range']}) - {len(cats['elite_top'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["elite_top"]))
             lines.append("")
             lines.append("**Deployment**: Core of top line and all special teams, most ice time in critical situations")
+            lines.append("")
+            lines.append("---")
         if cats["elite_strong"]:
             lines.append("")
-            lines.append(f"### Strong Skilled (≤{s['elite_strong_max']:.2f}) - {len(cats['elite_strong'])} Players")
+            lines.append(f"## {s['elite_name']} PLAYERS ({s['elite_range']}) - {len(cats['elite_strong'])} Players")
             lines.append("")
             lines.extend(_player_table(cats["elite_strong"]))
             lines.append("")
             lines.append("**Deployment**: Top two lines, power play, penalty kill, high-leverage ice time")
-        lines.append("")
-        lines.append("---")
+            lines.append("")
+            lines.append("---")
+    else:
+        # 1-3 scale: combined ELITE section with sub-headings
+        elite_all = cats["elite_top"] + cats["elite_strong"]
+        if elite_all:
+            lines.append("")
+            lines.append(f"## {s['top_tier_name']} PLAYERS ({s['elite_range']}) - {len(elite_all)} Players")
+            if cats["elite_top"]:
+                lines.append("")
+                lines.append(f"### {s['top_tier_sub1']} (≤{s['elite_top_max']:.2f}) - {len(cats['elite_top'])} Players")
+                lines.append("")
+                lines.extend(_player_table(cats["elite_top"]))
+                lines.append("")
+                lines.append("**Deployment**: Core of top line and all special teams, most ice time in critical situations")
+            if cats["elite_strong"]:
+                lines.append("")
+                lines.append(f"### {s['top_tier_sub2']} (≤{s['elite_strong_max']:.2f}) - {len(cats['elite_strong'])} Players")
+                lines.append("")
+                lines.extend(_player_table(cats["elite_strong"]))
+                lines.append("")
+                lines.append("**Deployment**: Top two lines, power play, penalty kill, high-leverage ice time")
+            lines.append("")
+            lines.append("---")
 
     # Strong players
     strong_all = cats["strong_twoway"] + cats["strong_middle"]
@@ -397,8 +433,31 @@ def generate_roster_md(players: List[Dict], scale: int) -> str:
         lines.append("---")
 
     # Positional depth
+    best_max = s["elite_top_max"]
     elite_max = s["elite_depth_max"]
     strong_max = s["strong_depth_max"]
+
+    def _depth_rows(player_list):
+        """Generate tier rows for a positional depth table."""
+        rows = []
+        if s["split_top_tier"]:
+            best_p = [p for p in player_list if p["rating"] <= best_max]
+            elite_p = [p for p in player_list if best_max < p["rating"] <= elite_max]
+            if best_p:
+                rows.append(f"| **Best ({s['best_range']})** | {', '.join(p['name'].split()[-1] for p in best_p)} |")
+            if elite_p:
+                rows.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_p)} |")
+        else:
+            elite_p = [p for p in player_list if p["rating"] <= elite_max]
+            if elite_p:
+                rows.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_p)} |")
+        strong_p = [p for p in player_list if elite_max < p["rating"] <= strong_max]
+        role_p = [p for p in player_list if p["rating"] > strong_max]
+        if strong_p:
+            rows.append(f"| **Strong ({s['strong_range']})** | {', '.join(p['name'].split()[-1] for p in strong_p)} |")
+        if role_p:
+            rows.append(f"| **Role ({s['role_range']})** | {', '.join(p['name'].split()[-1] for p in role_p)} |")
+        return rows
 
     lines.append("")
     lines.append("## POSITIONAL DEPTH ANALYSIS")
@@ -407,15 +466,7 @@ def generate_roster_md(players: List[Dict], scale: int) -> str:
     lines.append("")
     lines.append("| Tier | Players |")
     lines.append("|------|---------|")
-    elite_fwd = [p for p in cats["forwards"] if p["rating"] <= elite_max]
-    strong_fwd = [p for p in cats["forwards"] if elite_max < p["rating"] <= strong_max]
-    role_fwd = [p for p in cats["forwards"] if p["rating"] > strong_max]
-    if elite_fwd:
-        lines.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_fwd)} |")
-    if strong_fwd:
-        lines.append(f"| **Strong ({s['strong_range']})** | {', '.join(p['name'].split()[-1] for p in strong_fwd)} |")
-    if role_fwd:
-        lines.append(f"| **Role ({s['role_range']})** | {', '.join(p['name'].split()[-1] for p in role_fwd)} |")
+    lines.extend(_depth_rows(cats["forwards"]))
     lines.append("")
     lines.append(f"**Four-Line Capability**: {'YES - Core strength' if fwd_count >= 12 else 'Possible with adjustments' if fwd_count >= 9 else 'Limited'}")
 
@@ -424,15 +475,7 @@ def generate_roster_md(players: List[Dict], scale: int) -> str:
     lines.append("")
     lines.append("| Tier | Players |")
     lines.append("|------|---------|")
-    elite_def = [p for p in cats["defense"] if p["rating"] <= elite_max]
-    strong_def = [p for p in cats["defense"] if elite_max < p["rating"] <= strong_max]
-    role_def = [p for p in cats["defense"] if p["rating"] > strong_max]
-    if elite_def:
-        lines.append(f"| **Elite ({s['elite_range']})** | {', '.join(p['name'].split()[-1] for p in elite_def)} |")
-    if strong_def:
-        lines.append(f"| **Strong ({s['strong_range']})** | {', '.join(p['name'].split()[-1] for p in strong_def)} |")
-    if role_def:
-        lines.append(f"| **Role ({s['role_range']})** | {', '.join(p['name'].split()[-1] for p in role_def)} |")
+    lines.extend(_depth_rows(cats["defense"]))
 
     lines.append("")
     lines.append(f"### Versatile F/D Players ({fd_count})" + (" -- CRITICAL ASSET" if fd_count >= 4 else ""))
@@ -469,6 +512,7 @@ def generate_lineup_generator_roster(players: List[Dict], scale: int) -> str:
     """Generate the roster dict block for lineup_generator.py."""
     cats = categorize_players(players, scale)
 
+    s = SCALES[scale]
     lines = []
     lines.append("        self.roster = {")
 
@@ -479,11 +523,22 @@ def generate_lineup_generator_roster(players: List[Dict], scale: int) -> str:
         lines.append(f"                {{'name': '{g['name']}', 'rating': {g['rating']:.2f}, 'can_play': '{cap}'}},")
     lines.append("            ],")
 
-    # Elite
-    lines.append("            'elite': [")
-    for p in sorted(cats["elite_top"] + cats["elite_strong"], key=lambda x: x["rating"]):
-        lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
-    lines.append("            ],")
+    if s["split_top_tier"]:
+        # 1-5 scale: separate best and elite tiers
+        lines.append("            'best': [")
+        for p in sorted(cats["elite_top"], key=lambda x: x["rating"]):
+            lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
+        lines.append("            ],")
+        lines.append("            'elite': [")
+        for p in sorted(cats["elite_strong"], key=lambda x: x["rating"]):
+            lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
+        lines.append("            ],")
+    else:
+        # 1-3 scale: combined elite tier
+        lines.append("            'elite': [")
+        for p in sorted(cats["elite_top"] + cats["elite_strong"], key=lambda x: x["rating"]):
+            lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
+        lines.append("            ],")
 
     # Strong
     lines.append("            'strong': [")
@@ -600,7 +655,11 @@ def main():
     print(f"\nRoster summary:")
     print(f"  Goalies: {len(goalies)}")
     print(f"  Skaters: {len(skaters)}")
-    print(f"  Elite ({s['elite_range']}): {len(cats['elite_top']) + len(cats['elite_strong'])}")
+    if s["split_top_tier"]:
+        print(f"  Best ({s['best_range']}): {len(cats['elite_top'])}")
+        print(f"  Elite ({s['elite_range']}): {len(cats['elite_strong'])}")
+    else:
+        print(f"  Elite ({s['elite_range']}): {len(cats['elite_top']) + len(cats['elite_strong'])}")
     print(f"  Strong ({s['strong_range']}): {len(cats['strong_twoway']) + len(cats['strong_middle'])}")
     print(f"  Role ({s['role_range']}): {len(cats['role_situational']) + len(cats['role_specific'])}")
     print(f"  F/D Versatile: {len(cats['fd_versatile'])}")

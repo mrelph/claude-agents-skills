@@ -1,6 +1,7 @@
 ---
 name: jr-kraken-dev-team-lineup
-description: This skill should be used when the user asks to "build a dev team lineup", "create dev team lines", "dev team game plan", "dev team strategy", "optimize dev team line combinations", "set up dev team special teams", "plan dev team absences", "update dev team playbook", or mentions the Jr. Kraken Development Team, Dev Team lineup, Dev Team game strategy, or Dev Team forward lines. Do NOT use for the 18U Navy team -- use jr-kraken-18u-navy-lineup instead.
+version: 1.0.0
+description: This skill should be used when the user asks to "build a dev team lineup", "create dev team lines", "dev team game plan", "dev team strategy", "optimize dev team line combinations", "set up dev team special teams", "plan dev team absences", "update dev team playbook", "update dev team roster", "update dev team power rankings", "check dev team RSVPs", "print dev team bench card", or mentions the Jr. Kraken Development Team, Dev Team lineup, Dev Team game strategy, or Dev Team forward lines. Do NOT use for the 18U Navy team -- use jr-kraken-18u-navy-lineup instead.
 allowed-tools: Read, Bash, Write, Glob, Grep, AskUserQuestion, mcp__teamsnap__*
 ---
 
@@ -26,10 +27,11 @@ For any lineup or strategy request:
 
 **Read first for every lineup request.** Contains the complete roster organized by position, with ratings, positional flexibility (F, D, F/D), depth analysis, special teams personnel, line templates, and absence contingency plans. Starts empty -- populate by uploading a roster file (see `references/roster-management.md`).
 
-**Tier structure** (see `roster.md` for current names and ratings):
-- **Elite tier (1.00-1.50)**: Top performers and team leaders
-- **Strong tier (1.75-2.00)**: Reliable core contributors
-- **Role tier (2.50-3.00)**: Situational players with defined roles
+**Tier structure** (see `roster.md` for current names and ratings; 1-5 scale splits Best and Elite):
+- **Best tier**: Top performers, team drivers (1-5 scale only; combined with Elite on 1-3 scale)
+- **Elite tier**: Consistent high-level contributors
+- **Strong tier**: Reliable core contributors
+- **Role tier**: Situational players with defined roles
 
 ### Team Strategy (`references/coach-strategy.md`)
 
@@ -91,7 +93,7 @@ lineup.set_goalies("Starter_Name", "Backup_Name")
 print(lineup.generate_lineup_sheet(opponent="Team", date="March 15, 2026"))
 ```
 
-Pre-built templates: `generate_standard_four_line_lineup()`, `generate_competitive_three_line_lineup()`, `generate_vs_elite_rival_lineup()`. Requires roster to be populated first.
+Pre-built templates: `generate_standard_four_line_lineup()`, `generate_competitive_three_line_lineup()`, `generate_vs_elite_rival_lineup()`. Pre-built templates provide strategic notes and formation structure; player assignments must be added manually using the `add_line()` and `add_defense_pair()` methods. Requires roster to be populated first.
 
 ## Output Workflow
 

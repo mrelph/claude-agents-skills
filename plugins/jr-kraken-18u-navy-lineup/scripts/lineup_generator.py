@@ -199,8 +199,8 @@ class NavyLineupGenerator:
         self.add_line(2, "Klakring", "Silliker", "McCredy", "Skilled/Two-Way")
         self.add_line(3, "Bagga", "Herrick", "Jaeger", "Grind/Energy")
         self.add_line(4, "Berry", "Cram", "Tegart", "Development/Sheltered")
-        
-        self.add_defense_pair(1, "Young", "Berry", "Shutdown")
+
+        self.add_defense_pair(1, "Young", "Marsh", "Shutdown")
         self.add_defense_pair(2, "Butler", "Freeman", "Two-Way")
         self.add_defense_pair(3, "Thompson", "Silliker", "Sheltered")
         
@@ -244,7 +244,7 @@ class NavyLineupGenerator:
         self.add_line(3, "Bagga", "Herrick", "Jaeger", "Grind - Wear Them Down")
         self.add_line(4, "Berry", "Cram", "Tegart", "Depth - Fresh Legs")
 
-        self.add_defense_pair(1, "Young", "Berry", "Shutdown Their Elite")
+        self.add_defense_pair(1, "Young", "Marsh", "Shutdown Their Elite")
         self.add_defense_pair(2, "Butler", "Tegart", "Attack Their Tired D")
         self.add_defense_pair(3, "Thompson", "Silliker", "Sheltered")
 

@@ -41,6 +41,7 @@ def run_single_simulation(portfolio, spending, years, returns, inflation):
     """Run single Monte Carlo simulation path"""
     balance = portfolio
     balances = [balance]
+    cumulative_inflation = 1.0
 
     for year in range(years):
         # Apply return
@@ -48,8 +49,8 @@ def run_single_simulation(portfolio, spending, years, returns, inflation):
         balance *= (1 + annual_return / 100)
 
         # Withdraw spending (inflated)
-        inflation_factor = (1 + inflation[year] / 100) ** year
-        withdrawal = spending * inflation_factor
+        cumulative_inflation *= (1 + inflation[year] / 100)
+        withdrawal = spending * cumulative_inflation
         balance -= withdrawal
 
         balances.append(balance)

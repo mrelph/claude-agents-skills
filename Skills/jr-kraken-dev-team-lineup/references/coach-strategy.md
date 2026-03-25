@@ -255,31 +255,9 @@ The Dev Team's identity is built on preparation, ranking-driven deployment, and 
 
 ### vs Elite Skill / Star-Heavy Teams
 
-**Their Typical Strengths**:
-- Multiple elite forwards
-- Speed-based offense
-- Explosive power play
-- High skill ceiling
+**High-Level Philosophy**: Use our depth, systems, and compete level to neutralize their individual talent. Don't try to match their skill -- outwork and outlast them. Our four-line depth and defensive depth are the primary weapons. Third period is when our advantage emerges.
 
-**Their Typical Weaknesses**:
-- Limited D depth (often fewer D-capable players)
-- Top-heavy roster (rely on top 6)
-- Weaker role players at the bottom
-- Less grinding depth
-
-**Our Strategy**:
-1. **Heavy forecheck** -- attack their tired D-men, force turnovers
-2. **Roll four lines** -- wear them down, they can't match our depth
-3. **Strong penalty kill** -- neutralize their PP advantage
-4. **Physical play** -- make them work, finish checks
-5. **Control third period** -- our depth emerges, take over
-6. **Target their D** -- exploit our advantage in defensive depth
-7. **Keep it controlled** -- win 3-2, not 5-4
-
-**Key Matchups**:
-- Our Line 1 vs Their Line 1 (match up their best)
-- Our Lines 2-3-4 vs Their Lines 2-3 (we win here with depth)
-- Our fresh D vs Their tired D (big advantage late)
+> **For detailed tactical game plans, keys, and matchup guidance vs elite/star-heavy teams, see `references/game-planning.md` under "Game Strategy Templates > vs Elite Skill / Star-Heavy Teams".**
 
 ### vs Speed-Based Teams
 

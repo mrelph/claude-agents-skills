@@ -324,7 +324,7 @@ def main():
         content = f.read()
 
     # Set defaults
-    source_id = args.source_id or f"SRC-{input_path.stem[:3].upper()}"
+    source_id = args.source_id or f"SRC-{input_path.stem[:8].upper()}"
     source_name = args.source_name or input_path.name
 
     # Parse the source

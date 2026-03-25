@@ -2,21 +2,6 @@
 
 Player ratings are **not hardcoded** -- refresh them at any time by uploading a new Excel or CSV file. This updates both `references/roster.md` and the roster in `scripts/lineup_generator.py`.
 
-## Rating Scales
-
-The script supports two rating scales (lower is better on both):
-
-| | 1-3 Scale | 1-5 Scale |
-|--|-----------|-----------|
-| **Best** | -- | 1.00-1.50 |
-| **Elite** | 1.00-1.50 | 1.75-2.50 |
-| **Strong** | 1.75-2.00 | 2.75-3.50 |
-| **Role** | 2.50-3.00 | 3.75-5.00 |
-
-> On the 1-3 scale, Best and Elite are combined into a single "Elite" tier. On the 1-5 scale, Best and Elite are separate tiers with distinct sections in the roster.
-
-**Auto-detection**: If any player rating exceeds 3.0, the script uses the 1-5 scale. Otherwise it uses 1-3. Override with `--scale 3` or `--scale 5`.
-
 ## How to Update
 
 When a new roster file (Excel, CSV) is provided or player ratings need updating:
@@ -28,11 +13,9 @@ When a new roster file (Excel, CSV) is provided or player ratings need updating:
 python3 scripts/update_roster.py <path_to_roster.xlsx>
 # or
 python3 scripts/update_roster.py <path_to_roster.csv>
-# Force a specific scale:
-python3 scripts/update_roster.py --scale 5 <path_to_roster.xlsx>
 ```
 
-3. **Review the output** -- the script reports the detected scale, tier counts, and what it updated.
+3. **Review the output** -- the script reports tier counts, positional depth, and what it updated.
 4. **Read the refreshed `references/roster.md`** to confirm the new ratings are correct before building any lineups.
 
 ## Expected File Format
@@ -49,25 +32,30 @@ The Excel or CSV file needs at minimum two columns (case-insensitive, flexible m
 
 Use `G` for goalies in the Position column. Use `F/D` for versatile players.
 
-## Example CSV (1-3 Scale)
+### Rating Scale
+
+The script uses a 1-3 rating scale (lower is better):
+
+| Rating | Tier | Description |
+|--------|------|-------------|
+| 1.00 | Elite | Top tier for 18U C level |
+| 1.50 | Strong Skilled | Solid contributor |
+| 1.75 | Strong Two-Way | Reliable player |
+| 2.00 | Developing Contributor | Consistent middle tier |
+| 2.50 | Developing | Needs sheltered minutes |
+| 3.00 | Significant Development | Requires heavy sheltering |
+
+> Ratings outside the 0.50-5.00 range will generate a warning. The script also accepts a 1-5 scale if ratings exceed 3.0.
+
+## Example CSV
 
 ```csv
 Name,Position,Rating,Notes
 Player One,F/D,1.00,"Elite at both positions"
 Player Two,F/D,1.00,"Elite talent, leadership"
 Player Three,F/D,1.50,"Versatile two-way player"
+Player Four,F,2.00,"Consistent contributor"
 Goalie One,G,2.00,"Reliable starter"
-```
-
-## Example CSV (1-5 Scale)
-
-```csv
-Name,Position,Rating,Notes
-Player One,F/D,1.50,"Elite at both positions"
-Player Two,F,2.00,"Strong skilled forward"
-Player Three,D,3.25,"Solid contributor"
-Player Four,F,4.00,"Role player, situational"
-Goalie One,G,3.00,"Reliable starter"
 ```
 
 ## JSON Alternative
@@ -89,15 +77,19 @@ Preview changes without writing files:
 python3 scripts/update_roster.py --dry-run <path_to_roster.xlsx>
 ```
 
+This prints the generated `roster.md` content to the console so you can review tier assignments and positional depth before committing changes.
+
 ## What Gets Updated
 
 - **`references/roster.md`** -- fully regenerated with new ratings, tiers, positional depth analysis, and deployment notes
 - **`scripts/lineup_generator.py`** -- the internal roster dict is updated to match
 
-## After Updating
+## Post-Update Checklist
 
-After refreshing the roster, re-read `references/roster.md` before building any lineups. The tier groupings (Elite, Strong, Role) and lineup templates may shift based on the new ratings. Pay attention to:
-- Players who moved between tiers
-- Changes in line assignments based on new rankings
-- Shifts in F/D versatile player count
-- Updated average team rating
+After refreshing the roster, verify these before building any lineups:
+
+- [ ] **Read `references/roster.md`** -- confirm new ratings, tier assignments, and player counts are correct
+- [ ] **Check `scripts/lineup_generator.py`** -- verify the roster dict was updated (elite/strong/development groupings)
+- [ ] **Review tier assignments** -- look for players who moved between tiers
+- [ ] **Check F/D versatile count** -- shifts in versatile player count affect formation options
+- [ ] **Review average team rating** -- significant changes may affect strategy recommendations

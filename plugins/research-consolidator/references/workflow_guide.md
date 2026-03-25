@@ -644,4 +644,4 @@ Rapid workflow for simple source comparisons.
 
 ---
 
-*Workflow Guide for Research Consolidator Skill v1.0.0*
+*Workflow Guide for Research Consolidator Skill v2.0.0*

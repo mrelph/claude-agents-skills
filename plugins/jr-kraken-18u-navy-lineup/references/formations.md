@@ -23,20 +23,20 @@ This document outlines tactical formations, line deployment strategies, and syst
 
 ```
 LINE 1 - Elite/Offensive (35-40% ice time)
-LW: Marsh (1.00)    C: Relph (1.00)    RW: Freeman (1.50)
+LW: 1.00 F/D    C: 1.00 F/D    RW: 1.50 F/D
 Focus: Offensive production, top matchup line, all special teams
 
 LINE 2 - Skilled/Two-Way (30-35% ice time)
-LW: Klakring (1.50)    C: Silliker (1.50)    RW: McCredy (1.75)
+LW: 1.50 F    C: 1.50 F/D    RW: 1.75 F
 Focus: Two-way play, reliable in all situations, PP2 and PK
 
 LINE 3 - Grind/Energy (20-25% ice time)
-LW: Bagga (2.00)    C: Herrick (2.00)    RW: Jaeger (2.00)
+LW: 2.00 F    C: 2.00 F    RW: 2.00 F
 Focus: Energy, physicality, forecheck, defensive responsibility
 
 LINE 4 - Depth/Development (10-15% ice time)
-LW: Berry (2.00)    C: Cram (2.50)    RW: Tegart (2.00)
-Focus: Sheltered minutes for Cram, energy shifts, simple assignments
+LW: 2.00 F/D    C: 2.50 dev F    RW: 2.00 F/D
+Focus: Sheltered minutes for development F, energy shifts, simple assignments
 ```
 
 **Rotation Strategy**:
@@ -50,14 +50,14 @@ Focus: Sheltered minutes for Cram, energy shifts, simple assignments
 - Fresh legs all game
 - Third period dominance (opponents tire, we don't)
 - Can handle absences easily
-- Development opportunities for Cram
+- Development opportunities for development forward
 
 ### Three-Line System (COMPETITIVE GAMES)
 
 **When to Use**:
 - Close playoff games
 - Against very strong opponents
-- When Thompson is unavailable (need Berry on defense more)
+- When development D is unavailable (need F/D player on defense more)
 - Late in close games
 - When we need maximum firepower
 
@@ -67,20 +67,20 @@ Focus: Sheltered minutes for Cram, energy shifts, simple assignments
 
 ```
 LINE 1 - Elite (40-45% ice time)
-LW: Marsh (1.00)    C: Relph (1.00)    RW: Freeman (1.50)
+LW: 1.00 F/D    C: 1.00 F/D    RW: 1.50 F/D
 Focus: Carry the offense, dominate shifts
 
 LINE 2 - Skilled (35-40% ice time)
-LW: Klakring (1.50)    C: Silliker (1.50)    RW: McCredy (1.75)
+LW: 1.50 F    C: 1.50 F/D    RW: 1.75 F
 Focus: Two-way dominance, eat minutes
 
 LINE 3 - Energy/Depth (20-25% ice time)
-LW: Bagga (2.00)    C: Herrick (2.00)    RW: Jaeger (2.00)
+LW: 2.00 F    C: 2.00 F    RW: 2.00 F
 Focus: High-energy shifts, simple play, tire opponents
 
 SPOT DUTY:
-- Tegart (2.00): 5-8 minutes, energy shifts
-- Cram (2.50): 3-5 minutes, very sheltered, offensive zone only
+- 2.00 F/D player: 5-8 minutes, energy shifts
+- 2.50 dev F: 3-5 minutes, very sheltered, offensive zone only
 ```
 
 **Rotation Strategy**:
@@ -93,7 +93,7 @@ SPOT DUTY:
 - Maximum ice time for best players
 - Can match up against elite opponents
 - Still have depth when needed
-- Cram and Tegart still contribute
+- Development and depth F/D players still contribute
 
 ---
 
@@ -107,16 +107,16 @@ SPOT DUTY:
 
 ```
 PAIR 1 - Top/Shutdown (40-45% ice time)
-LD: Young (1.75)    RD: Berry (2.00) or Marsh (1.00)
+LD: 1.75 dedicated D    RD: 1.00 elite F/D or 2.00 F/D
 Focus: Against opponent's top line, defensive responsibility, PK
 
-PAIR 2 - Two-Way/Balanced (35-40% ice time)  
-LD: Butler (2.00)    RD: Freeman (1.50) or Tegart (2.00)
+PAIR 2 - Two-Way/Balanced (35-40% ice time)
+LD: 2.00 dedicated D    RD: 1.50 F/D or 2.00 F/D
 Focus: All situations, reliable, can jump into rush
 
 PAIR 3 - Development/Sheltered (20-25% ice time)
-LD: Thompson (3.00)    RD: Silliker (1.50) or Berry (2.00)
-Focus: Sheltered minutes for Thompson, offensive zone starts
+LD: 3.00 dev D    RD: 1.50 F/D or 2.00 F/D (strong partner always)
+Focus: Sheltered minutes for development D, offensive zone starts
 ```
 
 **Note**: Actual pairs can vary based on who's playing forward vs defense
@@ -125,11 +125,11 @@ Focus: Sheltered minutes for Thompson, offensive zone starts
 - Pair 1 → Pair 2 → Pair 3 → repeat
 - Shorten Pair 3 shifts (45-60 seconds)
 - Can run Pairs 1 and 2 back-to-back if needed
-- Thompson ALWAYS with experienced partner
+- Development D ALWAYS with experienced partner
 
 **Advantages**:
 - Fresh legs on defense all game (9 D-capable players)
-- Can shelter Thompson
+- Can shelter development D
 - Flexibility to move players forward if needed
 - Strong PK depth
 
@@ -144,10 +144,10 @@ Focus: Sheltered minutes for Thompson, offensive zone starts
 **Pair Structure**:
 
 ```
-PAIR 1: Young (1.75) - Marsh (1.00)
-PAIR 2: Butler (2.00) - Freeman (1.50)
-PAIR 3: Berry (2.00) - Tegart (2.00)
-PAIR 4: Thompson (3.00) - Silliker (1.50)
+PAIR 1: 1.75 dedicated D - 1.00 elite F/D
+PAIR 2: 2.00 dedicated D - 1.50 F/D
+PAIR 3: 2.00 F/D - 2.00 F/D
+PAIR 4: 3.00 dev D - 1.50 F/D (strong partner always)
 ```
 
 **Rotation**: Equal-ish shifts (Pair 4 slightly less)
@@ -169,8 +169,8 @@ PAIR 4: Thompson (3.00) - Silliker (1.50)
 **Pair Structure**:
 
 ```
-PAIR 1: Young (1.75) - Marsh (1.00) or Freeman (1.50)
-PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
+PAIR 1: 1.75 dedicated D - 1.00 elite F/D or 1.50 F/D
+PAIR 2: 2.00 dedicated D - 2.00 F/D
 ```
 
 **Rotation**: Back-and-forth, 60-90 second shifts
@@ -187,27 +187,27 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 **Formation**:
 ```
-         Klakring (1.50)
+         1.50 F (net-front)
               |
               |
-    Marsh --- Relph --- Freeman
-    (1.00)    (1.00)    (1.50)
-         
-         Young (1.75)
+    1.00 F/D --- 1.00 F/D --- 1.50 F/D
+    (half-wall)  (QB/slot)    (half-wall)
+
+         1.75 D (point)
 ```
 
 **Roles**:
-- **Relph (C)**: Quarterback, setup man, high slot
-- **Marsh (L)**: Left half-wall, shot threat, pass option
-- **Freeman (R)**: Right half-wall, shoot/pass
-- **Klakring (High F)**: Net-front, screens, tips, rebounds
-- **Young (Point)**: Blue line, one-timer threat, pass option
+- **Center (1.00 F/D)**: Quarterback, setup man, high slot
+- **Left (1.00 F/D)**: Left half-wall, shot threat, pass option
+- **Right (1.50 F/D)**: Right half-wall, shoot/pass
+- **High F (1.50 F)**: Net-front, screens, tips, rebounds
+- **Point (1.75 D)**: Blue line, one-timer threat, pass option
 
 **Keys**:
 - Puck movement, tire PK
-- Get Klakring in front for screens
-- Shoot from point (Young) for tips/rebounds
-- Marsh and Freeman: shoot or pass threats
+- Get net-front F in front for screens
+- Shoot from point (D) for tips/rebounds
+- Half-wall F/D players: shoot or pass threats
 
 #### PP2 - Overload Formation (SECOND UNIT)
 
@@ -215,13 +215,13 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 **Formation**:
 ```
-         McCredy (1.75)
+         1.75 F (net-front)
               |
               |
-    Silliker - Herrick - Bagga
-    (1.50)    (2.00)    (2.00)
-         
-         Berry (2.00)
+    1.50 F/D - 2.00 F - 2.00 F
+    (half-wall) (slot)  (half-wall)
+
+         2.00 F/D (point)
 ```
 
 **Philosophy**: Shoot first, crash net, get pucks on goal
@@ -250,10 +250,10 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 ```
 
 **Standard PK1 Personnel**:
-- **F1** (Pressure): Silliker (1.50) or Freeman (1.50)
-- **F2** (Box Forward): Tegart (2.00) or McCredy (1.75)
-- **D1** (Strong Side D): Young (1.75)
-- **D2** (Weak Side D): Butler (2.00)
+- **F1** (Pressure): 1.50 F/D two-way forward
+- **F2** (Box Forward): 2.00 F/D or 1.75 F
+- **D1** (Strong Side D): 1.75 dedicated D
+- **D2** (Weak Side D): 2.00 dedicated D
 
 **Keys**:
 - F1 pressures puck carrier aggressively
@@ -293,8 +293,8 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 ### Offensive Zone Faceoffs
 
 **Best Offensive Players**:
-1. **Marsh-Relph-Freeman line** (Line 1)
-2. **Klakring-Silliker-McCredy line** (Line 2)
+1. **Line 1** (elite tier forwards)
+2. **Line 2** (skilled tier forwards)
 
 **Strategy**:
 - Use best skill players
@@ -304,8 +304,8 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 ### Defensive Zone Faceoffs
 
 **Best Defensive Players**:
-1. **Silliker-Freeman-Tegart-McCredy** (Strong defensive forwards)
-2. **Young-Butler or Young-Berry pairs** (Shutdown defense)
+1. **Strong two-way forwards** (1.50 F/D players and 1.75 F)
+2. **Top D pairs** (1.75 D with 2.00 D or F/D partner)
 
 **Strategy**:
 - Win draw, clear zone
@@ -322,28 +322,28 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 ### Late Game Situations
 
 **Protecting Lead (Last 2 Minutes)**:
-- Line 1: Marsh-Relph-Freeman (if fresh)
-- Line 2: Klakring-Silliker-McCredy (if Line 1 tired)
-- Defense: Young-Butler or Young-Berry
-- **Do NOT use**: Line 4 with Cram, Pair 3 with Thompson
+- Line 1: Elite line (if fresh)
+- Line 2: Skilled line (if Line 1 tired)
+- Defense: Top pair (1.75 D + strong F/D partner)
+- **Do NOT use**: Development line or development D pair
 
 **Need Goal (Last 2 Minutes)**:
-- Line 1: Marsh-Relph-Freeman
-- Pair 1: Young-Marsh OR Young-Berry
+- Line 1: Elite line
+- Pair 1: Top D pair or elite F/D shifted to D
 - Pull goalie at 90 seconds if down 1, 2 minutes if down 2
-- **Extra Attacker**: Klakring or Silliker (skilled, responsible)
+- **Extra Attacker**: 1.50 skilled forward (responsible, two-way)
 
 ### Overtime Strategy (3v3 or 4v4)
 
 **3-on-3 OT Personnel**:
-- **Shift 1**: Marsh-Relph-Young (elite shift)
-- **Shift 2**: Freeman-Silliker-Butler (two-way shift)
-- **Shift 3**: Klakring-McCredy-Berry (balanced shift)
+- **Shift 1**: Two 1.00 elite F/D + 1.75 D (elite shift)
+- **Shift 2**: 1.50 F/D + 1.50 F/D + 2.00 D (two-way shift)
+- **Shift 3**: 1.50 F + 1.75 F + 2.00 F/D (balanced shift)
 - Rotate short shifts (45-60 seconds max)
 
 **4-on-4 OT Personnel**:
-- **Line 1**: Marsh-Relph / Young-Berry
-- **Line 2**: Freeman-Silliker / Butler-Tegart
+- **Line 1**: Two 1.00 elite F/D / 1.75 D + 2.00 F/D
+- **Line 2**: Two 1.50 F/D / 2.00 D + 2.00 F/D
 - Standard shifts (60-90 seconds)
 
 ---
@@ -407,8 +407,8 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 **Throughout Game**:
 - Roll four lines evenly
-- Give Cram extra ice time
-- Thompson gets safer minutes
+- Give development forward extra ice time
+- Development D gets safer minutes
 - Development focus
 - Prepare backup goalie to play
 
@@ -421,13 +421,13 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 **Line 1**: 60-90 seconds (can extend in critical situations)
 **Line 2**: 60-90 seconds (workhorses, eat minutes)
 **Line 3**: 60-75 seconds (high energy, shorter shifts)
-**Line 4**: 45-60 seconds (keep Cram fresh, limit exposure)
+**Line 4**: 45-60 seconds (keep development F fresh, limit exposure)
 
 ### Defense Shift Length
 
 **Pair 1**: 60-90 seconds (can extend if needed)
 **Pair 2**: 60-90 seconds (balanced, reliable)
-**Pair 3**: 45-60 seconds (protect Thompson, shorter shifts)
+**Pair 3**: 45-60 seconds (protect development D, shorter shifts)
 
 ### Line Matching Philosophy
 
@@ -445,14 +445,12 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 ## Special Deployment: F/D Versatile Players
 
-### Six Versatile Players
+### Six Versatile Players (see `roster.md` for current names)
 
-1. **Marsh (1.00)** - Elite at both F and D
-2. **Relph (1.00)** - Elite at both F and D
-3. **Freeman (1.50)** - Strong at both F and D
-4. **Silliker (1.50)** - Primarily F, can play D
-5. **Berry (2.00)** - Solid at both F and D
-6. **Tegart (2.00)** - Solid at both F and D
+1. **Two 1.00-rated F/D** - Elite at both F and D
+2. **One 1.50-rated F/D** - Strong at both F and D
+3. **One 1.50-rated F/D** - Primarily F, can play D
+4. **Two 2.00-rated F/D** - Solid at both F and D
 
 ### When to Move Players
 
@@ -470,13 +468,13 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 ### Common Adjustments
 
-**Most Flexible**: Marsh, Relph (elite at both)
-**Easy Moves**: Freeman, Berry, Tegart (good at both)
-**Emergency Only**: Silliker (primarily forward, but can help on D)
+**Most Flexible**: 1.00-rated elite F/D players (elite at both)
+**Easy Moves**: 1.50 and 2.00-rated F/D players (good at both)
+**Emergency Only**: F/D players who are primarily forward but can help on D
 
 **Example Mid-Game Adjustment**:
-- If down a forward: Move Berry or Tegart to forward, balance defensive pairs
-- If down a defenseman: Move Freeman to defense, balance forward lines
+- If down a forward: Move a 2.00 F/D to forward, balance defensive pairs
+- If down a defenseman: Move a 1.50 F/D to defense, balance forward lines
 
 ---
 
@@ -486,24 +484,24 @@ PAIR 2: Butler (2.00) - Berry (2.00) or Tegart (2.00)
 
 **Philosophy**: Both goalies split time roughly 50/50
 
-**Haffey**:
+**Goalie 1**:
 - Solid all-around
 - Can play forward in emergency
-- Give him equal opportunities
+- Give equal opportunities
 
-**Schuchart**:
+**Goalie 2**:
 - Experienced, can play out
 - Can play defense in emergency
-- Give him equal opportunities
+- Give equal opportunities
 
 ### Game Assignment Factors
 
-**Start Haffey When**:
+**Start Goalie 1 When**:
 - Against skill-based, high-shot teams (rely on positioning)
 - Back-to-back games (alternate)
 - Strong recent performance
 
-**Start Schuchart When**:
+**Start Goalie 2 When**:
 - Against physical, grinding teams
 - Back-to-back games (alternate)
 - Strong recent performance
@@ -524,13 +522,13 @@ Use practice time to experiment with lines before using them in games:
 
 ### Experimentation Ideas
 
-**Try moving Marsh**:
-- Line 1 at forward vs Line 1 at defense
-- Which maximizes his impact?
+**Try moving elite F/D players**:
+- Line 1 at forward vs Pair 1 at defense
+- Which maximizes their impact?
 
 **Test chemistry combinations**:
-- Which 2.00 players work well together?
-- Can Cram succeed with different linemates?
+- Which 2.00-rated players work well together?
+- Can the development forward succeed with different linemates?
 
 **Special teams testing**:
 - Try different PP formations

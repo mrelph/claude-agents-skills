@@ -768,4 +768,4 @@ python scripts/source_parser.py --input file.md 2>&1 | tee debug.log
 
 ---
 
-*API Reference for Research Consolidator Skill v1.0.0*
+*API Reference for Research Consolidator Skill v2.0.0*

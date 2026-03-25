@@ -2,9 +2,9 @@
 name: retirement-planner
 description: This skill should be used when the user asks "am I ready to retire", "when can I retire", "Social Security claiming strategy", "Roth conversion analysis", "withdrawal strategy", "how much do I need to retire", "Monte Carlo simulation", "retirement income plan", or mentions 401(k), IRA, RMD, pension, Medicare planning, or retirement savings targets. Also triggered by questions about retirement spending, sequence of returns risk, or survivor benefits.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
+version: 2.0.0
 metadata:
-  version: 1.1.0
-  last-updated: 2026-03-07
+  last-updated: 2026-03-25
   target-users: pre-retirees and families
   tax-year: 2025
   annual-review: Update ${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md each January with new IRS limits, IRMAA thresholds, and SSA figures.
@@ -63,9 +63,7 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/retirement_calculator.py --current-income <
 
 **Healthcare costs** (critical for pre-Medicare years):
 - See `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current cost estimates by age band
-- Age 55-65: ACA marketplace, COBRA, spousal coverage
-- Age 65+: Medicare Parts A/B/D, Medigap, out-of-pocket
-- Long-term care insurance or self-insure reserves
+- See `${CLAUDE_PLUGIN_ROOT}/references/healthcare_guide.md` for detailed cost estimates by age, Medicare parts, and long-term care planning
 
 ### 3. Project Retirement Income Sources
 
@@ -112,20 +110,11 @@ python ${CLAUDE_PLUGIN_ROOT}/scripts/tax_strategy.py --scenario roth-conversion 
 **Key strategies**:
 - **Pre-retirement conversions**: Fill lower brackets before RMDs/SS start (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current bracket thresholds)
 - **Early retirement conversions**: Age 62-70 window before SS, ideal for conversions
-- **Medicare IRMAA considerations**: Keep MAGI below IRMAA thresholds (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current thresholds by filing status)
+- **Medicare IRMAA considerations**: Keep MAGI below IRMAA thresholds (see `${CLAUDE_PLUGIN_ROOT}/references/annual_limits.md` for current thresholds by filing status; see `${CLAUDE_PLUGIN_ROOT}/references/retirement_rules.md` for detailed IRMAA brackets)
 - **State tax planning**: Consider residency changes, no-income-tax states
 
-**Withdrawal sequence optimization**:
-1. **Taxable accounts first**: Tax-efficient, step-up basis at death, flexibility
-2. **Tax-deferred (Traditional IRA/401k)**: After taxable depleted, manage brackets
-3. **Tax-free (Roth)**: Last resort, maximize tax-free growth, legacy asset
-4. **Alternative**: Proportional withdrawals to manage brackets annually
-
-**Tax-loss harvesting and asset location**:
-- Coordinate with portfolio-analyzer for tax-efficient positioning
-- Bonds/REITs in tax-deferred accounts
-- Growth stocks in Roth accounts
-- Tax-efficient index funds in taxable accounts
+**Withdrawal sequence and tax-loss harvesting**:
+- See `${CLAUDE_PLUGIN_ROOT}/references/tax_strategies.md` for detailed withdrawal sequencing, proportional withdrawal alternatives, asset location optimization, and tax-loss harvesting strategies
 
 ### 5. Monte Carlo Simulation & Scenario Analysis
 

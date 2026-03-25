@@ -1,10 +1,10 @@
 ---
 name: tax-preparation
-description: This skill should be used when the user asks to "prepare my taxes", "find deductions", "calculate my tax liability", "what tax credits do I qualify for", "estimated tax payments", "optimize my tax return", "review my W-2", "itemize or standard deduction", "self-employment taxes", "RSU taxes", "Amazon stock compensation", "cost basis for RSUs", "Form 8949 adjustment", "vesting income calculation", "1099-B cost basis is wrong", "RSU double taxation", or provides tax documents like W-2s, 1099s, K-1s, 1098s, RSU vesting confirmations, or brokerage statements. Also triggered by mentions of tax brackets, filing status, AMT, capital gains tax, tax planning strategies, fair market value at vesting, capital gains on RSU sales, or broker-reported basis errors.
+version: 2.0.0
+description: This skill should be used when the user asks to "prepare my taxes", "find deductions", "calculate my tax liability", "what tax credits do I qualify for", "estimated tax payments", "optimize my tax return", "review my W-2", "itemize or standard deduction", "self-employment taxes", "file my return", "how much do I owe in taxes", "tax refund", "RSU taxes", "Amazon stock compensation", "cost basis for RSUs", "Form 8949 adjustment", "vesting income calculation", "1099-B cost basis is wrong", "RSU double taxation", or provides tax documents like W-2s, 1099s, K-1s, 1098s, RSU vesting confirmations, or brokerage statements. Also triggered by mentions of tax brackets, filing status, AMT, capital gains tax, tax planning strategies, fair market value at vesting, capital gains on RSU sales, or broker-reported basis errors.
 allowed-tools: Read, Bash, WebSearch, WebFetch, Grep, Glob, Task, Skill, Write, AskUserQuestion
 metadata:
-  version: 1.5.0
-  last-updated: 2026-03-07
+  last-updated: 2026-03-25
   target-users: individuals, families, self-employed
   tax-year: 2024
   annual-review: Update tax brackets, deduction limits, credit amounts, and SE thresholds each January. Check IRS.gov Rev. Proc. for inflation adjustments.
@@ -80,7 +80,7 @@ Categorize all income by source:
 Apply above-the-line adjustments to reduce AGI: self-employed health insurance, retirement contributions (SEP, SIMPLE, Solo 401k), half of SE tax, student loan interest (up to $2,500), HSA contributions, Traditional IRA contributions (if eligible), educator expenses ($300), and alimony paid (pre-2019 agreements only).
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/scripts/tax_calculator.py --income-sources <file.json> --adjustments <file.json>
+python ${CLAUDE_PLUGIN_ROOT}/scripts/tax_calculator.py --gross-income <amount> --filing-status <status> --deductions <amount> --adjustments <amount> --credits <amount> --output-format json
 ```
 
 ### Phase 4: Determine Deductions
@@ -212,6 +212,10 @@ Load these when specific technical guidance is needed beyond built-in knowledge.
 | `${CLAUDE_PLUGIN_ROOT}/references/form_processing.md` | Form-by-form data extraction fields, RSU import procedures, brokerage CSV mapping, data recording format |
 | `${CLAUDE_PLUGIN_ROOT}/references/document_checklist.md` | Complete document gathering checklist by income/deduction type, prior year documents, red flags |
 | `${CLAUDE_PLUGIN_ROOT}/references/tax_planning.md` | Multi-year planning, estimated payments, state tax, bunching strategies, life event impact, output formats |
+| `${CLAUDE_PLUGIN_ROOT}/references/rsu/amazon_rsu_specifics.md` | Amazon RSU vesting schedules, backloaded structure, specifics for Amazon stock compensation |
+| `${CLAUDE_PLUGIN_ROOT}/references/rsu/extraction_templates.md` | Templates for extracting RSU data from brokerage statements and vesting confirmations |
+| `${CLAUDE_PLUGIN_ROOT}/references/rsu/form_8949_guide.md` | Guide for completing Form 8949 with RSU cost basis adjustments and reporting codes |
+| `${CLAUDE_PLUGIN_ROOT}/references/rsu/irs_tax_rates.md` | IRS tax rates applicable to RSU income, supplemental wage withholding rates |
 
 ---
 

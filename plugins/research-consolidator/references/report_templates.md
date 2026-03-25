@@ -61,9 +61,10 @@ Best for: Decision-makers who need key findings quickly with supporting detail a
 
 ### Confidence Scoring
 Confidence levels reflect:
-- Source agreement (40%)
-- Evidence quality (30%)
+- Source agreement (35%)
+- Evidence quality (25%)
 - Source authority (20%)
+- Verification status (10%)
 - Recency (10%)
 
 ---

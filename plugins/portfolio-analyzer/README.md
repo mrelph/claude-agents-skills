@@ -1,6 +1,6 @@
 # Portfolio Analyzer Skill
 
-**Version:** 2.3.0
+**Version:** 3.0.0
 **Last Updated:** 2025-10-30
 
 A comprehensive investment portfolio analysis skill for Claude Code that extracts data from statements, calculates performance metrics, compares against benchmarks, and generates strategic recommendations.

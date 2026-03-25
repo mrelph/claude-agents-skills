@@ -16,30 +16,30 @@ Import portfolio data from portfolio-analyzer skill.
 **Status**: Fully functional
 **Usage**: See script for argument details
 
-### retirement_calculator.py 📋 (Placeholder)
-Calculate comprehensive retirement income needs.
+### retirement_calculator.py ✅ (Implemented)
+Calculate comprehensive retirement income needs with expense modeling, replacement ratios (basic/comfortable/affluent), healthcare cost projections for pre-Medicare and Medicare years, and portfolio size targets based on withdrawal rates.
 
-**TODO**: Implement expense modeling, replacement ratio calculations, healthcare cost projections
+**Status**: Fully functional
+**Usage**: `python retirement_calculator.py --current-income 150000 --retirement-age 65 --lifestyle comfortable`
 
-### ss_optimizer.py 📋 (Placeholder)
-Optimize Social Security claiming strategy for singles and couples.
+### ss_optimizer.py ✅ (Implemented)
+Optimize Social Security claiming strategy for individuals and couples. Includes break-even analysis across claiming ages (62-70), spousal benefit comparison, survivor benefit estimates, and lifetime benefit projections with COLA adjustments.
 
-**TODO**: Implement break-even analysis, spousal benefit optimization, tax implications
+**Status**: Fully functional
+**Usage**: `python ss_optimizer.py --user-age 60 --user-fra-benefit 2800 --spouse-age 58 --spouse-fra-benefit 1500`
 
-### tax_strategy.py 📋 (Placeholder)
-Tax planning for Roth conversions and withdrawal sequencing.
+### tax_strategy.py ✅ (Implemented)
+Tax planning for Roth conversions and withdrawal sequencing. Analyzes conversion tax cost vs retirement tax savings, bracket space availability, IRMAA threshold warnings, and compares traditional-first vs proportional withdrawal strategies over 30 years.
 
-**TODO**: Implement Roth conversion bracket filling, IRMAA optimization, withdrawal sequencing
+**Status**: Fully functional
+**Usage**: `python tax_strategy.py --scenario roth-conversion --current-income 150000 --conversion-amount 50000`
 
-## Implementation Notes
+## Dependencies
 
-The placeholder scripts need to be implemented based on your specific needs. The Monte Carlo and sync scripts provide working examples of the structure and patterns to follow.
-
-Key Python packages you'll need:
-- numpy (for calculations)
-- pandas (for data manipulation)
-- matplotlib/plotly (for charts)
+Key Python packages used:
+- numpy (for Monte Carlo calculations)
 - json (for data I/O)
+- argparse (for CLI interfaces)
 
 ## Running Scripts
 

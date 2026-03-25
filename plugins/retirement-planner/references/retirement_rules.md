@@ -2,27 +2,27 @@
 
 Quick reference for IRS limits, thresholds, and retirement account rules.
 
-## 2024 Contribution Limits
+## 2025 Contribution Limits
 
 **401(k)/403(b)/457**:
-- Standard: $23,000
-- Age 50+ catch-up: $7,500 (total $30,500)
-- Age 60-63 "super catch-up" (2025+): $11,250
+- Standard: $23,500
+- Age 50+ catch-up: $7,500 (total $31,000)
+- Age 60-63 "super catch-up": $11,250 (total $34,750)
 
 **IRA (Traditional & Roth)**:
 - Standard: $7,000
 - Age 50+ catch-up: $1,000 (total $8,000)
 
 **HSA (Health Savings Account)**:
-- Individual: $4,150
-- Family: $8,300
+- Individual: $4,300
+- Family: $8,550
 - Age 55+ catch-up: $1,000
 
-## Roth IRA Income Limits (2024)
+## Roth IRA Income Limits (2025)
 
 **Phase-out ranges**:
-- Single: $146,000 - $161,000
-- Married filing jointly: $230,000 - $240,000
+- Single: $150,000 - $165,000
+- Married filing jointly: $236,000 - $246,000
 - Backdoor Roth available if over limits (no income restrictions on conversions)
 
 ## Required Minimum Distributions (RMDs)
@@ -63,20 +63,20 @@ Quick reference for IRS limits, thresholds, and retirement account rules.
 - Spousal: 50% of higher earner's FRA benefit (if higher than own benefit)
 
 **Earnings test** (if claiming before FRA while working):
-- Under FRA: Lose $1 per $2 earned over $22,320 (2024)
-- Year reaching FRA: Lose $1 per $3 earned over $59,520 (before birthday month)
+- Under FRA: Lose $1 per $2 earned over $23,400 (2025)
+- Year reaching FRA: Lose $1 per $3 earned over $62,160 (before birthday month)
 - At FRA+: No earnings limit
 
-## Medicare Eligibility & Costs (2024)
+## Medicare Eligibility & Costs (2025)
 
 **Part A (Hospital)**:
 - Eligible: Age 65
 - Cost: $0 premium if 40+ work quarters
-- Deductible: $1,632 per benefit period
+- Deductible: $1,676 per benefit period
 
 **Part B (Medical)**:
-- Standard premium: $174.70/month
-- Deductible: $240/year
+- Standard premium: $185.00/month
+- Deductible: $257/year
 - Covers: Doctor visits, outpatient care, preventive services
 
 **Part D (Prescription)**:
@@ -87,41 +87,41 @@ Quick reference for IRS limits, thresholds, and retirement account rules.
 
 Additional premium surcharge based on MAGI from 2 years prior:
 
-| MAGI (Single) | MAGI (Married) | Part B Add | Part D Add | Total Add |
-|---------------|----------------|------------|------------|-----------|
-| <$103,000 | <$206,000 | $0 | $0 | $0 |
-| $103-129k | $206-258k | $69.90 | $12.90 | $82.80 |
-| $129-161k | $258-322k | $174.70 | $33.30 | $208.00 |
-| $161-193k | $322-386k | $279.50 | $53.80 | $333.30 |
-| $193-500k | $386-750k | $384.30 | $74.20 | $458.50 |
-| >$500k | >$750k | $419.30 | $81.00 | $500.30 |
+| MAGI (Single) | MAGI (Married) | Part B Premium | Part D Surcharge |
+|---------------|----------------|----------------|------------------|
+| <$103,000 | <$206,000 | $185.00 | $0 |
+| $103-129k | $206-258k | $259.00 | $13.70 |
+| $129-161k | $258-322k | $370.00 | $35.50 |
+| $161-193k | $322-386k | $480.00 | $57.30 |
+| $193-500k | $386-750k | $591.00 | $79.00 |
+| >$500k | >$750k | $628.00 | $85.80 |
 
 **IRMAA planning**: Manage income 2 years before Medicare to minimize surcharges
 
-## Tax Brackets (2024)
+## Tax Brackets (2025)
 
 **Married Filing Jointly**:
-- 10%: $0 - $23,200
-- 12%: $23,200 - $94,300
-- 22%: $94,300 - $201,050
-- 24%: $201,050 - $383,900
-- 32%: $383,900 - $487,450
-- 35%: $487,450 - $731,200
-- 37%: $731,200+
+- 10%: $0 - $23,850
+- 12%: $23,850 - $96,950
+- 22%: $96,950 - $206,700
+- 24%: $206,700 - $394,600
+- 32%: $394,600 - $501,050
+- 35%: $501,050 - $751,600
+- 37%: $751,600+
 
 **Single**:
-- 10%: $0 - $11,600
-- 12%: $11,600 - $47,150
-- 22%: $47,150 - $100,525
-- 24%: $100,525 - $191,950
-- 32%: $191,950 - $243,725
-- 35%: $243,725 - $609,350
-- 37%: $609,350+
+- 10%: $0 - $11,925
+- 12%: $11,925 - $48,475
+- 22%: $48,475 - $103,350
+- 24%: $103,350 - $197,300
+- 32%: $197,300 - $250,525
+- 35%: $250,525 - $626,350
+- 37%: $626,350+
 
 **Standard deduction**:
-- Single: $14,600
-- Married filing jointly: $29,200
-- Age 65+: Additional $1,550/person (single) or $1,250/person (married)
+- Single: $15,000
+- Married filing jointly: $30,000
+- Age 65+: Additional $1,600/person (single) or $1,300/person (married)
 
 ## Early Withdrawal Penalties
 
