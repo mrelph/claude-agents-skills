@@ -33,6 +33,7 @@ This registers the marketplace so you can browse and install individual plugins:
 | `research-consolidator` | v2.0.0 | research | Multi-source research synthesis with confidence scoring and gap analysis |
 | `jr-kraken-18u-navy-lineup` | v1.0.0 | domain-specific | Jr. Kraken 18U Navy hockey lineup building, game strategy, player management |
 | `dev-tools` | v1.0.0 | development | Bundle: bug tracking, DB architecture, security scanning, performance, documentation |
+| `second-brain` | v0.1.0 | productivity | Interview/ingest workflow for scaffolding a personal knowledge base via the `second-brain` CLI |
 
 ## marketplace.json Schema
 
@@ -68,7 +69,7 @@ Each entry in the `plugins` array describes one installable plugin:
 }
 ```
 
-**Valid categories:** `financial`, `research`, `development`, `design`, `planning`, `domain-specific`
+**Valid categories:** `financial`, `research`, `development`, `design`, `planning`, `productivity`, `domain-specific`
 
 ### Complete Example
 

@@ -1,0 +1,12 @@
+{
+  "name": "second-brain",
+  "version": "0.1.0",
+  "description": "Conducts an interview or ingests existing material, then runs the second-brain CLI to scaffold a personal knowledge base your AI assistant can maintain.",
+  "author": {
+    "name": "Mark Relph"
+  },
+  "homepage": "https://github.com/mrelph/second-brain",
+  "repository": "https://github.com/mrelph/second-brain-plugin",
+  "license": "MIT",
+  "keywords": ["knowledge-base", "wiki", "obsidian", "notes", "second-brain"]
+}

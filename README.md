@@ -28,6 +28,7 @@ Once added, install any plugin individually:
 | [research-consolidator](plugins/research-consolidator/) | Multi-source research synthesis with confidence scoring and gap analysis | v2.0.0 | `/plugin install research-consolidator@mrelph/claude-agents-skills` |
 | [jr-kraken-18u-navy-lineup](plugins/jr-kraken-18u-navy-lineup/) | Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management | v1.0.0 | `/plugin install jr-kraken-18u-navy-lineup@mrelph/claude-agents-skills` |
 | [dev-tools](plugins/dev-tools/) | Bundle of 5 development agents: bug tracking, DB architecture, security scanning, performance, documentation | v1.0.0 | `/plugin install dev-tools@mrelph/claude-agents-skills` |
+| [second-brain](plugins/second-brain/) | Interview or ingest mode for scaffolding a personal knowledge base via the `second-brain` CLI | v0.1.0 | `/plugin install second-brain@mrelph/claude-agents-skills` |
 
 ## Plugin Details
 
@@ -85,6 +86,16 @@ A bundled collection of 5 specialized development agents:
 /plugin install dev-tools@mrelph/claude-agents-skills
 ```
 
+### second-brain (v0.1.0)
+
+Conversational front-end for the [`second-brain` CLI](https://github.com/mrelph/second-brain). The bundled `second-brain-init` skill conducts a brief interview — or ingests an existing folder of notes — to draft a `.second-brain.json` config and scaffold a personal knowledge base your AI assistant can maintain.
+
+Requires the `second-brain` CLI (≥ v0.2.0) on `PATH`.
+
+```bash
+/plugin install second-brain@mrelph/claude-agents-skills
+```
+
 ## Plugin Integrations
 
 Several plugins are designed to work together, passing context and data between sessions:
@@ -117,10 +128,11 @@ claude-agents-skills/
 │   ├── retirement-planner/
 │   ├── research-consolidator/
 │   ├── jr-kraken-18u-navy-lineup/
-│   └── dev-tools/
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       └── agents/              # Agent definitions
+│   ├── dev-tools/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   └── agents/              # Agent definitions
+│   └── second-brain/
 ├── Skills/                      # Legacy personal skills (not published to marketplace)
 ├── Agents/                      # Legacy personal agents (not published to marketplace)
 ├── staging/                     # Contribution staging area and templates

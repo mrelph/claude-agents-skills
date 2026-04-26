@@ -61,6 +61,15 @@
       "author": { "name": "mrelph" },
       "keywords": ["development", "debugging", "security", "performance", "database", "documentation"],
       "category": "development"
+    },
+    {
+      "name": "second-brain",
+      "source": "./plugins/second-brain",
+      "description": "Conducts an interview or ingests existing material, then runs the second-brain CLI to scaffold a personal knowledge base your AI assistant can maintain.",
+      "version": "0.1.0",
+      "author": { "name": "mrelph" },
+      "keywords": ["knowledge-base", "wiki", "obsidian", "notes", "second-brain"],
+      "category": "productivity"
     }
   ]
 }
