@@ -36,7 +36,7 @@ This registers the marketplace so you can browse and install individual plugins:
 
 ## marketplace.json Schema
 
-The `marketplace.json` at the root of this repository is the machine-readable plugin catalog. It follows the official Claude Code plugin marketplace format.
+The `.claude-plugin/marketplace.json` file is the machine-readable plugin catalog. It follows the official Claude Code plugin marketplace format.
 
 ### Top-Level Schema
 
@@ -140,37 +140,37 @@ The `${CLAUDE_PLUGIN_ROOT}` variable is resolved at install time to the actual p
 **List all plugin names and versions:**
 
 ```bash
-jq -r '.plugins[] | "\(.name)  \(.version)"' marketplace.json
+jq -r '.plugins[] | "\(.name)  \(.version)"' .claude-plugin/marketplace.json
 ```
 
 **Find plugins by category:**
 
 ```bash
-jq '.plugins[] | select(.category == "financial") | {name, version, description}' marketplace.json
+jq '.plugins[] | select(.category == "financial") | {name, version, description}' .claude-plugin/marketplace.json
 ```
 
 **Find plugins by keyword:**
 
 ```bash
-jq '.plugins[] | select(.keywords[] | contains("retirement"))' marketplace.json
+jq '.plugins[] | select(.keywords[] | contains("retirement"))' .claude-plugin/marketplace.json
 ```
 
 **Get the source path for a specific plugin:**
 
 ```bash
-jq -r '.plugins[] | select(.name == "tax-preparation") | .source' marketplace.json
+jq -r '.plugins[] | select(.name == "tax-preparation") | .source' .claude-plugin/marketplace.json
 ```
 
 **List all keywords across all plugins (deduplicated):**
 
 ```bash
-jq -r '[.plugins[].keywords[]] | unique[]' marketplace.json
+jq -r '[.plugins[].keywords[]] | unique[]' .claude-plugin/marketplace.json
 ```
 
 **Count plugins by category:**
 
 ```bash
-jq '[.plugins[] | .category] | group_by(.) | map({category: .[0], count: length})' marketplace.json
+jq '[.plugins[] | .category] | group_by(.) | map({category: .[0], count: length})' .claude-plugin/marketplace.json
 ```
 
 ### Querying with Python
@@ -178,7 +178,7 @@ jq '[.plugins[] | .category] | group_by(.) | map({category: .[0], count: length}
 ```python
 import json
 
-with open('marketplace.json') as f:
+with open('.claude-plugin/marketplace.json') as f:
     marketplace = json.load(f)
 
 # List all plugins
@@ -204,7 +204,7 @@ tax_related = search_plugins('tax')
 ### Querying with JavaScript/Node.js
 
 ```javascript
-const marketplace = require('./marketplace.json');
+const marketplace = require('./.claude-plugin/marketplace.json');
 
 // List all plugins
 marketplace.plugins.forEach(plugin => {
@@ -242,11 +242,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate marketplace.json
-        run: jq empty marketplace.json && echo "marketplace.json is valid JSON"
+        run: jq empty .claude-plugin/marketplace.json && echo "marketplace.json is valid JSON"
 
       - name: Validate all plugin manifests
         run: |
-          jq -r '.plugins[].source' marketplace.json | while read source; do
+          jq -r '.plugins[].source' .claude-plugin/marketplace.json | while read source; do
             manifest="${source}/.claude-plugin/plugin.json"
             if [ -f "$manifest" ]; then
               jq empty "$manifest" && echo "Valid: $manifest"
@@ -273,7 +273,7 @@ Check whether an installed version of a plugin is current:
 # Compare installed version against marketplace catalog
 
 PLUGIN="tax-preparation"
-CATALOG_VERSION=$(jq -r ".plugins[] | select(.name == \"$PLUGIN\") | .version" marketplace.json)
+CATALOG_VERSION=$(jq -r ".plugins[] | select(.name == \"$PLUGIN\") | .version" .claude-plugin/marketplace.json)
 INSTALLED_VERSION=$(jq -r '.version' ~/.claude/plugins/$PLUGIN/.claude-plugin/plugin.json 2>/dev/null || echo "not installed")
 
 if [ "$INSTALLED_VERSION" = "not installed" ]; then
@@ -301,10 +301,10 @@ Validate locally:
 
 ```bash
 # Check JSON syntax
-jq empty marketplace.json && echo "Valid JSON"
+jq empty .claude-plugin/marketplace.json && echo "Valid JSON"
 
 # Verify version consistency between marketplace.json and plugin.json manifests
-jq -r '.plugins[] | "\(.name) \(.version) \(.source)"' marketplace.json | \
+jq -r '.plugins[] | "\(.name) \(.version) \(.source)"' .claude-plugin/marketplace.json | \
   while read name catalog_ver source; do
     plugin_ver=$(jq -r '.version' "${source}/.claude-plugin/plugin.json" 2>/dev/null)
     if [ "$catalog_ver" != "$plugin_ver" ]; then

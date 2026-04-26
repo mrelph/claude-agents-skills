@@ -26,7 +26,7 @@ Once added, install any plugin individually:
 | [portfolio-analyzer](plugins/portfolio-analyzer/) | Investment portfolio analysis, risk assessment, asset allocation | v3.0.0 | `/plugin install portfolio-analyzer@mrelph/claude-agents-skills` |
 | [retirement-planner](plugins/retirement-planner/) | Retirement readiness, Social Security optimization, withdrawal strategies | v2.0.0 | `/plugin install retirement-planner@mrelph/claude-agents-skills` |
 | [research-consolidator](plugins/research-consolidator/) | Multi-source research synthesis with confidence scoring and gap analysis | v2.0.0 | `/plugin install research-consolidator@mrelph/claude-agents-skills` |
-| [kiro-spec-driven-dev](plugins/kiro-spec-driven-dev/) | Spec-driven development: requirements to design to tasks workflow | v2.0.0 | `/plugin install kiro-spec-driven-dev@mrelph/claude-agents-skills` |
+| [jr-kraken-18u-navy-lineup](plugins/jr-kraken-18u-navy-lineup/) | Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management | v1.0.0 | `/plugin install jr-kraken-18u-navy-lineup@mrelph/claude-agents-skills` |
 | [dev-tools](plugins/dev-tools/) | Bundle of 5 development agents: bug tracking, DB architecture, security scanning, performance, documentation | v1.0.0 | `/plugin install dev-tools@mrelph/claude-agents-skills` |
 
 ## Plugin Details
@@ -63,12 +63,12 @@ Synthesizes research from multiple AI models and sources into comprehensive repo
 /plugin install research-consolidator@mrelph/claude-agents-skills
 ```
 
-### kiro-spec-driven-dev (v2.0.0)
+### jr-kraken-18u-navy-lineup (v1.0.0)
 
-Structured spec-driven development workflow using Kiro methodology. Transforms feature ideas into formal requirements documents, design specifications, and implementation task lists.
+Personal-use plugin for the Jr. Kraken 18U Navy youth hockey team: lineup building, formation generation, opponent strategy, and roster management.
 
 ```bash
-/plugin install kiro-spec-driven-dev@mrelph/claude-agents-skills
+/plugin install jr-kraken-18u-navy-lineup@mrelph/claude-agents-skills
 ```
 
 ### dev-tools (v1.0.0)
@@ -101,7 +101,8 @@ claude-agents-skills/
 ├── CHANGELOG.md                 # Version history
 ├── CONTRIBUTING.md              # Contribution guidelines
 ├── MARKETPLACE.md               # Marketplace integration guide
-├── marketplace.json             # Machine-readable plugin catalog
+├── .claude-plugin/
+│   └── marketplace.json         # Machine-readable plugin catalog
 ├── plugins/                     # Plugin marketplace plugins (v2.0.0+)
 │   ├── tax-preparation/
 │   │   ├── .claude-plugin/
@@ -115,7 +116,7 @@ claude-agents-skills/
 │   ├── portfolio-analyzer/
 │   ├── retirement-planner/
 │   ├── research-consolidator/
-│   ├── kiro-spec-driven-dev/
+│   ├── jr-kraken-18u-navy-lineup/
 │   └── dev-tools/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
@@ -130,7 +131,6 @@ claude-agents-skills/
 
 The `Skills/` and `Agents/` directories contain personal items that remain in the repository for reference but are not part of the published plugin marketplace:
 
-- `Skills/jr-kraken-18u-navy-lineup/` — Hockey lineup generator (personal use)
 - `Agents/` — Individual agent markdown files (superseded by plugins/dev-tools)
 
 These items are not installable via `/plugin install`. If you need them, clone the repository directly and copy the relevant files.
@@ -144,14 +144,14 @@ The short version:
 1. Create a directory under `plugins/your-plugin-name/`
 2. Add a `plugin.json` manifest at `.claude-plugin/plugin.json`
 3. Add skills under `skills/` and agents under `agents/` using `${CLAUDE_PLUGIN_ROOT}/` for all file paths
-4. Add your plugin entry to `marketplace.json`
+4. Add your plugin entry to `.claude-plugin/marketplace.json`
 5. Open a pull request
 
 ## Marketplace Integration
 
 For programmatic access, version checking, and advanced integration scenarios, see [MARKETPLACE.md](MARKETPLACE.md).
 
-The `marketplace.json` file at the root of this repository provides a machine-readable catalog of all published plugins with metadata, keywords, and version information.
+The `.claude-plugin/marketplace.json` file in this repository provides a machine-readable catalog of all published plugins with metadata, keywords, and version information.
 
 ## License
 

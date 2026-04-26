@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Stale kiro-spec-driven-dev references in docs**: Removed the lingering kiro plugin entries from `README.md` (catalog table, plugin details section, repo file tree) and from `MARKETPLACE.md` (plugin table). The catalog itself had already dropped the entry; the docs hadn't caught up.
+- **Documentation paths**: `README.md` and `MARKETPLACE.md` now reference `.claude-plugin/marketplace.json` (its actual location) instead of a non-existent root-level `marketplace.json`. Affects the repository structure diagram, integration guide prose, and all jq/Python/JavaScript/CI examples.
+- **Missing jr-kraken-18u-navy-lineup in README**: The plugin had been added to `.claude-plugin/marketplace.json` but never to `README.md`'s catalog table, plugin details section, or file tree. Added now. Also dropped the stale "Legacy Content" reference to `Skills/jr-kraken-18u-navy-lineup/` (the migration moved it under `plugins/`).
+
 ## [2.0.0] - 2026-03-05
 
 ### Added
