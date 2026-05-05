@@ -15,7 +15,7 @@ Once added, install any plugin individually:
 ```bash
 /plugin install tax-preparation@mrelph/claude-agents-skills
 /plugin install portfolio-analyzer@mrelph/claude-agents-skills
-/plugin install dev-tools@mrelph/claude-agents-skills
+/plugin install hockey-lineup-builder@mrelph/claude-agents-skills
 ```
 
 ## Plugin Catalog
@@ -27,7 +27,6 @@ Once added, install any plugin individually:
 | [retirement-planner](plugins/retirement-planner/) | Retirement readiness, Social Security optimization, withdrawal strategies | v2.0.0 | `/plugin install retirement-planner@mrelph/claude-agents-skills` |
 | [research-consolidator](plugins/research-consolidator/) | Multi-source research synthesis with confidence scoring and gap analysis | v2.0.0 | `/plugin install research-consolidator@mrelph/claude-agents-skills` |
 | [hockey-lineup-builder](plugins/hockey-lineup-builder/) | Generic hockey lineup building, game strategy, special teams planning, and player management for any team | v2.0.0 | `/plugin install hockey-lineup-builder@mrelph/claude-agents-skills` |
-| [dev-tools](plugins/dev-tools/) | Bundle of 5 development agents: bug tracking, DB architecture, security scanning, performance, documentation | v1.0.0 | `/plugin install dev-tools@mrelph/claude-agents-skills` |
 | [second-brain](plugins/second-brain/) | Interview or ingest mode for scaffolding a personal knowledge base via the `second-brain` CLI | v0.1.0 | `/plugin install second-brain@mrelph/claude-agents-skills` |
 
 ## Plugin Details
@@ -72,20 +71,6 @@ Team-agnostic hockey coaching plugin: lineup building, formation generation, spe
 /plugin install hockey-lineup-builder@mrelph/claude-agents-skills
 ```
 
-### dev-tools (v1.0.0)
-
-A bundled collection of 5 specialized development agents:
-
-- **bug-tracker-resolver** — Bug management, root cause analysis, resolution planning
-- **database-architect** — PostgreSQL/Supabase schema design, query optimization, RLS policies
-- **security-code-scanner** — Vulnerability identification, OWASP Top 10 analysis
-- **performance-optimizer** — Core Web Vitals, bundle size reduction, runtime efficiency
-- **documentation-maintainer** — READMEs, API docs, user guides, documentation consistency
-
-```bash
-/plugin install dev-tools@mrelph/claude-agents-skills
-```
-
 ### second-brain (v0.1.0)
 
 Conversational front-end for the [`second-brain` CLI](https://github.com/mrelph/second-brain). The bundled `second-brain-init` skill conducts a brief interview — or ingests an existing folder of notes — to draft a `.second-brain.json` config and scaffold a personal knowledge base your AI assistant can maintain.
@@ -128,10 +113,6 @@ claude-agents-skills/
 │   ├── retirement-planner/
 │   ├── research-consolidator/
 │   ├── hockey-lineup-builder/
-│   ├── dev-tools/
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
-│   │   └── agents/              # Agent definitions
 │   └── second-brain/
 ├── Skills/                      # Legacy personal skills (not published to marketplace)
 ├── Agents/                      # Legacy personal agents (not published to marketplace)
@@ -143,7 +124,7 @@ claude-agents-skills/
 
 The `Skills/` and `Agents/` directories contain personal items that remain in the repository for reference but are not part of the published plugin marketplace:
 
-- `Agents/` — Individual agent markdown files (superseded by plugins/dev-tools)
+- `Agents/` — Individual agent markdown files retained for reference (e.g. `claude-desktop-skills-builder`, `marketplace-manager`, `roadmap-feature-planner`, `ux-ui-design-expert`, `video-integration-specialist`)
 
 These items are not installable via `/plugin install`. If you need them, clone the repository directly and copy the relevant files.
 
