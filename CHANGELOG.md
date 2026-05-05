@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **second-brain plugin (v0.1.0)**: Conversational front-end for the `second-brain` CLI. The bundled `second-brain-init` skill conducts an interview or ingests an existing folder of notes to scaffold a personal knowledge base. Imported from `mrelph/second-brain-plugin`. Adds a new `productivity` category to the marketplace.
 
+### Removed
+
+- **dev-tools plugin (v1.0.0)**: Removed from the marketplace catalog and repository (`plugins/dev-tools/` deleted, dropped from `.claude-plugin/marketplace.json`, README catalog/details/file-tree/legacy-content section, and the MARKETPLACE.md plugin table). The bundled agents (bug-tracker-resolver, database-architect, security-code-scanner, performance-optimizer, documentation-maintainer) are no longer part of this repository — they remain available in git history.
+
 ### Fixed
 
 - **Stale kiro-spec-driven-dev references in docs**: Removed the lingering kiro plugin entries from `README.md` (catalog table, plugin details section, repo file tree) and from `MARKETPLACE.md` (plugin table). The catalog itself had already dropped the entry; the docs hadn't caught up.
