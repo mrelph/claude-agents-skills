@@ -26,7 +26,7 @@ Once added, install any plugin individually:
 | [portfolio-analyzer](plugins/portfolio-analyzer/) | Investment portfolio analysis, risk assessment, asset allocation | v3.0.0 | `/plugin install portfolio-analyzer@mrelph/claude-agents-skills` |
 | [retirement-planner](plugins/retirement-planner/) | Retirement readiness, Social Security optimization, withdrawal strategies | v2.0.0 | `/plugin install retirement-planner@mrelph/claude-agents-skills` |
 | [research-consolidator](plugins/research-consolidator/) | Multi-source research synthesis with confidence scoring and gap analysis | v2.0.0 | `/plugin install research-consolidator@mrelph/claude-agents-skills` |
-| [jr-kraken-18u-navy-lineup](plugins/jr-kraken-18u-navy-lineup/) | Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management | v1.0.0 | `/plugin install jr-kraken-18u-navy-lineup@mrelph/claude-agents-skills` |
+| [hockey-lineup-builder](plugins/hockey-lineup-builder/) | Generic hockey lineup building, game strategy, special teams planning, and player management for any team | v2.0.0 | `/plugin install hockey-lineup-builder@mrelph/claude-agents-skills` |
 | [dev-tools](plugins/dev-tools/) | Bundle of 5 development agents: bug tracking, DB architecture, security scanning, performance, documentation | v1.0.0 | `/plugin install dev-tools@mrelph/claude-agents-skills` |
 | [second-brain](plugins/second-brain/) | Interview or ingest mode for scaffolding a personal knowledge base via the `second-brain` CLI | v0.1.0 | `/plugin install second-brain@mrelph/claude-agents-skills` |
 
@@ -64,12 +64,12 @@ Synthesizes research from multiple AI models and sources into comprehensive repo
 /plugin install research-consolidator@mrelph/claude-agents-skills
 ```
 
-### jr-kraken-18u-navy-lineup (v1.0.0)
+### hockey-lineup-builder (v2.0.0)
 
-Personal-use plugin for the Jr. Kraken 18U Navy youth hockey team: lineup building, formation generation, opponent strategy, and roster management.
+Team-agnostic hockey coaching plugin: lineup building, formation generation, special teams planning, opponent strategy, and roster management. Ships with starter templates for `roster.md` and `team-strategy.md`, plus a worked example under `examples/jr-kraken-18u-navy/`.
 
 ```bash
-/plugin install jr-kraken-18u-navy-lineup@mrelph/claude-agents-skills
+/plugin install hockey-lineup-builder@mrelph/claude-agents-skills
 ```
 
 ### dev-tools (v1.0.0)
@@ -127,7 +127,7 @@ claude-agents-skills/
 │   ├── portfolio-analyzer/
 │   ├── retirement-planner/
 │   ├── research-consolidator/
-│   ├── jr-kraken-18u-navy-lineup/
+│   ├── hockey-lineup-builder/
 │   ├── dev-tools/
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
