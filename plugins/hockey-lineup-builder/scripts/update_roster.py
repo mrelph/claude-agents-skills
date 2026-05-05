@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Jr Kraken 18U C Navy Team - Roster & Power Rankings Updater
+Hockey Lineup Builder - Roster & Power Rankings Updater
 
-Reads an Excel (.xlsx) or CSV file containing updated player ratings/positions
-and regenerates references/roster.md and the roster dict in lineup_generator.py.
+Reads an Excel (.xlsx), CSV, or JSON file containing player ratings/positions
+and regenerates references/roster.md plus the roster dict in lineup_generator.py.
+
+Team name and tagline are read from `.claude/hockey-lineup-builder.local.md`
+if that file exists. Otherwise the script falls back to generic headers.
 
 Expected columns (case-insensitive, flexible matching):
   - Name (or Player, Player Name)
-  - Position (or Pos) — F, D, F/D, G
-  - Rating (or Power Ranking, Rank, Score) — 1.00-3.00 scale
+  - Position (or Pos) -- F, D, F/D, G
+  - Rating (or Power Ranking, Rank, Score) -- 1.00-3.00 scale
   - Notes (optional)
   - Can Also Play (optional, for goalies)
 
@@ -21,11 +24,10 @@ Usage:
 import argparse
 import csv
 import json
-import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
@@ -146,6 +148,59 @@ def read_json_string(json_str: str) -> List[Dict]:
     return players
 
 
+def load_team_config() -> Dict[str, str]:
+    """Load team config from .claude/hockey-lineup-builder.local.md if present.
+
+    Walks up from the current working directory looking for a `.claude/`
+    directory containing the config file. Returns a dict of the YAML
+    frontmatter values, or sensible defaults if not found.
+    """
+    defaults = {
+        "team_name": "Hockey Team",
+        "head_coach": "",
+        "level": "",
+        "age_group": "",
+        "tagline": "",
+    }
+
+    cwd = Path.cwd()
+    candidates = [cwd] + list(cwd.parents)
+    config_path = None
+    for c in candidates:
+        candidate = c / ".claude" / "hockey-lineup-builder.local.md"
+        if candidate.exists():
+            config_path = candidate
+            break
+
+    if not config_path:
+        return defaults
+
+    try:
+        text = config_path.read_text(encoding="utf-8")
+    except Exception:
+        return defaults
+
+    # Parse YAML frontmatter (lightweight - we only need scalar values)
+    if not text.startswith("---"):
+        return defaults
+
+    end = text.find("\n---", 3)
+    if end == -1:
+        return defaults
+
+    frontmatter = text[3:end].strip()
+    parsed = dict(defaults)
+    for raw_line in frontmatter.splitlines():
+        line = raw_line.strip()
+        if not line or ":" not in line:
+            continue
+        key, _, val = line.partition(":")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        parsed[key] = val
+    return parsed
+
+
 def categorize_players(players: List[Dict]) -> Dict:
     """Categorize players into tiers and positions."""
     goalies = [p for p in players if p["position"].upper() == "G"]
@@ -180,7 +235,7 @@ def categorize_players(players: List[Dict]) -> Dict:
     }
 
 
-def generate_roster_md(players: List[Dict]) -> str:
+def generate_roster_md(players: List[Dict], config: Dict[str, str]) -> str:
     """Generate the full roster.md content from player data."""
     cats = categorize_players(players)
     goalies = cats["goalies"]
@@ -196,23 +251,46 @@ def generate_roster_md(players: List[Dict]) -> str:
     dedicated_f = fwd_count - fd_count
     dedicated_d = def_count - fd_count
 
+    team_name = config.get("team_name") or "Hockey Team"
+    coach = config.get("head_coach", "")
+    tagline = config.get("tagline", "")
+
+    title = f"# {team_name} Roster"
+    if coach:
+        title += f" - Coach {coach}"
+
     lines = []
-    lines.append("# Jr. Kraken 18U C Navy Team Roster - Coach Mark")
+    lines.append(title)
     lines.append("")
     lines.append("## Team Overview")
-    lines.append(f"- **Head Coach**: Mark")
-    lines.append(f'- **Team Identity**: "Balanced Depth"')
+    if coach:
+        lines.append(f"- **Head Coach**: {coach}")
+    if tagline:
+        lines.append(f'- **Team Identity**: "{tagline}"')
     lines.append(f"- **Total Players**: {total} ({skater_count} skaters + {goalie_count} goalies)")
-    lines.append(f"- **Forwards**: {dedicated_f} dedicated + {fd_count} F/D versatile = **{fwd_count} capable forwards**")
-    lines.append(f"- **Defense**: {dedicated_d} dedicated + {fd_count} F/D versatile = **{def_count} capable defensemen**" + (" ⭐ **MAJOR ADVANTAGE**" if def_count >= 8 else ""))
-    lines.append(f"- **Goalies**: {goalie_count} ({', '.join(g['name'] for g in goalies)})")
-    lines.append(f"- **Average Rating**: {cats['avg_rating']:.3f}" + (" (excellent balance)" if cats['avg_rating'] < 2.0 else ""))
+    lines.append(
+        f"- **Forwards**: {dedicated_f} dedicated + {fd_count} F/D versatile = "
+        f"**{fwd_count} capable forwards**"
+    )
+    lines.append(
+        f"- **Defense**: {dedicated_d} dedicated + {fd_count} F/D versatile = "
+        f"**{def_count} capable defensemen**"
+        + (" ⭐ **MAJOR ADVANTAGE**" if def_count >= 8 else "")
+    )
+    lines.append(
+        f"- **Goalies**: {goalie_count}"
+        + (f" ({', '.join(g['name'] for g in goalies)})" if goalies else "")
+    )
+    lines.append(
+        f"- **Average Rating**: {cats['avg_rating']:.3f}"
+        + (" (excellent balance)" if cats['avg_rating'] < 2.0 else "")
+    )
     lines.append("")
-    lines.append("> **Last updated**: This roster was auto-generated by `scripts/update_roster.py`.")
+    lines.append("> **Last updated**: Auto-generated by `scripts/update_roster.py`.")
     lines.append("> To refresh, run: `python3 scripts/update_roster.py <roster_file.xlsx>`")
     lines.append("")
     lines.append("## Player Rating Scale")
-    lines.append("- **1.00**: Elite - Top tier for 18U C level")
+    lines.append("- **1.00**: Elite - Top tier for the level")
     lines.append("- **1.50**: Strong Skilled - Solid contributor")
     lines.append("- **1.75**: Strong Two-Way - Reliable player")
     lines.append("- **2.00**: Developing Contributor - Consistent middle tier")
@@ -229,23 +307,27 @@ def generate_roster_md(players: List[Dict]) -> str:
         lines.append("| Name | Rating | Notes | Can Also Play |")
         lines.append("|------|--------|-------|---------------|")
         for g in goalies:
-            lines.append(f"| **{g['name']}** | {g['rating']:.2f} | {g['notes']} | {g['can_also_play']} |")
+            lines.append(
+                f"| **{g['name']}** | {g['rating']:.2f} | {g['notes']} | {g['can_also_play']} |"
+            )
         lines.append("")
-        lines.append("**Goalie Strategy**: ")
+        lines.append("**Goalie Strategy**:")
         lines.append("- Split starts roughly 50/50")
         lines.append("- Both get tournament experience")
         lines.append("- Communicate starter 24-48 hours ahead")
         lines.append("")
         lines.append("---")
 
-    # Elite players
+    # Helper: player table generator
     def _player_table(group, pos_col=True):
         tbl = []
         if pos_col:
             tbl.append("| Name | Position | Rating | Notes |")
             tbl.append("|------|----------|--------|-------|")
             for p in sorted(group, key=lambda x: x["rating"]):
-                tbl.append(f"| **{p['name']}** | {p['position']} | {p['rating']:.2f} | {p['notes']} |")
+                tbl.append(
+                    f"| **{p['name']}** | {p['position']} | {p['rating']:.2f} | {p['notes']} |"
+                )
         else:
             tbl.append("| Name | Rating | Notes |")
             tbl.append("|------|--------|-------|")
@@ -253,6 +335,7 @@ def generate_roster_md(players: List[Dict]) -> str:
                 tbl.append(f"| **{p['name']}** | {p['rating']:.2f} | {p['notes']} |")
         return tbl
 
+    # Elite players
     elite_all = cats["elite_top"] + cats["elite_strong"]
     if elite_all:
         lines.append("")
@@ -290,7 +373,11 @@ def generate_roster_md(players: List[Dict]) -> str:
             lines.append("")
             lines.extend(_player_table(cats["strong_middle"]))
         lines.append("")
-        lines.append(f"**Deployment**: These {len(strong_all)} players form the backbone of the team - second and third lines, second and third defense pairs, consistent contributors who make four-line depth possible")
+        lines.append(
+            f"**Deployment**: These {len(strong_all)} players form the backbone of the team - "
+            "second and third lines, second and third defense pairs, consistent contributors who "
+            "make four-line depth possible"
+        )
         lines.append("")
         lines.append("---")
 
@@ -344,16 +431,30 @@ def generate_roster_md(players: List[Dict]) -> str:
     strong_fwd = [p for p in cats["forwards"] if 1.50 < p["rating"] <= 2.00]
     dev_fwd = [p for p in cats["forwards"] if p["rating"] > 2.00]
     if elite_fwd:
-        lines.append(f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_fwd)} |")
+        lines.append(
+            f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_fwd)} |"
+        )
     if strong_fwd:
-        lines.append(f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_fwd)} |")
+        lines.append(
+            f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_fwd)} |"
+        )
     if dev_fwd:
-        lines.append(f"| **Development (2.50+)** | {', '.join(p['name'].split()[-1] for p in dev_fwd)} |")
+        lines.append(
+            f"| **Development (2.50+)** | {', '.join(p['name'].split()[-1] for p in dev_fwd)} |"
+        )
     lines.append("")
-    lines.append(f"**Four-Line Capability**: {'YES - Core strength' if fwd_count >= 12 else 'Possible with adjustments' if fwd_count >= 9 else 'Limited'}")
+    lines.append(
+        "**Four-Line Capability**: "
+        + ("YES - Core strength" if fwd_count >= 12
+           else "Possible with adjustments" if fwd_count >= 9
+           else "Limited")
+    )
 
     lines.append("")
-    lines.append(f"### Defensive Capability ({def_count} players)" + (" ⭐⭐⭐ MAJOR ADVANTAGE" if def_count >= 8 else ""))
+    lines.append(
+        f"### Defensive Capability ({def_count} players)"
+        + (" ⭐⭐⭐ MAJOR ADVANTAGE" if def_count >= 8 else "")
+    )
     lines.append("")
     lines.append("| Tier | Players |")
     lines.append("|------|---------|")
@@ -361,14 +462,23 @@ def generate_roster_md(players: List[Dict]) -> str:
     strong_def = [p for p in cats["defense"] if 1.50 < p["rating"] <= 2.00]
     dev_def = [p for p in cats["defense"] if p["rating"] > 2.00]
     if elite_def:
-        lines.append(f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_def)} |")
+        lines.append(
+            f"| **Elite (1.00-1.50)** | {', '.join(p['name'].split()[-1] for p in elite_def)} |"
+        )
     if strong_def:
-        lines.append(f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_def)} |")
+        lines.append(
+            f"| **Strong (1.75-2.00)** | {', '.join(p['name'].split()[-1] for p in strong_def)} |"
+        )
     if dev_def:
-        lines.append(f"| **Development (2.50+)** | {', '.join(p['name'].split()[-1] for p in dev_def)} |")
+        lines.append(
+            f"| **Development (2.50+)** | {', '.join(p['name'].split()[-1] for p in dev_def)} |"
+        )
 
     lines.append("")
-    lines.append(f"### Versatile F/D Players ({fd_count})" + (" ⭐ CRITICAL ASSET" if fd_count >= 4 else ""))
+    lines.append(
+        f"### Versatile F/D Players ({fd_count})"
+        + (" ⭐ CRITICAL ASSET" if fd_count >= 4 else "")
+    )
     lines.append("")
     lines.append("| Name | Rating | Notes |")
     lines.append("|------|--------|-------|")
@@ -380,18 +490,24 @@ def generate_roster_md(players: List[Dict]) -> str:
     lines.append("")
     lines.append("## ABSENCE CONTINGENCY PLANS")
     lines.append("")
-    lines.append("At 18U level, player absences are common. Key principles:")
+    lines.append("Player absences are common at youth levels. Key principles:")
     lines.append("")
     if fd_count >= 4:
         lines.append(f"- **{fd_count} F/D versatile players** can cover any positional shortage")
-    lines.append(f"- **{def_count} D-capable players** means defense absences are easy to cover")
+    lines.append(f"- **{def_count} D-capable players** -- defense absences are easier to cover with depth")
     lines.append("- Use F/D players to fill gaps instantly")
     lines.append("- Adjust strategy based on who's missing")
     lines.append("- Always have a contingency lineup ready")
     lines.append("")
     lines.append("---")
     lines.append("")
-    lines.append(f'**REMEMBER**: This roster\'s greatest strength is its depth and versatility. We have {def_count} defensive-capable players, {fd_count} F/D versatile players, and balanced talent distribution. We win by grinding opponents down, playing strong team defense, and dominating third periods when our depth advantage emerges. We are Coach Mark\'s Navy team, and "Balanced Depth" is our identity!')
+    closer_parts = [
+        f"**REMEMBER**: This roster has {def_count} defensive-capable players, "
+        f"{fd_count} F/D versatile players, and an average rating of {cats['avg_rating']:.2f}."
+    ]
+    if tagline:
+        closer_parts.append(f' Identity: "{tagline}".')
+    lines.append(" ".join(closer_parts))
     lines.append("")
 
     return "\n".join(lines)
@@ -404,30 +520,34 @@ def generate_lineup_generator_roster(players: List[Dict]) -> str:
     lines = []
     lines.append("        self.roster = {")
 
-    # Goalies
-    lines.append("            'goalies': [")
+    lines.append('            "goalies": [')
     for g in cats["goalies"]:
         cap = g.get("can_also_play", "")
-        lines.append(f"                {{'name': '{g['name']}', 'rating': {g['rating']:.2f}, 'can_play': '{cap}'}},")
+        lines.append(
+            f"                {{'name': '{g['name']}', 'rating': {g['rating']:.2f}, 'can_play': '{cap}'}},"
+        )
     lines.append("            ],")
 
-    # Elite
-    lines.append("            'elite': [")
+    lines.append('            "elite": [')
     for p in sorted(cats["elite_top"] + cats["elite_strong"], key=lambda x: x["rating"]):
-        lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
+        lines.append(
+            f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},"
+        )
     lines.append("            ],")
 
-    # Strong
-    lines.append("            'strong': [")
+    lines.append('            "strong": [')
     for p in sorted(cats["strong_twoway"] + cats["strong_middle"], key=lambda x: x["rating"]):
-        lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
+        lines.append(
+            f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},"
+        )
     lines.append("            ],")
 
-    # Development
-    lines.append("            'development': [")
+    lines.append('            "development": [')
     for p in sorted(cats["dev_sheltered"] + cats["dev_significant"], key=lambda x: x["rating"]):
-        lines.append(f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},")
-    lines.append("            ]")
+        lines.append(
+            f"                {{'name': '{p['name']}', 'rating': {p['rating']:.2f}, 'position': '{p['position']}'}},"
+        )
+    lines.append("            ],")
 
     lines.append("        }")
     return "\n".join(lines)
@@ -441,7 +561,6 @@ def update_lineup_generator(players: List[Dict]):
 
     content = LINEUP_GEN.read_text()
 
-    # Find and replace the self.roster block
     pattern = r"(\s+self\.roster\s*=\s*\{).*?(\n\s+\})"
     new_block = generate_lineup_generator_roster(players)
 
@@ -456,7 +575,7 @@ def update_lineup_generator(players: List[Dict]):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Update Jr Kraken 18U Navy roster and power rankings from Excel, CSV, or JSON."
+        description="Update hockey roster and power rankings from Excel, CSV, or JSON."
     )
     parser.add_argument(
         "file",
@@ -478,9 +597,9 @@ def main():
         parser.print_help()
         print("\nExample CSV format:")
         print("  Name,Position,Rating,Notes")
-        print("  Massey Relph,F/D,1.00,\"Coach's son, elite at both positions\"")
-        print("  Shaya Marsh,F/D,1.00,\"Elite talent, leadership\"")
-        print("  Cas Haffey,G,2.00,\"Reliable starter\"")
+        print('  Player One,F/D,1.00,"Elite at both positions"')
+        print('  Player Two,F/D,1.00,"Strong leadership"')
+        print('  Goalie One,G,2.00,"Reliable starter"')
         sys.exit(1)
 
     # Read players
@@ -500,7 +619,6 @@ def main():
     else:
         sys.exit(1)
 
-    # Validate
     if not players:
         print("ERROR: No players found in input.")
         sys.exit(1)
@@ -509,11 +627,15 @@ def main():
         if not (0.50 <= p["rating"] <= 5.00):
             print(f"WARNING: {p['name']} has unusual rating {p['rating']:.2f} (expected 1.00-3.00)")
 
+    # Load team config (from .claude/hockey-lineup-builder.local.md, if present)
+    config = load_team_config()
+
     # Categorize and report
     cats = categorize_players(players)
     goalies = cats["goalies"]
     skaters = cats["skaters"]
-    print(f"\nRoster summary:")
+    print("\nRoster summary:")
+    print(f"  Team: {config.get('team_name', 'Hockey Team')}")
     print(f"  Goalies: {len(goalies)}")
     print(f"  Skaters: {len(skaters)}")
     print(f"  Elite (1.00-1.50): {len(cats['elite_top']) + len(cats['elite_strong'])}")
@@ -525,7 +647,7 @@ def main():
     print(f"  Average rating: {cats['avg_rating']:.3f}")
 
     # Generate roster.md
-    roster_content = generate_roster_md(players)
+    roster_content = generate_roster_md(players, config)
 
     if args.dry_run:
         print("\n--- DRY RUN: Generated roster.md ---\n")
@@ -533,14 +655,14 @@ def main():
         return
 
     # Write files
-    print(f"\nWriting files:")
+    print("\nWriting files:")
     ROSTER_MD.write_text(roster_content)
     print(f"  Updated: {ROSTER_MD}")
 
     update_lineup_generator(players)
 
-    print(f"\nDone! Power rankings updated successfully.")
-    print(f"Review the changes in:")
+    print("\nDone! Power rankings updated successfully.")
+    print("Review the changes in:")
     print(f"  - {ROSTER_MD}")
     print(f"  - {LINEUP_GEN}")
 

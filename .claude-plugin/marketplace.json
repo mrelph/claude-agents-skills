@@ -45,10 +45,10 @@
       "category": "research"
     },
     {
-      "name": "jr-kraken-18u-navy-lineup",
-      "source": "./plugins/jr-kraken-18u-navy-lineup",
-      "description": "Jr. Kraken 18U Navy hockey lineup building, game strategy, and player management",
-      "version": "1.0.0",
+      "name": "hockey-lineup-builder",
+      "source": "./plugins/hockey-lineup-builder",
+      "description": "Generic hockey lineup building, game strategy, special teams planning, and player management for any team",
+      "version": "2.0.0",
       "author": { "name": "mrelph" },
       "keywords": ["hockey", "lineup", "strategy", "coaching", "sports"],
       "category": "domain-specific"
